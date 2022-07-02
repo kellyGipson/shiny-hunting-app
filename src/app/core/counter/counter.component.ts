@@ -43,7 +43,7 @@ export class CounterComponent implements OnInit, OnDestroy {
 
   onIntervalDecrease(): void {
     const interval = this._counterService.intervalSource.value;
-    if (interval !== 1 || interval !== Number.MAX_SAFE_INTEGER) {
+    if (interval > 1 && interval <= Number.MAX_SAFE_INTEGER) {
         this._counterService.setInterval(interval - 1);
     }
   }
