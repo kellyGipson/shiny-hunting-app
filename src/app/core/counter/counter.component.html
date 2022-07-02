@@ -1,7 +1,7 @@
 <div *ngIf="(activeMenu | async) === 'counter'" class="container">
   <h1>Shiny Hunt Counter</h1>
   <p>Intervals of: {{(interval | async)}}</p>
-  <div>
+  <div class="intervalBtnContainer">
     <button class="btn" (click)="onIntervalIncrease()">+</button>
     <button class="btn" (click)="onIntervalDecrease()">-</button>
   </div>

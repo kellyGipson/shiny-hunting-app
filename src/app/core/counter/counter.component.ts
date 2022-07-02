@@ -10,7 +10,7 @@ import { activeMenuType } from 'src/app/types/app.types';
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
-  styleUrls: ['./counter.component.css']
+  styleUrls: ['./counter.component.css', '../../app.component.css']
 })
 export class CounterComponent implements OnInit, OnDestroy {
   // State

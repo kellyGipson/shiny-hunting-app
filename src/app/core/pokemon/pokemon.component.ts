@@ -12,7 +12,7 @@ import { IPokemonFound, IPokemonFoundList } from 'src/app/types/pokemonFound.typ
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
-  styleUrls: ['./pokemon.component.css']
+  styleUrls: ['./pokemon.component.css', '../../app.component.css']
 })
 export class PokemonComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
