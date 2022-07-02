@@ -2,7 +2,7 @@
 
 This Angular application serves as a feature-full shiny hunting app for use with Pokemon games.
 
-## Useage
+## Usage
 
 - The 'space' key or the white plus button increment the counter
 
