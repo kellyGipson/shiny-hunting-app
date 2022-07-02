@@ -1,0 +1,12 @@
+<div class="navContainer">
+  <button
+    (click)="onCounterClick()"
+    id="counterButton"
+    class="menuSelector btn {{((activeMenu | async) === 'counter') ? 'btnActive' : ''}}"
+  >Counter</button>
+  <button
+    (click)="onPokemonClick()"
+    id="pokemonButton"
+    class="menuSelector btn {{((activeMenu | async) === 'pokemon') ? 'btnActive' : ''}}"
+  >Pokemon</button>
+</div>

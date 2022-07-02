@@ -1,0 +1,21 @@
+<div *ngIf="(activeMenu | async) === 'counter'" class="container">
+  <h1>Shiny Hunt Counter</h1>
+  <p>Intervals of: {{(interval | async)}}</p>
+  <div>
+    <button class="btn" (click)="onIntervalIncrease()">+</button>
+    <button class="btn" (click)="onIntervalDecrease()">-</button>
+  </div>
+  <p class="count {{(countAnimation) ? 'countAnimation' : ''}}">Count: {{(currentCount | async)}}</p>
+  <div class="counterButtons">
+    <img
+      (click)="foundAShiny()"
+      class="shinyButton"
+      src="../assets/shiny_sparkles.png"
+      alt="Found a shiny button"
+    >
+    <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
+    <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
+  </div>
+  <button (click)="onResetCounter()" class="btn resetButton">reset</button>
+  <p>Click the spacebar to increment the counter.</p>
+</div>

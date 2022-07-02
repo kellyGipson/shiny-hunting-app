@@ -1,0 +1,32 @@
+<div *ngIf="(activeMenu | async) === 'pokemon'" class="container">
+  <button (click)="onToggleShinyForm()" class="btn">Add Shiny</button>
+  <form *ngIf="addShinyOpen | async" (submit)="onShinySubmit($event)">
+    <div class="inputContainer">
+      <label for="pokemonName">Pokemon Name</label>
+      <input
+        [formControl]="pokemonName"
+        class="btn"
+        id="pokemonName"
+        type="text"
+      >
+    </div>
+    <div class="inputContainer">
+      <label for="pokemonName">Pokemon Encounters</label>
+      <input
+        [formControl]="pokemonEncounters"
+        class="btn"
+        id="pokemonName"
+        type="number"
+      >
+    </div>
+    <button class="btn" type="submit">Add</button>
+  </form>
+  <h2>Pokemon Found:</h2>
+  <div *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFoundContainer">
+    <p>{{pokemon.pokemonSpecies}}: {{pokemon.encounterCount}}</p>
+    <button
+      (click)="onPokemonDelete(pokemon)"
+      class="btn"
+    >Delete</button>
+  </div>
+</div>
