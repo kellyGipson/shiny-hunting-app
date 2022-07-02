@@ -37,17 +37,15 @@ export class CounterComponent implements OnInit, OnDestroy {
   }
 
   onIntervalIncrease(): void {
-    this.interval.subscribe((interval: number) => {
-      this._counterService.setInterval(interval++);
-    });
+    const interval = this._counterService.intervalSource.value;
+    this._counterService.setInterval(interval + 1);
   }
 
   onIntervalDecrease(): void {
-    this.interval.subscribe((interval: number) => {
-      if (interval !== 1) {
-        this._counterService.setInterval(interval--);
-      }
-    })
+    const interval = this._counterService.intervalSource.value;
+    if (interval !== 1 || interval !== Number.MAX_SAFE_INTEGER) {
+        this._counterService.setInterval(interval - 1);
+    }
   }
 
   onCounterIncrease(): void {
@@ -82,8 +80,7 @@ export class CounterComponent implements OnInit, OnDestroy {
 
   onResetCounter(): void {
     if (window.confirm("Are you sure you want to reset the counter?")) {
-      this._counterService.currentCountSource.next(0);
-      this._storageService.setCountToLocal(0);
+      this._counterService.setCurrentCount(0);
     }
   }
 

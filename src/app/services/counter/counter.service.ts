@@ -18,11 +18,17 @@ export class CounterService {
     private readonly _storageService: StorageService,
   ) { }
 
-  getInterval(): Observable<number> { return this.interval; }
+  getInterval(): Observable<number> {
+    return this.interval;
+  }
 
-  setInterval(interval: number): void { this.intervalSource.next(interval); }
+  setInterval(interval: number): void {
+    this.intervalSource.next(interval);
+  }
 
-  getCurrentCount(): Observable<number> { return this.currentCount; }
+  getCurrentCount(): Observable<number> {
+    return this.currentCount;
+  }
 
   setCurrentCount(value: number) {
     this.currentCountSource.next(value);
