@@ -1,4 +1,4 @@
-<div *ngIf="(activeMenu | async) === 'pokemon'" class="container">
+<div *ngIf="(activeMenu | async) === 'prev'" class="container">
   <button (click)="onToggleShinyForm()" class="btn">Add Shiny</button>
   <form *ngIf="addShinyOpen | async" (submit)="onShinySubmit($event)">
     <div class="inputContainer">

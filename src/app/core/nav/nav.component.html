@@ -1,12 +1,17 @@
 <div class="navContainer">
   <button
-    (click)="onCounterClick()"
-    id="counterButton"
-    class="menuSelector btn {{((activeMenu | async) === 'counter') ? 'btnActive' : ''}}"
-  >Counter</button>
-  <button
-    (click)="onPokemonClick()"
+    (click)="onPrevMenuClick()"
     id="pokemonButton"
-    class="menuSelector btn {{((activeMenu | async) === 'pokemon') ? 'btnActive' : ''}}"
-  >Pokemon</button>
+    class="menuSelector btn {{((activeMenu | async) === 'prev') ? 'btnActive' : ''}}"
+  >Previous Hunts</button>
+  <button
+    (click)="onCurrMenuClick()"
+    id="counterButton"
+    class="menuSelector btn {{((activeMenu | async) === 'curr') ? 'btnActive' : ''}}"
+  >Current Hunt</button>
+  <button
+    (click)="onNewMenuClick()"
+    id="pokemonButton"
+    class="menuSelector btn {{((activeMenu | async) === 'new') ? 'btnActive' : ''}}"
+  >New Hunt</button>
 </div>

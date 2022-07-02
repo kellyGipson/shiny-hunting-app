@@ -7,17 +7,17 @@ import { AppService } from 'src/app/services/app/app.service';
 import { CounterService } from 'src/app/services/counter/counter.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { activeMenuType } from 'src/app/types/app.types';
-import { IPokemonFound, IPokemonFoundList } from 'src/app/types/pokemonFound.types';
+import { PokemonFound, PokemonFoundList } from 'src/app/types/pokemonFound.types';
 
 @Component({
-  selector: 'app-pokemon',
-  templateUrl: './pokemon.component.html',
-  styleUrls: ['./pokemon.component.css', '../../app.component.css']
+  selector: 'app-prev-hunt',
+  templateUrl: './prev-hunt.component.html',
+  styleUrls: ['./prev-hunt.component.css', '../../app.component.css']
 })
 export class PokemonComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
   addShinyOpen: Observable<boolean> = this._appService.getAddShinyOpen();
-  pokemonFound: Observable<IPokemonFoundList> = this._pokemonService.getPokemonFound();
+  pokemonFound: Observable<PokemonFoundList> = this._pokemonService.getPokemonFound();
   pokemonName: FormControl = new FormControl(""); // TODO: add games, and pokemon names, etc(pokeapi)
   pokemonEncounters: FormControl = new FormControl(this._counterService.currentCountSource.value);
 
@@ -37,7 +37,7 @@ export class PokemonComponent implements OnInit {
   onShinySubmit(e: Event): void {
     if(e)e.preventDefault();
 
-    const newPokemonList: IPokemonFoundList = [
+    const newPokemonList: PokemonFoundList = [
       ...this._pokemonService.pokemonFoundSource.value,
       {
         pokemonSpecies: this.pokemonName.value,
@@ -51,8 +51,8 @@ export class PokemonComponent implements OnInit {
     this.pokemonEncounters.setValue(0);
   }
 
-  onPokemonDelete(pokemonToDelete: IPokemonFound): void {
-    const newPokemonList: IPokemonFoundList = this._pokemonService.pokemonFoundSource.value.filter(pokemon => pokemon !== pokemonToDelete);
+  onPokemonDelete(pokemonToDelete: PokemonFound): void {
+    const newPokemonList: PokemonFoundList = this._pokemonService.pokemonFoundSource.value.filter(pokemon => pokemon !== pokemonToDelete);
     this._pokemonService.setPokemonFound(newPokemonList);
   }
 }

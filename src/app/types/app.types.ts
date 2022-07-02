@@ -1,1 +1,1 @@
-export type activeMenuType = "counter" | "pokemon";
+export type activeMenuType = 'curr' | 'prev' | 'new';

@@ -8,11 +8,11 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { activeMenuType } from 'src/app/types/app.types';
 
 @Component({
-  selector: 'app-counter',
-  templateUrl: './counter.component.html',
-  styleUrls: ['./counter.component.css', '../../app.component.css']
+  selector: 'app-current-hunt',
+  templateUrl: './current-hunt.component.html',
+  styleUrls: ['./current-hunt.component.css', '../../app.component.css']
 })
-export class CounterComponent implements OnInit, OnDestroy {
+export class CurrentHuntComponent implements OnInit, OnDestroy {
   // State
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
 
@@ -72,7 +72,7 @@ export class CounterComponent implements OnInit, OnDestroy {
   }
 
   foundAShiny() {
-    this._appService.setActiveMenu('pokemon');
+    this._appService.setActiveMenu('prev');
     this._appService.toggleAddShinyOpen();
     this._counterService.setCurrentCount(0);
     this._storageService.setCountToLocal(this._counterService.currentCountSource.value);

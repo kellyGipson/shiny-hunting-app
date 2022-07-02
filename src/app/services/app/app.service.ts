@@ -7,7 +7,7 @@ import { activeMenuType } from '../../types/app.types';
   providedIn: 'root'
 })
 export class AppService {
-  readonly activeMenuSource = new BehaviorSubject<activeMenuType>("counter");
+  readonly activeMenuSource = new BehaviorSubject<activeMenuType>('new');
   readonly activeMenu: Observable<activeMenuType> = this.activeMenuSource.asObservable();
 
   readonly addShinyOpenSource = new BehaviorSubject<boolean>(false);

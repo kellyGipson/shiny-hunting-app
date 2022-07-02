@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { IPokemonFound } from 'src/app/types/pokemonFound.types';
+import { PokemonFound } from 'src/app/types/pokemonFound.types';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class StorageService {
 
   setCountToLocal(value: number) { localStorage.setItem("count", value.toString()); }
 
-  getPokemonFoundFromLocal(): IPokemonFound[] {
+  getPokemonFoundFromLocal(): PokemonFound[] {
     if(localStorage.getItem("found") === null) {
       return [];
     } else {
@@ -28,5 +28,5 @@ export class StorageService {
     }
   }
 
-  setPokemonFoundToLocal(value: IPokemonFound[]) { localStorage.setItem("found", JSON.stringify(value)); }
+  setPokemonFoundToLocal(value: PokemonFound[]) { localStorage.setItem("found", JSON.stringify(value)); }
 }

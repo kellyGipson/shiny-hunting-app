@@ -8,7 +8,7 @@ import { activeMenuType } from 'src/app/types/app.types';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css', '../../app.component.css']
+  styleUrls: ['./nav.component.css', '../../app.component.css'],
 })
 export class NavComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
@@ -20,15 +20,24 @@ export class NavComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onCounterClick(): void {
-    if(this._appService.activeMenuSource.value === 'pokemon') {
-      this._appService.setActiveMenu('counter');
+  onCurrMenuClick(): void {
+    const curr = this._appService.activeMenuSource.value;
+    if(curr === 'prev' || curr === 'new') {
+      this._appService.setActiveMenu('curr');
     }
   }
 
-  onPokemonClick(): void {
-    if(this._appService.activeMenuSource.value === 'counter') {
-      this._appService.setActiveMenu('pokemon');
+  onPrevMenuClick(): void {
+    const curr = this._appService.activeMenuSource.value;
+    if(curr === 'curr' || curr === 'new') {
+      this._appService.setActiveMenu('prev');
+    }
+  }
+
+  onNewMenuClick(): void {
+    const curr = this._appService.activeMenuSource.value;
+    if(curr === 'prev' || curr === 'curr') {
+      this._appService.setActiveMenu('new');
     }
   }
 }
