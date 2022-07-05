@@ -1,0 +1,12 @@
+.btn--nav {
+  width: 10rem;
+  height: 2rem;
+}
+
+.btnActive {
+  border-bottom: 8px solid grey !important;
+}
+
+.btnActive:active {
+  border-bottom: 8px solid white !important;
+}

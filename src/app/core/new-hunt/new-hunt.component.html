@@ -1,1 +1,8 @@
-<app-nav></app-nav>
+<div *ngIf="(activeMenu | async) === 'New'">
+  <app-pokemon-select
+  *ngIf="(currentPage | async) === 'pokemon'"></app-pokemon-select>
+  <app-game-select
+  *ngIf="(currentPage | async) === 'game'"></app-game-select>
+  <app-method-select
+  *ngIf="(currentPage | async) === 'method'"></app-method-select>
+</div>

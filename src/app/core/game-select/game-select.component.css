@@ -1,0 +1,27 @@
+.gameWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.gameContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 40rem;
+  margin-top: 1rem;
+}
+
+.game {
+  border: 2px solid grey;
+  width: 8rem;
+  padding-block: 0.75rem;
+}
+
+.game:active {
+  border-color: white;
+  user-select: none;
+}

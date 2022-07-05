@@ -4,10 +4,9 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { AppService } from 'src/app/services/app/app.service';
-import { CounterService } from 'src/app/services/counter/counter.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { activeMenuType } from 'src/app/types/app.types';
-import { PokemonFound, PokemonFoundList } from 'src/app/types/pokemonFound.types';
+import { emptyPokemonData, PreviousHunt, PreviousHunts } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-prev-hunt',
@@ -17,14 +16,16 @@ import { PokemonFound, PokemonFoundList } from 'src/app/types/pokemonFound.types
 export class PokemonComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
   addShinyOpen: Observable<boolean> = this._appService.getAddShinyOpen();
-  pokemonFound: Observable<PokemonFoundList> = this._pokemonService.getPokemonFound();
-  pokemonName: FormControl = new FormControl(""); // TODO: add games, and pokemon names, etc(pokeapi)
-  pokemonEncounters: FormControl = new FormControl(this._counterService.currentCountSource.value);
+  pokemonFound: Observable<PreviousHunts> = this._pokemonService.getPokemonPrev();
+
+  species: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.species || null);
+  count: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.count || null);
+  foundOnGame: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.foundOnGame || null);
+  method: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.method || null);
 
   constructor(
     private readonly _appService: AppService,
     private readonly _pokemonService: PokemonService,
-    private readonly _counterService: CounterService,
   ) { }
 
   ngOnInit(): void {
@@ -37,22 +38,28 @@ export class PokemonComponent implements OnInit {
   onShinySubmit(e: Event): void {
     if(e)e.preventDefault();
 
-    const newPokemonList: PokemonFoundList = [
-      ...this._pokemonService.pokemonFoundSource.value,
+    const newPokemonList: PreviousHunts = [
       {
-        pokemonSpecies: this.pokemonName.value,
-        encounterCount: this.pokemonEncounters.value,
-      }
+        species: this.species.value,
+        count: this.count.value,
+        foundOnGame: this.foundOnGame.value,
+        method: this.method.value,
+        huntStarted: this._pokemonService.pokemonCurrSource.value.huntStarted,
+        capturedOn: new Date(),
+      },
+      ...this._pokemonService.pokemonPrevSource.value
     ];
 
-    this._pokemonService.setPokemonFound(newPokemonList);
-    this._counterService.setCurrentCount(0);
-    this.pokemonName.setValue("");
-    this.pokemonEncounters.setValue(0);
+    this._pokemonService.setPokemonPrev(newPokemonList);
+    this._pokemonService.setPokemonCurr({ ...emptyPokemonData.currentHunt, count: 0 });
+    this.species.setValue("");
+    this.count.setValue(0);
+    this.foundOnGame.setValue("");
+    this.method.setValue("");
   }
 
-  onPokemonDelete(pokemonToDelete: PokemonFound): void {
-    const newPokemonList: PokemonFoundList = this._pokemonService.pokemonFoundSource.value.filter(pokemon => pokemon !== pokemonToDelete);
-    this._pokemonService.setPokemonFound(newPokemonList);
+  onPokemonDelete(pokemonToDelete: PreviousHunt): void {
+    const newPokemonList: PreviousHunts = this._pokemonService.pokemonPrevSource.value.filter(pokemon => pokemon !== pokemonToDelete);
+    this._pokemonService.setPokemonPrev(newPokemonList);
   }
 }

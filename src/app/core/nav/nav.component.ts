@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { AppService } from 'src/app/services/app/app.service';
+import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { activeMenuType } from 'src/app/types/app.types';
+import { CurrentHunt } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-nav',
@@ -12,32 +14,28 @@ import { activeMenuType } from 'src/app/types/app.types';
 })
 export class NavComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
+  currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
+
+  menus: activeMenuType[] = ['New', 'Current', 'Previous'];
 
   constructor(
     private readonly _appService: AppService,
+    private readonly _pokemonService: PokemonService,
   ) { }
 
   ngOnInit(): void {
   }
 
-  onCurrMenuClick(): void {
-    const curr = this._appService.activeMenuSource.value;
-    if(curr === 'prev' || curr === 'new') {
-      this._appService.setActiveMenu('curr');
+  onMenuClick(navItem: activeMenuType) {
+    if(navItem !== this._appService.activeMenuSource.value) {
+      this._appService.setActiveMenu(navItem);
     }
   }
 
-  onPrevMenuClick(): void {
-    const curr = this._appService.activeMenuSource.value;
-    if(curr === 'curr' || curr === 'new') {
-      this._appService.setActiveMenu('prev');
+  decideDisabled(navItem: activeMenuType) {
+    if(navItem === 'Current' && this._pokemonService.pokemonCurrSource.value.method === null) {
+      return true;
     }
-  }
-
-  onNewMenuClick(): void {
-    const curr = this._appService.activeMenuSource.value;
-    if(curr === 'prev' || curr === 'curr') {
-      this._appService.setActiveMenu('new');
-    }
+    return false;
   }
 }

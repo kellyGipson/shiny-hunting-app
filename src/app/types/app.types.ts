@@ -1,1 +1,1 @@
-export type activeMenuType = 'curr' | 'prev' | 'new';
+export type activeMenuType = 'New' |'Current' | 'Previous';

@@ -1,32 +1,51 @@
-<div *ngIf="(activeMenu | async) === 'prev'" class="container">
+<div *ngIf="(activeMenu | async) === 'Previous'" class="container">
   <button (click)="onToggleShinyForm()" class="btn">Add Shiny</button>
   <form *ngIf="addShinyOpen | async" (submit)="onShinySubmit($event)">
     <div class="inputContainer">
-      <label for="pokemonName">Pokemon Name</label>
+      <label>Pokemon Name</label>
       <input
-        [formControl]="pokemonName"
-        class="btn"
-        id="pokemonName"
-        type="text"
-      >
+      [formControl]="species"
+      class="btn btn--input"
+      id="pokemonName"
+      type="text">
     </div>
     <div class="inputContainer">
-      <label for="pokemonName">Pokemon Encounters</label>
+      <label>Hunt Count</label>
       <input
-        [formControl]="pokemonEncounters"
-        class="btn"
-        id="pokemonName"
-        type="number"
-      >
+      [formControl]="count"
+      class="btn btn--input"
+      id="count"
+      type="number">
+    </div>
+    <div class="inputContainer">
+      <label>Game</label>
+      <input
+      [formControl]="foundOnGame"
+      class="btn btn--input"
+      id="foundOnGame"
+      type="text">
+    </div>
+    <div class="inputContainer">
+      <label>Method</label>
+      <input
+      [formControl]="method"
+      class="btn btn--input"
+      id="method"
+      type="text">
     </div>
     <button class="btn" type="submit">Add</button>
   </form>
   <h2>Pokemon Found:</h2>
-  <div *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFoundContainer">
-    <p>{{pokemon.pokemonSpecies}}: {{pokemon.encounterCount}}</p>
-    <button
+  <div *ngIf="(pokemonFound | async) !== null">
+    <div *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFoundContainer">
+      <p class="pokemonSpecies">{{pokemon.species}}</p>
+      <p class="pokemonCount">{{pokemon.count}}</p>
+      <p class="pokemonGame">{{pokemon.foundOnGame}}</p>
+      <p class="pokemonMethod">{{pokemon.method}}</p>
+      <button
       (click)="onPokemonDelete(pokemon)"
-      class="btn"
-    >Delete</button>
+      class="pokemonFound--btn"
+      >Delete</button>
+    </div>
   </div>
 </div>

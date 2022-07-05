@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Pokemon, PokemonClient } from 'pokenode-ts';
 
 import { Observable } from 'rxjs';
 
 import { AppService } from 'src/app/services/app/app.service';
-import { CounterService } from 'src/app/services/counter/counter.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
+import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { activeMenuType } from 'src/app/types/app.types';
+import { CurrentHunt, emptyPokemonData } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-current-hunt',
@@ -13,23 +14,26 @@ import { activeMenuType } from 'src/app/types/app.types';
   styleUrls: ['./current-hunt.component.css', '../../app.component.css']
 })
 export class CurrentHuntComponent implements OnInit, OnDestroy {
+  pokemonApi = new PokemonClient();
+
   // State
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
-
-  currentCount: Observable<number> = this._counterService.getCurrentCount();
-  interval: Observable<number> = this._counterService.getInterval();
+  currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
+  interval: number = 1;
 
   // Variables
+  currentCount!: number | null;
+  imageUrl: Observable<string> = this._pokemonService.currImgUrl;
   countAnimation: boolean = false;
 
   constructor(
     private readonly _appService: AppService,
-    private readonly _counterService: CounterService,
-    private readonly _storageService: StorageService,
-  ) { }
+    private readonly _pokemonService: PokemonService,
+  ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     document.addEventListener('keypress', e => this.onKeypress(e));
+    this._pokemonService.setPokemonImgUrl(this._pokemonService.pokemonCurrSource.value.species!.toLowerCase()!);
   }
 
   ngOnDestroy(): void {
@@ -37,32 +41,33 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   }
 
   onIntervalIncrease(): void {
-    const interval = this._counterService.intervalSource.value;
-    this._counterService.setInterval(interval + 1);
+    this.interval++;
   }
 
   onIntervalDecrease(): void {
-    const interval = this._counterService.intervalSource.value;
-    if (interval > 1 && interval <= Number.MAX_SAFE_INTEGER) {
-        this._counterService.setInterval(interval - 1);
+    if (this.interval > 1 && this.interval <= Number.MAX_SAFE_INTEGER) {
+        this.interval--;
     }
   }
 
   onCounterIncrease(): void {
     this.counterAnimationFn();
-    const count = this._counterService.currentCountSource.value;
-    const interval = this._counterService.intervalSource.value;
-    this._counterService.setCurrentCount(count + interval);
-    this._storageService.setCountToLocal(this._counterService.currentCountSource.value);
+    const count = this._pokemonService.pokemonCurrSource.value.count! + this.interval;
+    this._pokemonService.setPokemonCurr({
+      ...this._pokemonService.pokemonCurrSource.value,
+      count: count,
+    });
   }
 
   onCounterDecrease(): void {
-    const count = this._counterService.currentCountSource.value;
-    const interval = this._counterService.intervalSource.value;
-    if (count !== 0) {
+    let count = this._pokemonService.pokemonCurrSource.value.count;
+    if(!(count! - this.interval < 0)) {
       this.counterAnimationFn();
-      this._counterService.setCurrentCount(count - interval);
-      this._storageService.setCountToLocal(this._counterService.currentCountSource.value);
+      const count = this._pokemonService.pokemonCurrSource.value.count! - this.interval;
+      this._pokemonService.setPokemonCurr({
+        ...this._pokemonService.pokemonCurrSource.value,
+        count: count,
+      });
     }
   }
 
@@ -72,15 +77,16 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   }
 
   foundAShiny() {
-    this._appService.setActiveMenu('prev');
-    this._appService.toggleAddShinyOpen();
-    this._counterService.setCurrentCount(0);
-    this._storageService.setCountToLocal(this._counterService.currentCountSource.value);
+    this._appService.setActiveMenu('Previous');
+    // this._pokemonService.setPokemonPrev([
+    //   ...this._pokemonService.pokemonPrevSource.value, this._pokemonService.pokemonCurrSource.value
+    // ]);
+    this._pokemonService.setPokemonCurr({ ...emptyPokemonData.currentHunt, count: 0 });
   }
 
   onResetCounter(): void {
     if (window.confirm("Are you sure you want to reset the counter?")) {
-      this._counterService.setCurrentCount(0);
+      this._pokemonService.setPokemonCurr({ ...this._pokemonService.pokemonCurrSource.value, count: 0 });
     }
   }
 

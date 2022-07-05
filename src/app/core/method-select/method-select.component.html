@@ -1,0 +1,11 @@
+<button
+class="btn btn--select"
+(click)="backButton()">Go back</button>
+<div class="methodContainer">
+  <div
+  class="method"
+  (click)="methodClick(method)"
+  *ngFor="let method of methods">
+    <p>{{method}}</p>
+  </div>
+</div>

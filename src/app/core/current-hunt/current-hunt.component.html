@@ -1,11 +1,12 @@
-<div *ngIf="(activeMenu | async) === 'curr'" class="container">
-  <h1>Shiny Hunt Counter</h1>
-  <p>Intervals of: {{(interval | async)}}</p>
+<div *ngIf="(activeMenu | async) === 'Current'" class="container">
+  <h1>Now Hunting: {{(currentHunt | async)!.species}}</h1>
+  <img *ngIf="imageUrl" src="{{(imageUrl | async)}}">
+  <p>Intervals of: {{interval}}</p>
   <div class="intervalBtnContainer">
     <button class="btn" (click)="onIntervalIncrease()">+</button>
     <button class="btn" (click)="onIntervalDecrease()">-</button>
   </div>
-  <p class="count {{(countAnimation) ? 'countAnimation' : ''}}">Count: {{(currentCount | async)}}</p>
+  <p class="count {{(countAnimation) ? 'countAnimation' : ''}}">Count: {{(currentHunt | async)!.count}}</p>
   <div class="counterButtons">
     <img
       (click)="foundAShiny()"

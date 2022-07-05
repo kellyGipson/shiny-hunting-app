@@ -1,0 +1,46 @@
+.pokemonList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.pokemonSearch {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  width: 14rem;
+}
+
+.pokemonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 15rem;
+  border: 2px grey solid;
+  user-select: none;
+}
+
+.pokemonContainer:first-child {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.pokemonContainer:last-child {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.pokemonContainer:active {
+  border-color: white;
+}
+
+.pokemonImg {
+  height: 3rem;
+  width: 3rem;
+  border-right: 2px dashed grey;
+}
+
+.pokemonName {
+  text-align: left;
+  width: 12ch;
+}

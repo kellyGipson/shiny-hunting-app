@@ -1,17 +1,8 @@
 <div class="navContainer">
   <button
-    (click)="onPrevMenuClick()"
-    id="pokemonButton"
-    class="menuSelector btn {{((activeMenu | async) === 'prev') ? 'btnActive' : ''}}"
-  >Previous Hunts</button>
-  <button
-    (click)="onCurrMenuClick()"
-    id="counterButton"
-    class="menuSelector btn {{((activeMenu | async) === 'curr') ? 'btnActive' : ''}}"
-  >Current Hunt</button>
-  <button
-    (click)="onNewMenuClick()"
-    id="pokemonButton"
-    class="menuSelector btn {{((activeMenu | async) === 'new') ? 'btnActive' : ''}}"
-  >New Hunt</button>
+  class="menuSelector btn btn--nav {{((activeMenu | async) === navItem) ? 'btnActive' : ''}}"
+  (click)="onMenuClick(navItem)"
+  *ngFor="let navItem of menus"
+  [disabled]="decideDisabled(navItem)"
+  >{{navItem}}</button>
 </div>

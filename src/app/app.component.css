@@ -23,7 +23,7 @@ div {
   padding-block: 0.25rem;
   color: white;
   background-color: #333333;
-  border: 2px solid grey;
+  border: 2px solid #808080;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -34,11 +34,10 @@ div {
   border: 2px solid white;
 }
 
-.btnActive {
-  border-left: 8px solid grey;
+.btn:disabled {
+  border: 2px solid #606060;
 }
 
-.inputContainer {
-  display: flex;
-  flex-direction: column;
+.btn--select {
+  margin-top: 1rem;
 }

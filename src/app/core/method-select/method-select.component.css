@@ -1,0 +1,29 @@
+.methodContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.method:first-child {
+  border-top-left-radius: 0.5rem !important;
+  border-top-right-radius: 0.5rem !important;
+}
+
+.method:last-child {
+  border-bottom-left-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
+}
+
+.method {
+  border: 2px solid grey;
+  width: 8rem;
+  padding-block: 0.75rem;
+}
+
+.method:active {
+  border-color: white;
+  user-select: none;
+}

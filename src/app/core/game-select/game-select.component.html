@@ -1,0 +1,13 @@
+<button
+class="btn btn--select"
+(click)="backButton()">Go back</button>
+<div class="gameWrapper">
+  <div class="gameContainer">
+    <div
+    class="game"
+    (click)="gameClick(game)"
+    *ngFor="let game of allGames">
+      <p>{{game}}</p>
+    </div>
+  </div>
+</div>

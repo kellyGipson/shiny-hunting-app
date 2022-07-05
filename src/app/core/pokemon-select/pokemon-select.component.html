@@ -1,0 +1,19 @@
+<div
+class="pokemonList"
+*ngIf="namesReady">
+<input
+placeholder="Search"
+(change)="search($event)"
+class="btn pokemonSearch"
+type="text">
+  <div
+  class="pokemonContainer"
+  (click)="pokemonClick(pokemon)"
+  *ngFor="let pokemon of searchList">
+    <img
+    class="pokemonImg"
+    src="{{pokemon.url}}"
+    alt="Image of {{pokemon.name}}">
+    <p class="pokemonName">{{pokemon.name}}</p>
+  </div>
+</div>
