@@ -1,1 +1,12 @@
-export type activeMenuType = 'New' |'Current' | 'Previous';
+export type activeMenuType =
+  | 'Home'
+  | 'New'
+  | 'Current'
+  | 'Previous';
+
+export enum activeMenuEnum {
+  Home = 'Home',
+  New = 'New',
+  Current = 'Current',
+  Previous = 'Previous',
+}

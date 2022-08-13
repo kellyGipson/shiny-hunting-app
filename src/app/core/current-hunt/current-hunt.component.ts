@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { activeMenuType } from 'src/app/types/app.types';
-import { CurrentHunt, emptyPokemonData } from 'src/app/types/pokemonFound.types';
+import { CurrentHunt, emptyPokemonData, gameImgUrlLookup, gameImgUrlLookupProd, gameImgUrlLookupType } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-current-hunt',
@@ -26,6 +26,9 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   imageUrl: Observable<string> = this._pokemonService.currImgUrl;
   countAnimation: boolean = false;
 
+  readonly gameTyped = this._pokemonService.pokemonCurrSource.value.foundOnGame?.toLowerCase() as keyof typeof gameImgUrlLookup;
+  gameImgUrl: string = gameImgUrlLookup[this.gameTyped];
+
   constructor(
     private readonly _appService: AppService,
     private readonly _pokemonService: PokemonService,
@@ -33,7 +36,9 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     document.addEventListener('keypress', e => this.onKeypress(e));
-    this._pokemonService.setPokemonImgUrl(this._pokemonService.pokemonCurrSource.value.species!.toLowerCase()!);
+    if(this._pokemonService.pokemonCurrSource.value.species !== null) {
+      this._pokemonService.setPokemonImgUrl(this._pokemonService.pokemonCurrSource.value.species!.toLowerCase()!);
+    }
   }
 
   ngOnDestroy(): void {
@@ -76,8 +81,11 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
     setTimeout(() => this.countAnimation = false, 100);
   }
 
+  //{"currentHunt":{"species":"Totodile","huntStarted":"2022-07-06T01:50:32.175Z","capturedOn":null,"count":5451,"foundOnGame":"heartgold","method":"fullodds"},"previousHunts":[{"species":"chikorita","count":330,"foundOnGame":"heartgold","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:50:26.041Z"},{"species":"psyduck","count":4302,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:56.834Z"},{"species":"wooper","count":194,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:41.399Z"},{"species":"bibarel","count":2222,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:30.148Z"},{"species":"quagsire","count":964,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":"2022-07-06T01:47:51.845Z","capturedOn":"2022-07-06T01:49:12.681Z"}]}
+
   foundAShiny() {
     this._appService.setActiveMenu('Previous');
+    this._appService.toggleAddShinyOpen();
     // this._pokemonService.setPokemonPrev([
     //   ...this._pokemonService.pokemonPrevSource.value, this._pokemonService.pokemonCurrSource.value
     // ]);

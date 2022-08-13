@@ -1,6 +1,24 @@
-.btn--nav {
+.sidenav__container {
+  background-color: #333333;
+  color: #ccc;
+  min-height: 100vh;
+}
+
+.sidenav__drawer {
+  display: flex;
+  flex-direction: column;
+  background-color: #444;
+  width: min-content;
+}
+
+.sidenav__button {
   width: 10rem;
   height: 2rem;
+  margin: 0.5rem;
+}
+
+.navButton__container {
+  position: fixed;
 }
 
 .btnActive {

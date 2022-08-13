@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
-import { methods as Methods } from 'src/app/types/pokemonFound.types';
+import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-method-select',
@@ -10,11 +10,7 @@ import { methods as Methods } from 'src/app/types/pokemonFound.types';
 })
 export class MethodSelectComponent implements OnInit {
 
-  methods: Methods[] = [
-    'Full Odds',
-    'Shiny Charm',
-    'Masuda Method',
-  ]
+  methods: methodsType[] = allMethods;
 
   constructor(
     private readonly _pokemonService: PokemonService,
@@ -24,7 +20,7 @@ export class MethodSelectComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  methodClick(method: Methods) {
+  methodClick(method: methodsType) {
     this._pokemonService.setPokemonCurr({
       ...this._pokemonService.pokemonCurrSource.value,
       method: method,

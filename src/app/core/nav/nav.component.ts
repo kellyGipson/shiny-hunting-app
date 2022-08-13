@@ -16,7 +16,7 @@ export class NavComponent implements OnInit {
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
   currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
 
-  menus: activeMenuType[] = ['New', 'Current', 'Previous'];
+  menus: activeMenuType[] = ['Home', 'New', 'Current', 'Previous'];
 
   constructor(
     private readonly _appService: AppService,

@@ -1,8 +1,31 @@
-<div class="navContainer">
-  <button
-  class="menuSelector btn btn--nav {{((activeMenu | async) === navItem) ? 'btnActive' : ''}}"
-  (click)="onMenuClick(navItem)"
-  *ngFor="let navItem of menus"
-  [disabled]="decideDisabled(navItem)"
-  >{{navItem}}</button>
-</div>
+<mat-drawer-container class="sidenav__container">
+
+  <mat-drawer #drawer class="sidenav__drawer" mode="side">
+    <button
+      class="menuSelector btn sidenav__button {{((activeMenu | async) === navItem) ? 'btnActive' : ''}}"
+      (click)="onMenuClick(navItem)"
+      *ngFor="let navItem of menus"
+      [disabled]="decideDisabled(navItem)"
+    >{{navItem}}</button>
+  </mat-drawer>
+
+  <mat-drawer-content class="content__container">
+    <div class="navButton__container">
+      <button
+        type="button"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        color="primary"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div class="pages__container">
+      <app-home></app-home>
+      <app-new-hunt></app-new-hunt>
+      <app-current-hunt></app-current-hunt>
+      <app-prev-hunt></app-prev-hunt>
+    </div>
+  </mat-drawer-content>
+
+</mat-drawer-container>

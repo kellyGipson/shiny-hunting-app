@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
-import { allGames } from 'src/app/types/pokemonFound.types';
+import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-game-select',
@@ -10,7 +10,7 @@ import { allGames } from 'src/app/types/pokemonFound.types';
 })
 export class GameSelectComponent implements OnInit {
 
-  allGames: string[] = allGames;
+  allGames: pokemonGames[] = allGames;
 
   constructor(
     private readonly _pokemonService: PokemonService,

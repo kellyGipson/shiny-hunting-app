@@ -9,7 +9,7 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root'
 })
 export class AppService {
-  readonly activeMenuSource = new BehaviorSubject<activeMenuType>('Current');
+  readonly activeMenuSource = new BehaviorSubject<activeMenuType>('Home');
   readonly activeMenu: Observable<activeMenuType> = this.activeMenuSource.asObservable();
 
   readonly addShinyOpenSource = new BehaviorSubject<boolean>(false);
@@ -42,10 +42,16 @@ export class AppService {
     this.activeMenuSource.next(menu);
   }
 
+  /**
+   * @returns True if the shiny form is open
+   */
   getAddShinyOpen(): Observable<boolean> {
     return this.addShinyOpen;
   }
 
+  /**
+   * Toggles the shiny form
+   */
   toggleAddShinyOpen(): void {
     this.addShinyOpenSource.next(!this.addShinyOpenSource.value);
   }

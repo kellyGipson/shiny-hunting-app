@@ -1,5 +1,6 @@
 <div *ngIf="(activeMenu | async) === 'Current'" class="container">
   <h1>Now Hunting: {{(currentHunt | async)!.species}}</h1>
+  <img src="{{gameImgUrl}}">
   <img *ngIf="imageUrl" src="{{(imageUrl | async)}}">
   <p>Intervals of: {{interval}}</p>
   <div class="intervalBtnContainer">
