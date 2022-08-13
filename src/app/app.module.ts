@@ -7,6 +7,7 @@ import { AppComponent } from "./app.component";
 import { APP_COMPONENTS } from "./core";
 import { MATERIAL_COMPONENTS } from "./app.consts";
 import { HomeComponent } from './core/home/home.component';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { HomeComponent } from './core/home/home.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MATERIAL_COMPONENTS,
+    StoreModule.forRoot({}, {}),
   ],
   providers: [],
   bootstrap: [AppComponent]
