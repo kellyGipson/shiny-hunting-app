@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
@@ -18,10 +18,10 @@ export class PokemonComponent implements OnInit {
   addShinyOpen: Observable<boolean> = this._appService.getAddShinyOpen();
   pokemonFound: Observable<PreviousHunts> = this._pokemonService.getPokemonPrev();
 
-  species: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.species || null);
-  count: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.count || null);
-  foundOnGame: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.foundOnGame || null);
-  method: FormControl = new FormControl(this._pokemonService.pokemonCurrSource.value.method || null);
+  species: UntypedFormControl = new UntypedFormControl(this._pokemonService.pokemonCurrSource.value.species || null);
+  count: UntypedFormControl = new UntypedFormControl(this._pokemonService.pokemonCurrSource.value.count || null);
+  foundOnGame: UntypedFormControl = new UntypedFormControl(this._pokemonService.pokemonCurrSource.value.foundOnGame || null);
+  method: UntypedFormControl = new UntypedFormControl(this._pokemonService.pokemonCurrSource.value.method || null);
 
   constructor(
     private readonly _appService: AppService,
