@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PokemonClient } from 'pokenode-ts';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { from, map, Observable, take } from 'rxjs';
+import { AppActionTypes } from 'src/app/ngrx/app.actions';
+import { AppState } from 'src/app/types/app-state.types';
 
-import { CurrentHunt, PreviousHunts } from 'src/app/types/pokemonFound.types';
+import { CurrentHunt, PreviousHunt } from 'src/app/types/pokemonFound.types';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -12,50 +15,67 @@ import { StorageService } from '../storage/storage.service';
 export class PokemonService {
   pokemonApi = new PokemonClient();
 
-  readonly pokemonPrevSource = new BehaviorSubject<PreviousHunts>(this._storageService.getPokemonFoundFromLocal().previousHunts);
-  readonly pokemonPrev: Observable<PreviousHunts> = this.pokemonPrevSource.asObservable();
-
-  readonly pokemonCurrSource = new BehaviorSubject<CurrentHunt>(this._storageService.getPokemonFoundFromLocal().currentHunt);
-  readonly pokemonCurr: Observable<CurrentHunt> = this.pokemonCurrSource.asObservable();
-
-  readonly currImgUrlSource = new BehaviorSubject<string>('');
-  readonly currImgUrl: Observable<string> = this.currImgUrlSource.asObservable();
-
   constructor(
     private readonly _storageService: StorageService,
+    private readonly _store$: Store<AppState>,
   ) {}
 
-  getPokemonPrev(): Observable<PreviousHunts> {
-    return this.pokemonPrev;
+  getPokemonPrev(): Observable<PreviousHunt[]> {
+    return this._store$.select((s) => s.previousHunts);
   }
 
-  setPokemonPrev(list: PreviousHunts): void {
-    this.pokemonPrevSource.next(list);
-    this._storageService.setPokemonFoundToLocal({
-      currentHunt: this.pokemonCurrSource.value,
-      previousHunts: list
-    });
+  setPokemonPrev(list: PreviousHunt[]): void {
+    this._store$.dispatch(
+      AppActionTypes.setPreviousHuntsAction({ list: list })
+    );
+    this.persistPokemonLists();
   }
 
-  getPokemonCurr(): Observable<CurrentHunt> {
-    return this.pokemonCurr;
+  getPokemonCurr(): Observable<CurrentHunt[]> {
+    return this._store$.select((s) => s.currentHunts);
   }
 
-  setPokemonCurr(list: CurrentHunt): void {
-    this.pokemonCurrSource.next(list);
-    this._storageService.setPokemonFoundToLocal({
-      currentHunt: list,
-      previousHunts: this.pokemonPrevSource.value
-    });
+  setPokemonCurr(list: CurrentHunt[]): void {
+    this._store$.dispatch(
+      AppActionTypes.setCurrentHuntsAction({ list: list })
+    );
+    this.persistPokemonLists();
   }
 
-  getPokemonImgUrl(): Observable<string> {
-    return this.currImgUrl;
+  persistPokemonLists(): void {
+    this._store$.pipe(
+      take(1),
+      map((s) => {
+        this._storageService.setPokemonFoundToLocal({
+          currentHunt: null,
+          currentHunts: s.currentHunts,
+          previousHunts: s.previousHunts,
+        });
+      })
+    ).subscribe();
   }
 
-  async setPokemonImgUrl(pokemonName: string) {
-    if(pokemonName !== '') {
-      await this.pokemonApi.getPokemonByName(pokemonName).then(pokemon => this.currImgUrlSource.next(pokemon.sprites.front_shiny!))
+  async addCurrectPokemonImgUrl(currentHunt: CurrentHunt) {
+    let currentHuntIndex: number;
+    this._store$.pipe(
+      take(1),
+      map((s) => {
+        currentHuntIndex = s.currentHunts.length;
+      })
+    ).subscribe();
+
+    if (currentHunt.species !== null) {
+      await this.getPokemonImgUrl(currentHunt.species)
+        .then((url) => { currentHunt.pokemonImgUrl = url; return currentHunt })
+        .then((currentHunt) => {
+          this._store$.dispatch(
+            AppActionTypes.updateCurrentHuntsAction({ ...currentHunt, index: currentHuntIndex })
+          );
+        });
     }
+  }
+
+  async getPokemonImgUrl(pokemonName: string): Promise<string | null> {
+    return this.pokemonApi.getPokemonByName(pokemonName).then(pokemon => pokemon?.sprites?.front_shiny);
   }
 }

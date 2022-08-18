@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, map, Observable, take } from 'rxjs';
+import { AppActionTypes } from 'src/app/ngrx/app.actions';
+import { AppState } from 'src/app/types/app-state.types';
 import { emptyPokemonData, PokemonDataStorage } from 'src/app/types/pokemonFound.types';
 
 import { activeMenuType } from '../../types/app.types';
@@ -9,81 +12,74 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root'
 })
 export class AppService {
-  readonly activeMenuSource = new BehaviorSubject<activeMenuType>('Home');
-  readonly activeMenu: Observable<activeMenuType> = this.activeMenuSource.asObservable();
-
-  readonly addShinyOpenSource = new BehaviorSubject<boolean>(false);
-  readonly addShinyOpen: Observable<boolean> = this.addShinyOpenSource.asObservable();
-
-  currentNewPageSource = new BehaviorSubject<'pokemon' | 'game' | 'method'>('pokemon');
-  currentNewPage: Observable<'pokemon' | 'game' | 'method'> = this.currentNewPageSource;
 
   constructor(
+    private readonly _store$: Store<AppState>,
     private readonly _storageService: StorageService,
   ) {}
 
   initApp(): void {
     try {
       const initData: PokemonDataStorage = this._storageService.getPokemonFoundFromLocal()
-      if(initData.currentHunt.method === null) {
-        this.activeMenuSource.next('New');
+      console.log(initData);
+      if(initData.currentHunts === null) {
+        this._store$.dispatch(
+          AppActionTypes.setActiveMenuAction({ menu: 'Home'})
+        );
+      }
+      //! temporary code, remove after pokemon are saved
+      if (!!initData.currentHunt && !initData.currentHunts) {
+        this._store$.dispatch(
+          AppActionTypes.setCurrentHuntsAction({ list: [initData.currentHunt] }),
+        );
       }
     } catch (error) {
       this._storageService.setPokemonFoundToLocal(emptyPokemonData);
-      this.activeMenuSource.next('New');
+      this._store$.dispatch(
+        AppActionTypes.setActiveMenuAction({ menu: 'New'})
+      );
     }
   }
 
   getActiveMenu(): Observable<activeMenuType> {
-    return this.activeMenu;
+    return this._store$.select((s) => s.activeMenu);
   }
 
   setActiveMenu(menu: activeMenuType): void {
-    this.activeMenuSource.next(menu);
+    this._store$.dispatch(
+      AppActionTypes.setActiveMenuAction({ menu: menu })
+    );
   }
 
   /**
    * @returns True if the shiny form is open
    */
   getAddShinyOpen(): Observable<boolean> {
-    return this.addShinyOpen;
+    return this._store$.select((s) => s.addShinyFormOpen);
   }
 
   /**
    * Toggles the shiny form
    */
   toggleAddShinyOpen(): void {
-    this.addShinyOpenSource.next(!this.addShinyOpenSource.value);
+    this._store$.dispatch(
+      AppActionTypes.toggleAddShinyFormOpenAction()
+    );
   }
 
   getCurrentNewPage(): Observable<'pokemon' | 'game' | 'method'> {
-    return this.currentNewPage;
+    return this._store$.select((s) => s.currentNewPage)
   }
 
   progressToNextPage(): void {
-    switch(this.currentNewPageSource.value) {
-      case 'pokemon':
-        this.currentNewPageSource.next('game');
-        break;
-      case 'game':
-        this.currentNewPageSource.next('method');
-        break;
-      case 'method':
-        this.currentNewPageSource.next('pokemon');
-        break;
-    }
+    this._store$.dispatch(
+      AppActionTypes.advanceCurrentNewPageAction()
+    );
   }
 
   goBackToLastPage(): void {
-    switch(this.currentNewPageSource.value) {
-      case 'pokemon':
-        break;
-      case 'game':
-        this.currentNewPageSource.next('pokemon');
-        break;
-      case 'method':
-        this.currentNewPageSource.next('game');
-        break;
-    }
+    this._store$.dispatch(
+      AppActionTypes.recedeCurrentNewPageAction()
+    );
   }
 }

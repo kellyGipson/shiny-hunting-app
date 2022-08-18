@@ -12,7 +12,6 @@ import { CurrentHunt } from 'src/app/types/pokemonFound.types';
 })
 export class HomeComponent implements OnInit {
   readonly activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
-  readonly currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
 
   currentPage: Observable<'pokemon' | 'game' | 'method'> = this._appService.getCurrentNewPage();
 

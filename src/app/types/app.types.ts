@@ -10,3 +10,5 @@ export enum activeMenuEnum {
   Current = 'Current',
   Previous = 'Previous',
 }
+
+export type currentNewPageType = 'pokemon' | 'game' | 'method';

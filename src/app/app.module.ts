@@ -8,6 +8,9 @@ import { APP_COMPONENTS } from "./core";
 import { MATERIAL_COMPONENTS } from "./app.consts";
 import { HomeComponent } from './core/home/home.component';
 import { StoreModule } from '@ngrx/store';
+import { AppReducers } from "./ngrx/app.reducers";
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from "./ngrx/app.effects";
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import { StoreModule } from '@ngrx/store';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MATERIAL_COMPONENTS,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(AppReducers),
+    EffectsModule.forRoot(AppEffects),
   ],
   providers: [],
   bootstrap: [AppComponent]

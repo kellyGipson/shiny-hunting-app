@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
+import { AppActionTypes } from 'src/app/ngrx/app.actions';
 
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppState } from 'src/app/types/app-state.types';
 import { activeMenuType } from 'src/app/types/app.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
 import { CurrentHunt } from 'src/app/types/pokemonFound.types';
@@ -15,7 +18,6 @@ import { CurrentHunt } from 'src/app/types/pokemonFound.types';
 })
 export class PokemonSelectComponent implements OnInit {
   readonly activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
-  readonly currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
 
   pokemonList: PokemonJSONType[] = [];
   searchList: PokemonJSONType[] = [];
@@ -24,6 +26,7 @@ export class PokemonSelectComponent implements OnInit {
   constructor(
     private readonly _appService: AppService,
     private readonly _pokemonService: PokemonService,
+    private readonly _store$: Store<AppState>,
   ) {}
 
   async ngOnInit() {
@@ -64,14 +67,17 @@ export class PokemonSelectComponent implements OnInit {
   }
 
   pokemonClick(pokemon: PokemonJSONType) {
-    // update the current hunt
-    this._pokemonService.setPokemonCurr({
-      ...this._pokemonService.pokemonCurrSource.value,
-      species: pokemon.name,
-      huntStarted: new Date(),
-      count: 0,
-    });
-    // switch to game page
+    this._store$.dispatch(
+      AppActionTypes.addCurrentHuntsAction({
+        species: pokemon.name,
+        huntStarted: new Date(),
+        count: 0,
+        capturedOn: null,
+        foundOnGame: null,
+        method: null,
+        pokemonImgUrl: null,
+      })
+    );
     this._appService.progressToNextPage();
   }
 }

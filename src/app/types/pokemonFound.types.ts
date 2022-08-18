@@ -5,6 +5,7 @@ export interface CurrentHunt {
   count: number | null;
   foundOnGame: string | null; // todo add games
   method: methodsType | null;
+  pokemonImgUrl: string | null;
 }
 
 export interface PreviousHunt {
@@ -14,25 +15,19 @@ export interface PreviousHunt {
   count: number | null;
   foundOnGame: string | null; // todo add games
   method: methodsType | null;
+  pokemonImgUrl: string | null;
 }
 
 export interface PokemonDataStorage {
-  currentHunt: CurrentHunt;
-  previousHunts: PreviousHunts;
+  currentHunt: CurrentHunt | null; //! temporary until recover pokemon list
+  currentHunts: CurrentHunt[];
+  previousHunts: PreviousHunt[];
 }
 
-export type PreviousHunts = CurrentHunt[];
-
 export const emptyPokemonData: PokemonDataStorage = {
-  currentHunt: {
-    species: null,
-    huntStarted: null,
-    capturedOn: null,
-    count: null,
-    foundOnGame: null,
-    method: null
-  },
-  previousHunts: []
+  currentHunt: null,
+  currentHunts: [],
+  previousHunts: [],
 }
 
 export type methodsType = 'fullodds' | 'shinycharm' | 'masudamethod';

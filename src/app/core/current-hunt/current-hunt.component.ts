@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Pokemon, PokemonClient } from 'pokenode-ts';
+import { Store } from '@ngrx/store';
+import { PokemonClient } from 'pokenode-ts';
 
-import { Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
+import { AppActionTypes } from 'src/app/ngrx/app.actions';
 
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppState } from 'src/app/types/app-state.types';
 import { activeMenuType } from 'src/app/types/app.types';
-import { CurrentHunt, emptyPokemonData, gameImgUrlLookup, gameImgUrlLookupProd, gameImgUrlLookupType } from 'src/app/types/pokemonFound.types';
+import { CurrentHunt, gameImgUrlLookup, PreviousHunt } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-current-hunt',
@@ -17,28 +20,37 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   pokemonApi = new PokemonClient();
 
   // State
+  currentHunt!: Observable<CurrentHunt | null>;
+  currentHuntIndex!: Observable<number | null>;
   activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
-  currentHunt: Observable<CurrentHunt> = this._pokemonService.getPokemonCurr();
   interval: number = 1;
 
   // Variables
   currentCount!: number | null;
-  imageUrl: Observable<string> = this._pokemonService.currImgUrl;
   countAnimation: boolean = false;
 
-  readonly gameTyped = this._pokemonService.pokemonCurrSource.value.foundOnGame?.toLowerCase() as keyof typeof gameImgUrlLookup;
-  gameImgUrl: string = gameImgUrlLookup[this.gameTyped];
+  gameTyped!: keyof typeof gameImgUrlLookup;
+  gameImgUrl!: string;
 
   constructor(
     private readonly _appService: AppService,
     private readonly _pokemonService: PokemonService,
+    private readonly _store$: Store<AppState>,
   ) {}
 
   async ngOnInit(): Promise<void> {
     document.addEventListener('keypress', e => this.onKeypress(e));
-    if(this._pokemonService.pokemonCurrSource.value.species !== null) {
-      this._pokemonService.setPokemonImgUrl(this._pokemonService.pokemonCurrSource.value.species!.toLowerCase()!);
-    }
+    this.currentHunt = this._store$.select((s) => s.selectedHunt);
+    this.currentHuntIndex = this._store$.select((s) => s.selectedHuntIndex);
+    this.currentHunt.pipe(
+      take(1),
+      map((s) => {
+        if (!!s?.foundOnGame) {
+          this.gameTyped = s.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
+          this.gameImgUrl = gameImgUrlLookup[this.gameTyped];
+        }
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -57,23 +69,49 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
 
   onCounterIncrease(): void {
     this.counterAnimationFn();
-    const count = this._pokemonService.pokemonCurrSource.value.count! + this.interval;
-    this._pokemonService.setPokemonCurr({
-      ...this._pokemonService.pokemonCurrSource.value,
-      count: count,
-    });
+    this._store$.pipe(
+      take(1),
+      map((s) => {
+        if (s?.selectedHunt?.count === null) {
+          this._store$.dispatch(
+            AppActionTypes.updateCurrentHuntsAction({
+              ...s.selectedHunt,
+              count: 0,
+              index: s.selectedHuntIndex!,
+            })
+          );
+        }
+        const count = s.selectedHunt!.count! + this.interval;
+        this._store$.dispatch(
+          AppActionTypes.updateCurrentHuntsAction({
+            ...s.selectedHunt!,
+            count: count,
+            index: s.selectedHuntIndex!,
+          }),
+        );
+      })
+    ).subscribe();
   }
 
   onCounterDecrease(): void {
-    let count = this._pokemonService.pokemonCurrSource.value.count;
-    if(!(count! - this.interval < 0)) {
-      this.counterAnimationFn();
-      const count = this._pokemonService.pokemonCurrSource.value.count! - this.interval;
-      this._pokemonService.setPokemonCurr({
-        ...this._pokemonService.pokemonCurrSource.value,
-        count: count,
-      });
-    }
+    this._store$.pipe(
+      take(1),
+      map((s) => {
+        if (s.selectedHunt!.count !== null) {
+          if(!(s.selectedHunt!.count - this.interval < 0)) {
+            this.counterAnimationFn();
+            const count = s.selectedHunt!.count - this.interval;
+            this._store$.dispatch(
+              AppActionTypes.updateCurrentHuntsAction({
+                ...s.selectedHunt!,
+                count: count,
+                index: s.selectedHuntIndex!,
+              }),
+            );
+          }
+        }
+      })
+    ).subscribe();
   }
 
   counterAnimationFn(): void {
@@ -86,15 +124,33 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   foundAShiny() {
     this._appService.setActiveMenu('Previous');
     this._appService.toggleAddShinyOpen();
-    // this._pokemonService.setPokemonPrev([
-    //   ...this._pokemonService.pokemonPrevSource.value, this._pokemonService.pokemonCurrSource.value
-    // ]);
-    this._pokemonService.setPokemonCurr({ ...emptyPokemonData.currentHunt, count: 0 });
+    this._store$.pipe(
+      take(1),
+      map((s) => {
+        this._store$.dispatch(
+          AppActionTypes.addPreviousHuntsAction(s.selectedHunt as PreviousHunt)
+        );
+        this._store$.dispatch(
+          AppActionTypes.deleteCurrentHuntsAction({ index: s.selectedHuntIndex! })
+        );
+      })
+    )
   }
 
   onResetCounter(): void {
     if (window.confirm("Are you sure you want to reset the counter?")) {
-      this._pokemonService.setPokemonCurr({ ...this._pokemonService.pokemonCurrSource.value, count: 0 });
+      this._store$.pipe(
+        take(1),
+        map((s) => {
+          this._store$.dispatch(
+            AppActionTypes.updateCurrentHuntsAction({
+              ...s.selectedHunt!,
+              count: 0,
+              index: s.selectedHuntIndex!,
+            })
+          );
+        })
+      ).subscribe();
     }
   }
 
