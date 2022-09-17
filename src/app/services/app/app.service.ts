@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, map, Observable, take } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
-import { emptyPokemonData, PokemonDataStorage } from 'src/app/types/pokemonFound.types';
 
-import { activeMenuType } from '../../types/app.types';
-import { StorageService } from '../storage/storage.service';
+import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 
 @Injectable({
   providedIn: 'root'
@@ -15,52 +13,53 @@ export class AppService {
 
   constructor(
     private readonly _store$: Store<AppState>,
-    private readonly _storageService: StorageService,
   ) {}
 
-  initApp(): void {
-    try {
-      const initData: PokemonDataStorage = this._storageService.getPokemonFoundFromLocal()
-      console.log(initData);
-      if(initData.currentHunts === null) {
-        this._store$.dispatch(
-          AppActionTypes.setActiveMenuAction({ menu: 'Home'})
-        );
-      }
-      //! temporary code, remove after pokemon are saved
-      if (!!initData.currentHunt && !initData.currentHunts) {
-        this._store$.dispatch(
-          AppActionTypes.setCurrentHuntsAction({ list: [initData.currentHunt] }),
-        );
-      }
-    } catch (error) {
-      this._storageService.setPokemonFoundToLocal(emptyPokemonData);
-      this._store$.dispatch(
-        AppActionTypes.setActiveMenuAction({ menu: 'New'})
-      );
-    }
+  getCurrentAppState(): AppState {
+    let appState: AppState;
+
+    this._store$.pipe(
+      take(1),
+      map((state) => {
+        appState = state;
+      })
+    ).subscribe();
+
+    return appState;
   }
 
-  getActiveMenu(): Observable<activeMenuType> {
-    return this._store$.select((s) => s.activeMenu);
-  }
-
-  setActiveMenu(menu: activeMenuType): void {
+  setAppState(state: AppState): void {
     this._store$.dispatch(
-      AppActionTypes.setActiveMenuAction({ menu: menu })
+      AppActionTypes.setActiveMenuAction({ activeMenu: state.activeMenu })
+    );
+    this._store$.dispatch(
+      AppActionTypes.setCurrentHuntsAction({ list: state.currentHunts })
+    );
+    this._store$.dispatch(
+      AppActionTypes.setCurrentNewPageAction({ currentNewPage: state.currentNewPage})
+    );
+    this._store$.dispatch(
+      AppActionTypes.setPreviousHuntsAction({ previousHunts: state.previousHunts })
+    );
+    this._store$.dispatch(
+      AppActionTypes.setAddShinyFormOpenAction({ addShinyFormOpen: state.addShinyFormOpen })
     );
   }
 
-  /**
-   * @returns True if the shiny form is open
-   */
+  getActiveMenu(): Observable<ActiveMenuType> {
+    return this._store$.select((s) => s.activeMenu);
+  }
+
+  setActiveMenu(activeMenu: ActiveMenuType): void {
+    this._store$.dispatch(
+      AppActionTypes.setActiveMenuAction({ activeMenu })
+    );
+  }
+
   getAddShinyOpen(): Observable<boolean> {
     return this._store$.select((s) => s.addShinyFormOpen);
   }
 
-  /**
-   * Toggles the shiny form
-   */
   toggleAddShinyOpen(): void {
     this._store$.dispatch(
       AppActionTypes.toggleAddShinyFormOpenAction()

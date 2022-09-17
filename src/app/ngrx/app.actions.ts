@@ -3,7 +3,6 @@ import { addShinyFormOpenActionsContainer } from "./addShinyFormOpen/addShinyFor
 import { currentHuntsActionsContainer } from "./currentHunts/currentHunts.actions";
 import { currentNewPageActionsContainer } from "./currentNewPage/currentNewPage.actions";
 import { previousHuntsActionsContainer } from "./previousHunts/previousHunts.actions";
-import { selectedHuntsActionsContainer } from "./selectedHunt/selectedHunts.actions";
 
 export const AppActionTypes = {
   ...activeMenuActionsContainer,
@@ -11,5 +10,4 @@ export const AppActionTypes = {
   ...currentNewPageActionsContainer,
   ...currentHuntsActionsContainer,
   ...previousHuntsActionsContainer,
-  ...selectedHuntsActionsContainer,
 }

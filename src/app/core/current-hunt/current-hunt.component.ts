@@ -8,8 +8,10 @@ import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { AppState } from 'src/app/types/app-state.types';
-import { activeMenuType } from 'src/app/types/app.types';
-import { CurrentHunt, gameImgUrlLookup, PreviousHunt } from 'src/app/types/pokemonFound.types';
+import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { gameImgUrlLookup } from 'src/app/types/pokemonFound.types';
+import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { PreviousHunt } from 'src/app/types/previousHunts.types';
 
 @Component({
   selector: 'app-current-hunt',
@@ -22,7 +24,7 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   // State
   currentHunt!: Observable<CurrentHunt | null>;
   currentHuntIndex!: Observable<number | null>;
-  activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
+  activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
   interval: number = 1;
 
   // Variables
@@ -72,7 +74,7 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
     this._store$.pipe(
       take(1),
       map((s) => {
-        if (s?.selectedHunt?.count === null) {
+        if (s.selectedHunt?.count === null) {
           this._store$.dispatch(
             AppActionTypes.updateCurrentHuntsAction({
               ...s.selectedHunt,
@@ -81,12 +83,12 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
             })
           );
         }
-        const count = s.selectedHunt!.count! + this.interval;
+        const count = s.selectedHunt.count + this.interval;
         this._store$.dispatch(
           AppActionTypes.updateCurrentHuntsAction({
             ...s.selectedHunt!,
             count: count,
-            index: s.selectedHuntIndex!,
+            index: s.selectedHuntIndex,
           }),
         );
       })
@@ -97,15 +99,15 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
     this._store$.pipe(
       take(1),
       map((s) => {
-        if (s.selectedHunt!.count !== null) {
-          if(!(s.selectedHunt!.count - this.interval < 0)) {
+        if (s.selectedHunt.count !== null) {
+          if(!(s.selectedHunt.count - this.interval < 0)) {
             this.counterAnimationFn();
-            const count = s.selectedHunt!.count - this.interval;
+            const count = s.selectedHunt.count - this.interval;
             this._store$.dispatch(
               AppActionTypes.updateCurrentHuntsAction({
-                ...s.selectedHunt!,
+                ...s.selectedHunt,
                 count: count,
-                index: s.selectedHuntIndex!,
+                index: s.selectedHuntIndex,
               }),
             );
           }

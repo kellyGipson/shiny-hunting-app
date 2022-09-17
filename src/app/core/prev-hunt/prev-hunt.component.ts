@@ -7,8 +7,9 @@ import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { AppState } from 'src/app/types/app-state.types';
-import { activeMenuType } from 'src/app/types/app.types';
-import { CurrentHunt, PreviousHunt } from 'src/app/types/pokemonFound.types';
+import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { PreviousHunts } from 'src/app/types/previousHunts.types';
 
 @Component({
   selector: 'app-prev-hunt',
@@ -18,9 +19,9 @@ import { CurrentHunt, PreviousHunt } from 'src/app/types/pokemonFound.types';
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: CurrentHunt;
 
-  activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
+  activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
   addShinyOpen: Observable<boolean> = this._appService.getAddShinyOpen();
-  pokemonFound: Observable<PreviousHunt[]> = this._pokemonService.getPokemonPrev();
+  pokemonFound: Observable<PreviousHunts> = this._pokemonService.getPokemonPrev();
 
   species!: UntypedFormControl;
   count!: UntypedFormControl;
@@ -47,7 +48,7 @@ export class PokemonComponent implements OnInit {
   onShinySubmit(e: Event): void {
     if(e)e.preventDefault();
 
-    const newPokemonList: PreviousHunt[] = [
+    const newPokemonList: PreviousHunts = [
       {
         species: this.species.value,
         count: this.count.value,

@@ -1,47 +1,54 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppState, INITIAL_APP_STATE } from "src/app/types/app-state.types";
+import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
+import { PreviousHunts } from "src/app/types/previousHunts.types";
 import { AppActionTypes } from "../app.actions";
 
-export const previousHuntsReducer = createReducer(
-  INITIAL_APP_STATE,
+export const addPreviousHuntsReducer = on(
+  AppActionTypes.addPreviousHuntsAction,
+  (state: PreviousHunts, action) => {
+    state.push(action)
 
-  on(AppActionTypes.addPreviousHuntsAction,
-    (state: AppState, action) => {
-      state.previousHunts.push(action)
+    return { ...state };
+  }
+);
 
-      return { ...state };
-    }
-  ),
+export const deletePreviousHuntsReducer = on(
+  AppActionTypes.deletePreviousHuntsAction,
+  (state: PreviousHunts, action) => {
+    state.splice(action.index, 1);
 
-  on(AppActionTypes.deletePreviousHuntsAction,
-    (state: AppState, action) => {
-      state.previousHunts.splice(action.index, 1);
+    return { ...state };
+  }
+);
 
-      return { ...state };
-    }
-  ),
+export const updatePreviousHuntsReducer = on(
+  AppActionTypes.updatePreviousHuntsAction,
+  (state: PreviousHunts, action) => {
+    state.splice(action.index, 1, {
+      capturedOn: action.capturedOn,
+      count: action.count,
+      foundOnGame: action.foundOnGame,
+      huntStarted: action.huntStarted,
+      method: action.method,
+      pokemonImgUrl: action.pokemonImgUrl,
+      species: action.species,
+    })
 
-  on(AppActionTypes.updatePreviousHuntsAction,
-    (state: AppState, action) => {
-      state.previousHunts.splice(action.index, 1, {
-        capturedOn: action.capturedOn,
-        count: action.count,
-        foundOnGame: action.foundOnGame,
-        huntStarted: action.huntStarted,
-        method: action.method,
-        pokemonImgUrl: action.pokemonImgUrl,
-        species: action.species,
-      })
+    return { ...state }
+  }
+);
 
-      return { ...state }
-    }
-  ),
+export const setPreviousHuntsReducer = on(
+  AppActionTypes.setPreviousHuntsAction,
+  (_, action) => {
+    return action.previousHunts
+  }
+);
 
-  on(AppActionTypes.setPreviousHuntsAction,
-    (state: AppState, action) => {
-      state.previousHunts = action.list;
-
-      return { ...state }
-    }
-  ),
+export const previousHuntsReducers = createReducer(
+  INITIAL_APP_STATE.previousHunts,
+  addPreviousHuntsReducer,
+  deletePreviousHuntsReducer,
+  updatePreviousHuntsReducer,
+  setPreviousHuntsReducer,
 )

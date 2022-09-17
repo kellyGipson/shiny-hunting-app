@@ -2,7 +2,8 @@
 
   <mat-drawer #drawer class="sidenav__drawer" mode="side">
     <button
-      class="menuSelector btn sidenav__button {{((activeMenu | async) === navItem) ? 'btnActive' : ''}}"
+      class="menuSelector btn sidenav__button"
+      [class.btnActive]="(activeMenu$ | async) === navItem"
       (click)="onMenuClick(navItem)"
       *ngFor="let navItem of menus"
       [disabled]="decideDisabled(navItem)"

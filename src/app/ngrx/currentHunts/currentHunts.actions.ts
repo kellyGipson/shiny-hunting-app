@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store"
-import { CurrentHunt } from "src/app/types/pokemonFound.types"
+import { AddCurrentHunt, CurrentHunt } from "src/app/types/currentHunts.types";
 
 export const currentHuntsActionsType = {
   ADD_CURRENT_HUNTS_OPEN_ACTION: 'ADD_CURRENT_HUNTS_OPEN_ACTION',
@@ -20,7 +20,7 @@ export const deleteCurrentHuntsAction = createAction(
 
 export const updateCurrentHuntsAction = createAction(
   currentHuntsActionsType.UPDATE_CURRENT_HUNTS_OPEN_ACTION,
-  props<CurrentHunt & { index: number }>(),
+  props<AddCurrentHunt>(),
 );
 
 export const setCurrentHuntsAction = createAction(

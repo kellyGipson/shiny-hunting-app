@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PokemonClient } from 'pokenode-ts';
 
-import { from, map, Observable, take } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
-
-import { CurrentHunt, PreviousHunt } from 'src/app/types/pokemonFound.types';
+import { CurrentHunt, CurrentHuntsStateType } from 'src/app/types/currentHunts.types';
+import { PreviousHunts } from 'src/app/types/previousHunts.types';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -20,22 +20,22 @@ export class PokemonService {
     private readonly _store$: Store<AppState>,
   ) {}
 
-  getPokemonPrev(): Observable<PreviousHunt[]> {
+  getPokemonPrev(): Observable<PreviousHunts> {
     return this._store$.select((s) => s.previousHunts);
   }
 
-  setPokemonPrev(list: PreviousHunt[]): void {
+  setPokemonPrev(previousHunts: PreviousHunts): void {
     this._store$.dispatch(
-      AppActionTypes.setPreviousHuntsAction({ list: list })
+      AppActionTypes.setPreviousHuntsAction({ previousHunts })
     );
     this.persistPokemonLists();
   }
 
-  getPokemonCurr(): Observable<CurrentHunt[]> {
+  getPokemonCurr(): Observable<CurrentHuntsStateType> {
     return this._store$.select((s) => s.currentHunts);
   }
 
-  setPokemonCurr(list: CurrentHunt[]): void {
+  setPokemonCurr(list: CurrentHuntsStateType): void {
     this._store$.dispatch(
       AppActionTypes.setCurrentHuntsAction({ list: list })
     );
@@ -46,11 +46,7 @@ export class PokemonService {
     this._store$.pipe(
       take(1),
       map((s) => {
-        this._storageService.setPokemonFoundToLocal({
-          currentHunt: null,
-          currentHunts: s.currentHunts,
-          previousHunts: s.previousHunts,
-        });
+        this._storageService.setPokemonFoundToLocal(s);
       })
     ).subscribe();
   }

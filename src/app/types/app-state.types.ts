@@ -1,14 +1,16 @@
-import { activeMenuType, currentNewPageType } from "./app.types";
-import { CurrentHunt, PreviousHunt } from "./pokemonFound.types";
+import { ActiveMenuType } from "./activeMenu.types";
+import { CurrentNewPageType } from "./currentNewPage.types";
+import { CurrentHunt } from "./currentHunts.types";
+import { PreviousHunts } from "./previousHunts.types";
 
 export interface AppState {
-  activeMenu: activeMenuType;
+  activeMenu: ActiveMenuType;
   addShinyFormOpen: boolean;
-  currentNewPage: currentNewPageType;
+  currentNewPage: CurrentNewPageType;
   selectedHunt: CurrentHunt | null;
   selectedHuntIndex: number | null;
   currentHunts: CurrentHunt[];
-  previousHunts: PreviousHunt[];
+  previousHunts: PreviousHunts;
 }
 
 export const INITIAL_APP_STATE: AppState = {

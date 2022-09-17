@@ -1,5 +1,5 @@
-import { createAction, props } from "@ngrx/store"
-import { activeMenuType } from "src/app/types/app.types"
+import { createAction, props } from '@ngrx/store';
+import { ActiveMenuStateType } from 'src/app/types/activeMenu.types';
 
 export const activeMenuActionsType = {
   SET_ACTIVE_MENU_ACTION: 'SET_ACTIVE_MENU_ACTION',
@@ -7,7 +7,7 @@ export const activeMenuActionsType = {
 
 export const setActiveMenuAction = createAction(
   activeMenuActionsType.SET_ACTIVE_MENU_ACTION,
-  props<{ menu: activeMenuType }>(),
+  props<ActiveMenuStateType>(),
 )
 
 export const activeMenuActionsContainer = {

@@ -7,9 +7,9 @@ import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { AppState } from 'src/app/types/app-state.types';
-import { activeMenuType } from 'src/app/types/app.types';
+import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
-import { CurrentHunt } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-pokemon-select',
@@ -17,7 +17,7 @@ import { CurrentHunt } from 'src/app/types/pokemonFound.types';
   styleUrls: ['./pokemon-select.component.css', '../../app.component.css']
 })
 export class PokemonSelectComponent implements OnInit {
-  readonly activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
+  readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
 
   pokemonList: PokemonJSONType[] = [];
   searchList: PokemonJSONType[] = [];
@@ -60,7 +60,7 @@ export class PokemonSelectComponent implements OnInit {
   search(e: any) {
     this.searchList = [];
     for(let i = 0; i < this.pokemonList.length; i++) {
-      if(this.pokemonList[i].name.toLowerCase().includes(e.target.value)) {
+      if(this.pokemonList[i].name.toLowerCase().includes(e.target.value.toLowerCase())) {
         this.searchList.push(this.pokemonList[i]);
       }
     }
@@ -69,7 +69,7 @@ export class PokemonSelectComponent implements OnInit {
   pokemonClick(pokemon: PokemonJSONType) {
     this._store$.dispatch(
       AppActionTypes.addCurrentHuntsAction({
-        species: pokemon.name,
+        species: pokemon.name.toLowerCase(),
         huntStarted: new Date(),
         count: 0,
         capturedOn: null,

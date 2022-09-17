@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
-import { activeMenuType } from 'src/app/types/app.types';
-import { CurrentHunt } from 'src/app/types/pokemonFound.types';
+import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 
 @Component({
   selector: 'app-new-hunt',
@@ -13,7 +11,7 @@ import { CurrentHunt } from 'src/app/types/pokemonFound.types';
   styleUrls: ['./new-hunt.component.css', '../../app.component.css']
 })
 export class NewHuntComponent implements OnInit {
-  readonly activeMenu: Observable<activeMenuType> = this._appService.getActiveMenu();
+  readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
 
   currentPage: Observable<'pokemon' | 'game' | 'method'> = this._appService.getCurrentNewPage();
 

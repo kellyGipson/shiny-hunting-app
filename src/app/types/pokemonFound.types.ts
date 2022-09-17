@@ -1,35 +1,3 @@
-export interface CurrentHunt {
-  species: string | null;
-  huntStarted: Date | null;
-  capturedOn: Date | null;
-  count: number | null;
-  foundOnGame: string | null; // todo add games
-  method: methodsType | null;
-  pokemonImgUrl: string | null;
-}
-
-export interface PreviousHunt {
-  species: string | null;
-  huntStarted: Date | null;
-  capturedOn: Date | null;
-  count: number | null;
-  foundOnGame: string | null; // todo add games
-  method: methodsType | null;
-  pokemonImgUrl: string | null;
-}
-
-export interface PokemonDataStorage {
-  currentHunt: CurrentHunt | null; //! temporary until recover pokemon list
-  currentHunts: CurrentHunt[];
-  previousHunts: PreviousHunt[];
-}
-
-export const emptyPokemonData: PokemonDataStorage = {
-  currentHunt: null,
-  currentHunts: [],
-  previousHunts: [],
-}
-
 export type methodsType = 'fullodds' | 'shinycharm' | 'masudamethod';
 
 export const allMethods: methodsType[] = ['fullodds', 'shinycharm', 'masudamethod']

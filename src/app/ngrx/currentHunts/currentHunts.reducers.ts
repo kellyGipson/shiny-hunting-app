@@ -1,45 +1,53 @@
 import { createReducer, on } from "@ngrx/store";
-import { AppState, INITIAL_APP_STATE } from "src/app/types/app-state.types";
+import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
+import { CurrentHuntsStateType } from "src/app/types/currentHunts.types";
 import { AppActionTypes } from "../app.actions";
 
-export const currentHuntsReducer = createReducer(
+export const addCurrentHuntsReducer = on(
+  AppActionTypes.addCurrentHuntsAction,
+  (state: CurrentHuntsStateType, action) => {
+    state.push(action)
+
+    return { ...state };
+  }
+);
+
+export const deleteCurrentHuntsReducer = on(
+  AppActionTypes.deleteCurrentHuntsAction,
+  (state: CurrentHuntsStateType, action) => {
+    state.splice(action.index, 1);
+
+    return { ...state }
+  }
+);
+
+export const updateCurrentHuntsReducer = on(
+  AppActionTypes.updateCurrentHuntsAction,
+  (state: CurrentHuntsStateType, action) => {
+    state.splice(action.index, 1, {
+      capturedOn: action.capturedOn,
+      count: action.count,
+      foundOnGame: action.foundOnGame,
+      huntStarted: action.huntStarted,
+      method: action.method,
+      pokemonImgUrl: action.pokemonImgUrl,
+      species: action.species,
+    })
+    return { ...state }
+  }
+);
+
+export const setCurrentHuntsAction = on(
+  AppActionTypes.setCurrentHuntsAction,
+  (_, action) => {
+    return action.list
+  }
+);
+
+export const currentHuntsReducers = createReducer(
   INITIAL_APP_STATE,
-
-  on(AppActionTypes.addCurrentHuntsAction,
-    (state: AppState, action) => {
-      state.currentHunts.push(action)
-
-      return { ...state };
-    }
-  ),
-
-  on(AppActionTypes.deleteCurrentHuntsAction,
-    (state: AppState, action) => {
-      state.currentHunts.splice(action.index, 1);
-
-      return { ...state }
-    }
-  ),
-
-  on(AppActionTypes.updateCurrentHuntsAction,
-    (state: AppState, action) => {
-      state.currentHunts.splice(action.index, 1, {
-        capturedOn: action.capturedOn,
-        count: action.count,
-        foundOnGame: action.foundOnGame,
-        huntStarted: action.huntStarted,
-        method: action.method,
-        pokemonImgUrl: action.pokemonImgUrl,
-        species: action.species,
-      })
-
-      return { ...state }
-    }
-  ),
-
-  on(AppActionTypes.setCurrentHuntsAction,
-    (state: AppState, action) => {
-      return { ...state, currentHunts: action.list }
-    }
-  ),
+  addCurrentHuntsReducer,
+  deleteCurrentHuntsReducer,
+  updateCurrentHuntsReducer,
+  setCurrentHuntsAction,
 )

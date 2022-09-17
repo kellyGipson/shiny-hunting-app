@@ -1,6 +1,5 @@
 import { createAction, props } from "@ngrx/store"
-import { create } from "domain"
-import { currentNewPageType } from "src/app/types/app.types"
+import { CurrentNewPageType } from "src/app/types/currentNewPage.types"
 
 export const currentNewPageActionsType = {
   SET_CURRENT_NEW_PAGE_ACTION: 'SET_CURRENT_NEW_PAGE_ACTION',
@@ -10,7 +9,7 @@ export const currentNewPageActionsType = {
 
 export const setCurrentNewPageAction = createAction(
   currentNewPageActionsType.SET_CURRENT_NEW_PAGE_ACTION,
-  props<{ currentNewPage: currentNewPageType }>(),
+  props<{ currentNewPage: CurrentNewPageType }>(),
 )
 
 export const advanceCurrentNewPageAction = createAction(
