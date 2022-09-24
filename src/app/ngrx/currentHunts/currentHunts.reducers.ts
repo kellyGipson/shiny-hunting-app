@@ -1,4 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
+import copy from "fast-copy";
 import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
 import { CurrentHuntsStateType } from "src/app/types/currentHunts.types";
 import { AppActionTypes } from "../app.actions";
@@ -6,7 +7,8 @@ import { AppActionTypes } from "../app.actions";
 export const addCurrentHuntsReducer = on(
   AppActionTypes.addCurrentHuntsAction,
   (state: CurrentHuntsStateType, action) => {
-    state.push({
+    let newCurrentHunts = copy(state);
+    newCurrentHunts.push({
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
@@ -14,9 +16,8 @@ export const addCurrentHuntsReducer = on(
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
       species: action.species
-    });
-
-    return state;
+    })
+    return newCurrentHunts;
   }
 );
 
