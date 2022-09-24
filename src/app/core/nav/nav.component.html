@@ -1,6 +1,10 @@
 <mat-drawer-container class="sidenav__container">
 
-  <mat-drawer #drawer class="sidenav__drawer" mode="side">
+  <mat-drawer
+    #drawer
+    mode="side"
+    class="sidenav__drawer"
+  >
     <button
       class="menuSelector btn sidenav__button"
       [class.btnActive]="(activeMenu$ | async) === navItem"

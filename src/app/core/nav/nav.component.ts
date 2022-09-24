@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
 
   constructor(
     private readonly _appService: AppService,
-    private readonly _store: Store<AppState>,
+    private readonly _store$: Store<AppState>,
   ) {}
 
   ngOnInit(): void {
@@ -26,11 +26,11 @@ export class NavComponent implements OnInit {
   }
 
   private _mapStore(): void {
-    this.activeMenu$ = this._store.select((s) => s.activeMenu);
+    this.activeMenu$ = this._store$.select((s) => s.activeMenu);
   }
 
   onMenuClick(navItem: ActiveMenuType) {
-    this._store.pipe(
+    this._store$.pipe(
       take(1),
       tap((s) => {
         if(navItem !== s.activeMenu) {
@@ -42,7 +42,14 @@ export class NavComponent implements OnInit {
 
   decideDisabled(navItem: ActiveMenuType) {
     let isDisabled: boolean = false;
-
+    this._store$.pipe(
+      take(1),
+      tap((s) => {
+        if (navItem === s.activeMenu) {
+          isDisabled = true;
+        }
+      })
+    ).subscribe();
     return isDisabled;
   }
 }
