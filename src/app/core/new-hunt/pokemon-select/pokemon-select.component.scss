@@ -18,20 +18,20 @@
   width: 15rem;
   border: 2px grey solid;
   user-select: none;
-}
 
-.pokemonContainer:first-child {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-}
+  :first-child {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
 
-.pokemonContainer:last-child {
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
-}
+  :last-child {
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
 
-.pokemonContainer:active {
-  border-color: white;
+  :active {
+    border-color: white;
+  }
 }
 
 .pokemonImg {
