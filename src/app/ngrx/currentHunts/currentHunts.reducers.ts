@@ -6,9 +6,17 @@ import { AppActionTypes } from "../app.actions";
 export const addCurrentHuntsReducer = on(
   AppActionTypes.addCurrentHuntsAction,
   (state: CurrentHuntsStateType, action) => {
-    state.push(action)
+    state.push({
+      capturedOn: action.capturedOn,
+      count: action.count,
+      foundOnGame: action.foundOnGame,
+      huntStarted: action.huntStarted,
+      method: action.method,
+      pokemonImgUrl: action.pokemonImgUrl,
+      species: action.species
+    });
 
-    return { ...state };
+    return state;
   }
 );
 
@@ -17,7 +25,7 @@ export const deleteCurrentHuntsReducer = on(
   (state: CurrentHuntsStateType, action) => {
     state.splice(action.index, 1);
 
-    return { ...state }
+    return state;
   }
 );
 
@@ -32,15 +40,16 @@ export const updateCurrentHuntsReducer = on(
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
       species: action.species,
-    })
-    return { ...state }
+    });
+
+    return state
   }
 );
 
 export const setCurrentHuntsAction = on(
   AppActionTypes.setCurrentHuntsAction,
   (_, action) => {
-    return action.list
+    return action.list;
   }
 );
 
