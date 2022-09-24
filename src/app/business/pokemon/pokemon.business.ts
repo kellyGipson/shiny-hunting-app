@@ -7,16 +7,16 @@ import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
 import { CurrentHunt, CurrentHuntsStateType } from 'src/app/types/currentHunts.types';
 import { PreviousHunts } from 'src/app/types/previousHunts.types';
-import { StorageService } from '../storage/storage.service';
+import { StorageBusiness } from '../storage/storage.business';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PokemonService {
+export class PokemonBusiness {
   pokemonApi = new PokemonClient();
 
   constructor(
-    private readonly _storageService: StorageService,
+    private readonly _storageBusiness: StorageBusiness,
     private readonly _store$: Store<AppState>,
   ) {}
 
@@ -46,7 +46,7 @@ export class PokemonService {
     this._store$.pipe(
       take(1),
       map((s) => {
-        this._storageService.setPokemonFoundToLocal(s);
+        this._storageBusiness.setPokemonFoundToLocal(s);
       })
     ).subscribe();
   }

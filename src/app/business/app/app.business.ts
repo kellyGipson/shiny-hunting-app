@@ -9,7 +9,7 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 @Injectable({
   providedIn: 'root'
 })
-export class AppService {
+export class AppBusiness {
 
   constructor(
     private readonly _store$: Store<AppState>,

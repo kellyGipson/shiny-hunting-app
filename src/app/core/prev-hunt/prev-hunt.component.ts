@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 
-import { AppService } from 'src/app/services/app/app.service';
-import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
+import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
@@ -19,9 +19,9 @@ import { PreviousHunts } from 'src/app/types/previousHunts.types';
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: CurrentHunt;
 
-  activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
-  addShinyOpen: Observable<boolean> = this._appService.getAddShinyOpen();
-  pokemonFound: Observable<PreviousHunts> = this._pokemonService.getPokemonPrev();
+  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
+  addShinyOpen: Observable<boolean> = this._appBusiness.getAddShinyOpen();
+  pokemonFound: Observable<PreviousHunts> = this._pokemonBusiness.getPokemonPrev();
 
   species!: UntypedFormControl;
   count!: UntypedFormControl;
@@ -29,8 +29,8 @@ export class PokemonComponent implements OnInit {
   method!: UntypedFormControl;
 
   constructor(
-    private readonly _appService: AppService,
-    private readonly _pokemonService: PokemonService,
+    private readonly _appBusiness: AppBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
     private readonly _store$: Store<AppState>,
   ) { }
 
@@ -42,7 +42,7 @@ export class PokemonComponent implements OnInit {
   }
 
   onToggleShinyForm(): void {
-    this._appService.toggleAddShinyOpen();
+    this._appBusiness.toggleAddShinyOpen();
   }
 
   onShinySubmit(e: Event): void {
@@ -60,7 +60,7 @@ export class PokemonComponent implements OnInit {
       },
     ];
 
-    this._pokemonService.setPokemonPrev(newPokemonList);
+    this._pokemonBusiness.setPokemonPrev(newPokemonList);
     this.species.setValue("");
     this.count.setValue(0);
     this.foundOnGame.setValue("");
@@ -71,6 +71,6 @@ export class PokemonComponent implements OnInit {
     this._store$.dispatch(
       AppActionTypes.deletePreviousHuntsAction({ index: index })
     );
-    this._pokemonService.persistPokemonLists();
+    this._pokemonBusiness.persistPokemonLists();
   }
 }

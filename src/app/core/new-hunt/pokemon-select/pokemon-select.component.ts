@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 
-import { AppService } from 'src/app/services/app/app.service';
-import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
+import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
@@ -16,15 +16,15 @@ import { PokemonJSONType } from 'src/app/types/pokemonData.types';
   styleUrls: ['./pokemon-select.component.scss', '../../../app.component.scss']
 })
 export class PokemonSelectComponent implements OnInit {
-  readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
+  readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
 
   pokemonList: PokemonJSONType[] = [];
   searchList: PokemonJSONType[] = [];
   namesReady: boolean = false;
 
   constructor(
-    private readonly _appService: AppService,
-    private readonly _pokemonService: PokemonService,
+    private readonly _appBusiness: AppBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
     private readonly _store$: Store<AppState>,
   ) {}
 
@@ -77,6 +77,6 @@ export class PokemonSelectComponent implements OnInit {
         pokemonImgUrl: null,
       })
     );
-    this._appService.progressToNextPage();
+    this._appBusiness.progressToNextPage();
   }
 }

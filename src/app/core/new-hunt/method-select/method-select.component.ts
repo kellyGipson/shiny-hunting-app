@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take, map, Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
-import { AppService } from 'src/app/services/app/app.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
@@ -19,7 +19,7 @@ export class MethodSelectComponent implements OnInit {
   methods: methodsType[] = allMethods;
 
   constructor(
-    private readonly _appService: AppService,
+    private readonly _appBusiness: AppBusiness,
     private readonly _store$: Store<AppState>,
   ) { }
 
@@ -43,11 +43,11 @@ export class MethodSelectComponent implements OnInit {
         );
       })
     ).subscribe();
-    this._appService.progressToNextPage();
-    this._appService.setActiveMenu('Selected');
+    this._appBusiness.progressToNextPage();
+    this._appBusiness.setActiveMenu('Selected');
   }
 
   backButton() {
-    this._appService.goBackToLastPage();
+    this._appBusiness.goBackToLastPage();
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
-import { AppService } from 'src/app/services/app/app.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
@@ -20,7 +20,7 @@ export class GameSelectComponent implements OnInit {
   allGames: pokemonGames[] = allGames;
 
   constructor(
-    private readonly _appService: AppService,
+    private readonly _appBusiness: AppBusiness,
     private readonly _store$: Store<AppState>,
   ) { }
 
@@ -44,10 +44,10 @@ export class GameSelectComponent implements OnInit {
         );
       })
     ).subscribe();
-    this._appService.progressToNextPage();
+    this._appBusiness.progressToNextPage();
   }
 
   backButton() {
-    this._appService.goBackToLastPage();
+    this._appBusiness.goBackToLastPage();
   }
 }

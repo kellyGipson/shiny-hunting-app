@@ -4,7 +4,7 @@ import { AppState, INITIAL_APP_STATE } from 'src/app/types/app-state.types';
 @Injectable({
   providedIn: 'root'
 })
-export class StorageService {
+export class StorageBusiness {
   constructor() {}
 
   getPokemonFoundFromLocal(): AppState {

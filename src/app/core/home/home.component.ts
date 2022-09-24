@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppService } from 'src/app/services/app/app.service';
-import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
+import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 
 @Component({
@@ -10,13 +10,13 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
+  readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
 
-  currentPage: Observable<'pokemon' | 'game' | 'method'> = this._appService.getCurrentNewPage();
+  currentPage: Observable<'pokemon' | 'game' | 'method'> = this._appBusiness.getCurrentNewPage();
 
   constructor(
-    private readonly _appService: AppService,
-    private readonly _pokemonService: PokemonService,
+    private readonly _appBusiness: AppBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
   ) { }
 
   ngOnInit(): void {

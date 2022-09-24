@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AppService } from 'src/app/services/app/app.service';
-import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
+import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 
 @Component({
@@ -11,15 +11,20 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
   styleUrls: ['./new-hunt.component.scss', '../../app.component.scss']
 })
 export class NewHuntComponent implements OnInit {
-  readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
-
-  currentPage: Observable<'pokemon' | 'game' | 'method'> = this._appService.getCurrentNewPage();
+  activeMenu: Observable<ActiveMenuType>;
+  currentPage: Observable<'pokemon' | 'game' | 'method'>;
 
   constructor(
-    private readonly _appService: AppService,
-    private readonly _pokemonService: PokemonService,
+    private readonly _appBusiness: AppBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
   ) {}
 
   async ngOnInit() {
+    this._mapState();
+  }
+
+  private _mapState(): void {
+    this.activeMenu = this._appBusiness.getActiveMenu();
+    this.currentPage = this._appBusiness.getCurrentNewPage();
   }
 }

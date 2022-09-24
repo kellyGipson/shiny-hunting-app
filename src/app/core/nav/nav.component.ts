@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable, take, tap } from 'rxjs';
 
-import { AppService } from 'src/app/services/app/app.service';
+import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
 
@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
   menus: ActiveMenuType[] = allActiveMenu;
 
   constructor(
-    private readonly _appService: AppService,
+    private readonly _appBusiness: AppBusiness,
     private readonly _store$: Store<AppState>,
   ) {}
 
@@ -34,7 +34,7 @@ export class NavComponent implements OnInit {
       take(1),
       tap((s) => {
         if(navItem !== s.activeMenu) {
-          this._appService.setActiveMenu(navItem);
+          this._appBusiness.setActiveMenu(navItem);
         }
       })
     ).subscribe();
