@@ -13,7 +13,7 @@ import { PokemonJSONType } from 'src/app/types/pokemonData.types';
 @Component({
   selector: 'app-pokemon-select',
   templateUrl: './pokemon-select.component.html',
-  styleUrls: ['./pokemon-select.component.scss', '../../app.component.scss']
+  styleUrls: ['./pokemon-select.component.scss', '../../../app.component.scss']
 })
 export class PokemonSelectComponent implements OnInit {
   readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();

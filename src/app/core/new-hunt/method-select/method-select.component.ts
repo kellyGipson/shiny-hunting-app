@@ -10,7 +10,7 @@ import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
 @Component({
   selector: 'app-method-select',
   templateUrl: './method-select.component.html',
-  styleUrls: ['./method-select.component.scss', '../../app.component.scss']
+  styleUrls: ['./method-select.component.scss', '../../../app.component.scss']
 })
 export class MethodSelectComponent implements OnInit {
   currentHunt!: Observable<CurrentHunt>;
