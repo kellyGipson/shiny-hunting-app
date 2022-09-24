@@ -8,7 +8,6 @@ import { AppService } from 'src/app/services/app/app.service';
 import { PokemonService } from 'src/app/services/pokemon/pokemon.service';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
 
 @Component({
@@ -69,13 +68,13 @@ export class PokemonSelectComponent implements OnInit {
   pokemonClick(pokemon: PokemonJSONType) {
     this._store$.dispatch(
       AppActionTypes.addCurrentHuntsAction({
-          species: pokemon.name.toLowerCase(),
-          huntStarted: new Date(),
-          count: 0,
-          capturedOn: null,
-          foundOnGame: null,
-          method: null,
-          pokemonImgUrl: null,
+        species: pokemon.name.toLowerCase(),
+        huntStarted: new Date(),
+        count: 0,
+        capturedOn: null,
+        foundOnGame: null,
+        method: null,
+        pokemonImgUrl: null,
       })
     );
     this._appService.progressToNextPage();
