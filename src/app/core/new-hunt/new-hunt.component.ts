@@ -8,7 +8,7 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 @Component({
   selector: 'app-new-hunt',
   templateUrl: './new-hunt.component.html',
-  styleUrls: ['./new-hunt.component.css', '../../app.component.css']
+  styleUrls: ['./new-hunt.component.scss', '../../app.component.scss']
 })
 export class NewHuntComponent implements OnInit {
   readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();

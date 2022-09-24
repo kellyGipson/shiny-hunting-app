@@ -9,7 +9,7 @@ import { ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css', '../../app.component.css'],
+  styleUrls: ['./nav.component.scss', '../../app.component.scss'],
 })
 export class NavComponent implements OnInit {
   activeMenu$!: Observable<ActiveMenuType>;

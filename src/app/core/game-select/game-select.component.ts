@@ -10,7 +10,7 @@ import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
 @Component({
   selector: 'app-game-select',
   templateUrl: './game-select.component.html',
-  styleUrls: ['./game-select.component.css', '../../app.component.css']
+  styleUrls: ['./game-select.component.scss', '../../app.component.scss']
 })
 export class GameSelectComponent implements OnInit {
 

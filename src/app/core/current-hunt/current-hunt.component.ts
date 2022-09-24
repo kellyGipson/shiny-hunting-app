@@ -16,7 +16,7 @@ import { PreviousHunt } from 'src/app/types/previousHunts.types';
 @Component({
   selector: 'app-current-hunt',
   templateUrl: './current-hunt.component.html',
-  styleUrls: ['./current-hunt.component.css', '../../app.component.css']
+  styleUrls: ['./current-hunt.component.scss', '../../app.component.scss']
 })
 export class CurrentHuntComponent implements OnInit, OnDestroy {
   pokemonApi = new PokemonClient();

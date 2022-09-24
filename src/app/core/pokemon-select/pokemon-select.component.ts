@@ -14,7 +14,7 @@ import { PokemonJSONType } from 'src/app/types/pokemonData.types';
 @Component({
   selector: 'app-pokemon-select',
   templateUrl: './pokemon-select.component.html',
-  styleUrls: ['./pokemon-select.component.css', '../../app.component.css']
+  styleUrls: ['./pokemon-select.component.scss', '../../app.component.scss']
 })
 export class PokemonSelectComponent implements OnInit {
   readonly activeMenu: Observable<ActiveMenuType> = this._appService.getActiveMenu();
@@ -69,13 +69,13 @@ export class PokemonSelectComponent implements OnInit {
   pokemonClick(pokemon: PokemonJSONType) {
     this._store$.dispatch(
       AppActionTypes.addCurrentHuntsAction({
-        species: pokemon.name.toLowerCase(),
-        huntStarted: new Date(),
-        count: 0,
-        capturedOn: null,
-        foundOnGame: null,
-        method: null,
-        pokemonImgUrl: null,
+          species: pokemon.name.toLowerCase(),
+          huntStarted: new Date(),
+          count: 0,
+          capturedOn: null,
+          foundOnGame: null,
+          method: null,
+          pokemonImgUrl: null,
       })
     );
     this._appService.progressToNextPage();

@@ -14,7 +14,7 @@ import { PreviousHunts } from 'src/app/types/previousHunts.types';
 @Component({
   selector: 'app-prev-hunt',
   templateUrl: './prev-hunt.component.html',
-  styleUrls: ['./prev-hunt.component.css', '../../app.component.css']
+  styleUrls: ['./prev-hunt.component.scss', '../../app.component.scss']
 })
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: CurrentHunt;
