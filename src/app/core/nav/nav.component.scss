@@ -1,30 +1,39 @@
-.sidenav__container {
-  background-color: #333333;
-  color: #ccc;
-  min-height: 100vh;
+.sidenav {
+  &__container {
+    background-color: #333333;
+    color: #ccc;
+    min-height: 100vh;
+  }
+
+  &__drawer {
+    display: flex;
+    flex-direction: column;
+    background-color: #444;
+    width: min-content;
+  }
+
+  &__button {
+    width: 10rem;
+    height: 2rem;
+    margin: 0.5rem;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
 }
 
-.sidenav__drawer {
-  display: flex;
-  flex-direction: column;
-  background-color: #444;
-  width: min-content;
-}
-
-.sidenav__button {
-  width: 10rem;
-  height: 2rem;
-  margin: 0.5rem;
-}
-
-.navButton__container {
-  position: fixed;
+.navButton {
+  &__container {
+    position: fixed;
+  }
 }
 
 .btnActive {
   border-bottom: 8px solid grey !important;
-}
 
-.btnActive:active {
-  border-bottom: 8px solid white !important;
+  :active {
+    border-bottom: 8px solid white !important;
+  }
 }
