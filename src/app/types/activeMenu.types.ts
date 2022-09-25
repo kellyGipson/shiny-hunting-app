@@ -2,13 +2,16 @@ export type ActiveMenuType =
   | 'Home'
   | 'New'
   | 'Current'
-  | 'Previous';
+  | 'Previous'
+  | 'Editing'
+;
 
 export enum ActiveMenuEnum {
   Home = 'Home',
   New = 'New',
   Current = 'Current',
   Previous = 'Previous',
+  Editing = 'Editing'
 }
 
 export const allActiveMenu: ActiveMenuType[] = [
@@ -16,5 +19,6 @@ export const allActiveMenu: ActiveMenuType[] = [
   'Current',
   'New',
   'Previous',
+  'Editing'
 ]
 export type ActiveMenuStateType = { activeMenu: ActiveMenuType };
