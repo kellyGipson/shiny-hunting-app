@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { CurrentHuntsBusiness } from 'src/app/business/currentHunts/currentHunts.business';
-import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { ActiveMenuEnum, ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { CurrentNewPageType } from 'src/app/types/currentNewPage.types';
@@ -20,6 +19,7 @@ export class HomeComponent implements OnInit {
   huntSelected: boolean = false;
   huntBeingEdited: boolean = false;
   selectedHunt: CurrentHunt = null;
+  isDeleteConfirmationOpen: boolean = false;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -36,8 +36,21 @@ export class HomeComponent implements OnInit {
     this.currentHunts = this._currentHuntsBusiness.getCurrentHunts$();
   }
 
-  onDeleteHunt(hunt: CurrentHunt): void {
-    this._currentHuntsBusiness.deleteCurrentHunt(hunt);
+  confirmDelete(hunt: CurrentHunt): void {
+    console.log(hunt.species);
+    this.selectedHunt = hunt;
+    this.isDeleteConfirmationOpen = true;
+  }
+
+  cancelDeleteConfirmation(): void {
+    this.selectedHunt = null;
+    this.isDeleteConfirmationOpen = false;
+  }
+
+  onDeleteHunt(): void {
+    if (this.selectedHunt !== null) {
+      this._currentHuntsBusiness.deleteCurrentHunt(this.selectedHunt);
+    }
   }
 
   onEditHunt(hunt: CurrentHunt) {

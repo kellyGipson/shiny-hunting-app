@@ -11,11 +11,13 @@ import { HomeComponent } from './core/home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { AppReducers } from "./ngrx/app.reducers";
 import { EffectsModule } from '@ngrx/effects';
+import { SHARED_COMPONENTS } from "./shared/components";
 
 @NgModule({
   declarations: [
     AppComponent,
     APP_COMPONENTS,
+    SHARED_COMPONENTS,
     HomeComponent,
   ],
   imports: [
