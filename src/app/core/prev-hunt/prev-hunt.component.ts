@@ -59,6 +59,7 @@ export class PokemonComponent implements OnInit {
         huntStarted: this.currentHunt.huntStarted,
         capturedOn: new Date(),
         pokemonImgUrl: null,
+        interval: 1,
       },
     ];
 

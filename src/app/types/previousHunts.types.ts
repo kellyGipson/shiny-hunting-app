@@ -10,6 +10,7 @@ export interface PreviousHunt {
   foundOnGame: string | null; // todo add games
   method: methodsType | null;
   pokemonImgUrl: string | null;
+  interval: number | null;
 };
 
 export type PreviousHunts = PreviousHunt[];

@@ -10,6 +10,7 @@ export interface CurrentHunt {
   foundOnGame: string | null; // todo add games
   method: methodsType | null;
   pokemonImgUrl: string | null;
+  interval: number | null;
 }
 export type CurrentHuntsStateType = CurrentHunt[];
 
@@ -22,4 +23,5 @@ export const emptyCurrentHunt: CurrentHunt = {
   foundOnGame: null,
   method: null,
   pokemonImgUrl: null,
+  interval: null,
 }

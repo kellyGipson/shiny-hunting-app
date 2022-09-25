@@ -16,7 +16,8 @@ export const addCurrentHuntsReducer = on(
       huntStarted: action.huntStarted,
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
-      species: action.species
+      species: action.species,
+      interval: action.interval,
     })
     return newCurrentHunts;
   }
@@ -48,6 +49,7 @@ export const updateCurrentHuntsReducer = on(
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
       species: action.species,
+      interval: action.interval,
     });
 
     return state

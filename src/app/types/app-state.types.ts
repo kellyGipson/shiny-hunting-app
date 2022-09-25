@@ -9,7 +9,7 @@ export interface AppState {
   currentNewPage: CurrentNewPageType;
   currentHunts: CurrentHunt[];
   previousHunts: PreviousHunts;
-  selectedHunt: CurrentHunt | null;
+  selectedHunt: CurrentHunt;
 }
 
 export const INITIAL_APP_STATE: AppState = {
