@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { CurrentHunt } from "src/app/types/currentHunts.types";
 
 @Component({
@@ -10,10 +10,10 @@ export class PopOverComponent implements OnInit {
   @Input()
   message: string = 'Are you sure you want to delete?'
 
-  @Input()
+  @Output()
   onConfirm = new EventEmitter<void>();
 
-  @Input()
+  @Output()
   onCancel = new EventEmitter<void>();
 
   constructor() {}
