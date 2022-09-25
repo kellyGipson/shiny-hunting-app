@@ -10,7 +10,8 @@ export class StorageBusiness {
   getPokemonFoundFromLocal(): AppState {
     const rawData = localStorage.getItem('state');
 
-    return (rawData === null) ? INITIAL_APP_STATE : JSON.parse(rawData) as AppState;
+    console.log(JSON.parse(rawData));
+    return (JSON.parse(rawData) as AppState || INITIAL_APP_STATE);
   }
 
   setPokemonFoundToLocal(data: AppState): void {

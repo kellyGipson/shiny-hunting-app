@@ -44,6 +44,9 @@ export class AppBusiness {
     this._store$.dispatch(
       AppActionTypes.setAddShinyFormOpenAction({ addShinyFormOpen: state.addShinyFormOpen })
     );
+    this._store$.dispatch(
+      AppActionTypes.setSelectedHuntAction(state.selectedHunt)
+    );
   }
 
   getActiveMenu$(): Observable<ActiveMenuType> {

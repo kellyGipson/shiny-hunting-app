@@ -37,7 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this._actions$.pipe(
       takeUntil(this._cancelListener),
       tap((_) => {
-        this._storageBusiness.setPokemonFoundToLocal(this._appBusiness.getCurrentAppState());
+        this._storageBusiness.setPokemonFoundToLocal(
+          this._appBusiness.getCurrentAppState()
+        );
       })
     ).subscribe();
   }
