@@ -1,6 +1,6 @@
 import { ActiveMenuType } from "./activeMenu.types";
 import { CurrentNewPageType } from "./currentNewPage.types";
-import { CurrentHunt } from "./currentHunts.types";
+import { CurrentHunt, emptyCurrentHunt } from "./currentHunts.types";
 import { PreviousHunts } from "./previousHunts.types";
 
 export interface AppState {
@@ -9,6 +9,7 @@ export interface AppState {
   currentNewPage: CurrentNewPageType;
   currentHunts: CurrentHunt[];
   previousHunts: PreviousHunts;
+  selectedHunt: CurrentHunt | null;
 }
 
 export const INITIAL_APP_STATE: AppState = {
@@ -17,4 +18,5 @@ export const INITIAL_APP_STATE: AppState = {
   currentNewPage: 'pokemon',
   currentHunts: [],
   previousHunts: [],
+  selectedHunt: null,
 }
