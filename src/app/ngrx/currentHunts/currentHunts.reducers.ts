@@ -9,6 +9,7 @@ export const addCurrentHuntsReducer = on(
   (state: CurrentHuntsStateType, action) => {
     let newCurrentHunts = copy(state);
     newCurrentHunts.push({
+      id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
@@ -24,16 +25,22 @@ export const addCurrentHuntsReducer = on(
 export const deleteCurrentHuntsReducer = on(
   AppActionTypes.deleteCurrentHuntsAction,
   (state: CurrentHuntsStateType, action) => {
-    state.splice(action.index, 1);
+    let newState: CurrentHuntsStateType = copy(state);
+    const index = newState.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    newState.splice(index, 1);
 
-    return state;
+    return newState;
   }
 );
 
 export const updateCurrentHuntsReducer = on(
   AppActionTypes.updateCurrentHuntsAction,
   (state: CurrentHuntsStateType, action) => {
-    state.splice(action.index, 1, {
+    let newState: CurrentHuntsStateType = copy(state);
+    console.log(newState);
+    const index = newState.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    newState.splice(index, 1, {
+      id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,

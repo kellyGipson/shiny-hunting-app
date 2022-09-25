@@ -1,6 +1,8 @@
 import { methodsType } from "./pokemonFound.types";
+import { Guid } from 'guid-typescript';
 
 export interface PreviousHunt {
+  id: Guid;
   species: string | null;
   huntStarted: Date | null;
   capturedOn: Date | null;
@@ -11,5 +13,4 @@ export interface PreviousHunt {
 };
 
 export type PreviousHunts = PreviousHunt[];
-export type UpdatePreviousHunts = PreviousHunt & { index: number };
 export type PreviousHuntsStateType = { previousHunts: PreviousHunts };

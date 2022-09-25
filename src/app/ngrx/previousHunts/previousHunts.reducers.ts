@@ -9,6 +9,7 @@ export const addPreviousHuntsReducer = on(
   (state: PreviousHunts, action) => {
     let newPreviousHunts = copy(state);
     newPreviousHunts.push({
+      id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
@@ -24,7 +25,9 @@ export const addPreviousHuntsReducer = on(
 export const deletePreviousHuntsReducer = on(
   AppActionTypes.deletePreviousHuntsAction,
   (state: PreviousHunts, action) => {
-    state.splice(action.index, 1);
+    let newState = copy(state);
+    const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    newState.splice(index, 1);
 
     return { ...state };
   }
@@ -33,7 +36,10 @@ export const deletePreviousHuntsReducer = on(
 export const updatePreviousHuntsReducer = on(
   AppActionTypes.updatePreviousHuntsAction,
   (state: PreviousHunts, action) => {
-    state.splice(action.index, 1, {
+    let newState = copy(state);
+    const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    newState.splice(index, 1, {
+      id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
