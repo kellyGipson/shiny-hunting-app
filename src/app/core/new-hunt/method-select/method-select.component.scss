@@ -5,11 +5,10 @@
 
 .method {
   margin-top: 3rem;
-  width: clamp(11rem, 80vw, 25rem);
 
   &__listItem {
+    width: clamp(11rem, 80vw, 25rem) !important;
     color: white;
-    width: 8rem;
     background-color: #2E2E2E;
     border-bottom: 3px #333 solid;
   }
