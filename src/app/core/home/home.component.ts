@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { CurrentHuntsBusiness } from 'src/app/business/currentHunts/currentHunts.business';
+import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { ActiveMenuEnum, ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { AppState } from 'src/app/types/app-state.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { CurrentNewPageType } from 'src/app/types/currentNewPage.types';
 
@@ -24,6 +27,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private readonly _appBusiness: AppBusiness,
     private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
+    private readonly _store$: Store<AppState>,
   ) { }
 
   ngOnInit(): void {
@@ -58,7 +62,10 @@ export class HomeComponent implements OnInit {
   }
 
   onSelectHunt(hunt: CurrentHunt) {
-
+    this._store$.dispatch(
+      AppActionTypes.setSelectedHuntAction(hunt)
+    );
+    this._appBusiness.setActiveMenu(ActiveMenuEnum.Current);
   }
 
   addANewHunt(): void {
