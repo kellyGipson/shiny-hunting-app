@@ -1,11 +1,23 @@
-<button
-class="btn btn--select"
-(click)="backButton()">Go back</button>
 <div class="methodContainer">
-  <div
-  class="method"
-  (click)="methodClick(method)"
-  *ngFor="let method of methods">
-    <p>{{method}}</p>
-  </div>
+  <mat-selection-list class="method" [multiple]="false">
+    <mat-list-option
+      class="method__listItem"
+      (click)="methodClick(method)"
+      *ngFor="let method of methods"
+    >{{method}}</mat-list-option>
+  </mat-selection-list>
 </div>
+
+<button
+  mat-raised-button
+  (click)="back()"
+  color="primary"
+  class="backButton"
+>Go back</button>
+<button
+  mat-raised-button
+  (click)="next()"
+  color="primary"
+  class="nextButton"
+  [disabled]="isNextDisabled()"
+>Next</button>

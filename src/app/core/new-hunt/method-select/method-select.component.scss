@@ -1,29 +1,28 @@
 .methodContainer {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 2rem;
-}
-
-.method:first-child {
-  border-top-left-radius: 0.5rem !important;
-  border-top-right-radius: 0.5rem !important;
-}
-
-.method:last-child {
-  border-bottom-left-radius: 0.5rem !important;
-  border-bottom-right-radius: 0.5rem !important;
 }
 
 .method {
-  border: 2px solid grey;
-  width: 8rem;
-  padding-block: 0.75rem;
+  margin-top: 3rem;
+  width: clamp(11rem, 80vw, 25rem);
+
+  &__listItem {
+    color: white;
+    width: 8rem;
+    background-color: #2E2E2E;
+    border-bottom: 3px #333 solid;
+  }
 }
 
-.method:active {
-  border-color: white;
-  user-select: none;
+.backButton {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.nextButton {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
 }

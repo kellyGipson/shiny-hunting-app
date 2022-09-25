@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { take, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
+import { Guid } from 'guid-typescript'
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 
 @Component({
   selector: 'app-method-select',
@@ -13,7 +15,12 @@ import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
   styleUrls: ['./method-select.component.scss', '../../../app.component.scss']
 })
 export class MethodSelectComponent implements OnInit {
+  @Input()
+  newHuntToCreate: CurrentHunt;
+
+  @Input()
   currentHunt!: Observable<CurrentHunt>;
+  @Input()
   currentHuntIndex!: number;
 
   methods: methodsType[] = allMethods;
@@ -24,30 +31,33 @@ export class MethodSelectComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.currentHunt = this._store$.select((s) => {
-      this.currentHuntIndex = s.selectedHuntIndex;
-      return s.currentHunts[s.selectedHuntIndex]
-    });
   }
 
   methodClick(method: methodsType) {
-    this.currentHunt.pipe(
-      take(1),
-      map((s) => {
-        this._store$.dispatch(
-          AppActionTypes.updateCurrentHuntsAction({
-            ...s,
-            method: method,
-            index: this.currentHuntIndex,
-          })
-        );
-      })
-    ).subscribe();
-    this._appBusiness.progressToNextPage();
-    this._appBusiness.setActiveMenu('Selected');
+    this.newHuntToCreate.method = method;
   }
 
-  backButton() {
+  back() {
     this._appBusiness.goBackToLastPage();
+  }
+
+  next() {
+    this._store$.dispatch(
+      AppActionTypes.addCurrentHuntsAction({
+        ...this.newHuntToCreate,
+        id: Guid.create(),
+        count: 0,
+        huntStarted: new Date(),
+        capturedOn: null
+      })
+    );
+    this._appBusiness.progressToNextPage();
+    this._appBusiness.setActiveMenu(ActiveMenuEnum.Home);
+  }
+
+  isNextDisabled(): boolean {
+    return this.newHuntToCreate.method === null ||
+      this.newHuntToCreate.foundOnGame === null ||
+      this.newHuntToCreate.species === null;
   }
 }
