@@ -1,0 +1,23 @@
+<div *ngIf="(activeMenu | async) === 'Current'" class="container">
+  <h1>Now Hunting: {{(selectedHunt | async)!.species}}</h1>
+  <img src="{{gameImgUrl}}">
+  <img *ngIf="(selectedHunt | async)?.pokemonImgUrl" src="{{ (selectedHunt | async)?.pokemonImgUrl }}">
+  <p>Intervals of: {{interval}}</p>
+  <div class="intervalBtnContainer">
+    <button class="btn" (click)="onIntervalIncrease()">+</button>
+    <button class="btn" (click)="onIntervalDecrease()">-</button>
+  </div>
+  <p class="count {{(countAnimation) ? 'countAnimation' : ''}}">Count: {{(selectedHunt | async)!.count}}</p>
+  <div class="counterButtons">
+    <img
+      (click)="foundAShiny()"
+      class="shinyButton"
+      src="../assets/shiny_sparkles.png"
+      alt="Found a shiny button"
+    >
+    <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
+    <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
+  </div>
+  <button (click)="onResetCounter()" class="btn resetButton">reset</button>
+  <p>Click the spacebar to increment the counter.</p>
+</div>
