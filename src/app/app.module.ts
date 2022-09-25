@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { ReactiveFormsModule } from "@angular/forms"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -19,6 +19,7 @@ import { EffectsModule } from '@ngrx/effects';
     HomeComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,

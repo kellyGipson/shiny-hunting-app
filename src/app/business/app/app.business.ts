@@ -46,7 +46,7 @@ export class AppBusiness {
     );
   }
 
-  getActiveMenu(): Observable<ActiveMenuType> {
+  getActiveMenu$(): Observable<ActiveMenuType> {
     return this._store$.select((s) => s.activeMenu);
   }
 
@@ -66,7 +66,7 @@ export class AppBusiness {
     );
   }
 
-  getCurrentNewPage(): Observable<'pokemon' | 'game' | 'method'> {
+  getCurrentNewPage$(): Observable<'pokemon' | 'game' | 'method'> {
     return this._store$.select((s) => s.currentNewPage)
   }
 

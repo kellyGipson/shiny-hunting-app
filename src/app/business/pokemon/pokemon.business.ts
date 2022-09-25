@@ -65,7 +65,7 @@ export class PokemonBusiness {
         .then((url) => { currentHunt.pokemonImgUrl = url; return currentHunt })
         .then((currentHunt) => {
           this._store$.dispatch(
-            AppActionTypes.updateCurrentHuntsAction({ ...currentHunt, index: currentHuntIndex })
+            AppActionTypes.updateCurrentHuntsAction(currentHunt)
           );
         });
     }

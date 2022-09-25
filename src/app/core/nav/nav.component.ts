@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, take, tap } from 'rxjs';
+import { Observable, take, tap } from 'rxjs';
 
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
-import { ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum, ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
+import { CurrentHunt } from 'src/app/types/currentHunts.types';
 
 @Component({
   selector: 'app-nav',
@@ -15,6 +16,7 @@ export class NavComponent implements OnInit {
   activeMenu$!: Observable<ActiveMenuType>;
 
   menus: ActiveMenuType[] = allActiveMenu;
+  selectedHunt: CurrentHunt = null;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -46,6 +48,10 @@ export class NavComponent implements OnInit {
       take(1),
       tap((s) => {
         if (navItem === s.activeMenu) {
+          isDisabled = true;
+        }
+
+        if (this.selectedHunt === null && navItem === ActiveMenuEnum.Current) {
           isDisabled = true;
         }
       })

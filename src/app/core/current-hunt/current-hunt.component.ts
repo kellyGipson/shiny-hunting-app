@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PokemonClient } from 'pokenode-ts';
 
@@ -22,9 +22,9 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   pokemonApi = new PokemonClient();
 
   // State
-  currentHunt!: Observable<CurrentHunt | null>;
-  currentHuntIndex!: Observable<number | null>;
-  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
+  @Input()
+  currentHunt: Observable<CurrentHunt>;
+  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
   interval: number = 1;
 
   // Variables
@@ -42,17 +42,17 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     document.addEventListener('keypress', e => this.onKeypress(e));
-    this.currentHunt = this._store$.select((s) => s.selectedHunt);
-    this.currentHuntIndex = this._store$.select((s) => s.selectedHuntIndex);
-    this.currentHunt.pipe(
-      take(1),
-      map((s) => {
-        if (!!s?.foundOnGame) {
-          this.gameTyped = s.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
-          this.gameImgUrl = gameImgUrlLookup[this.gameTyped];
-        }
-      })
-    ).subscribe();
+    if (this.currentHunt !== null && this.currentHunt !== undefined) {
+      this.currentHunt.pipe(
+        take(1),
+        map((state) => {
+          if (!!state?.foundOnGame) {
+            this.gameTyped = state.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
+            this.gameImgUrl = gameImgUrlLookup[this.gameTyped];
+          }
+        })
+      ).subscribe();
+    }
   }
 
   ngOnDestroy(): void {
@@ -70,48 +70,48 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
   }
 
   onCounterIncrease(): void {
-    this.counterAnimationFn();
-    this._store$.pipe(
-      take(1),
-      map((s) => {
-        if (s.selectedHunt?.count === null) {
-          this._store$.dispatch(
-            AppActionTypes.updateCurrentHuntsAction({
-              ...s.selectedHunt,
-              count: 0,
-              index: s.selectedHuntIndex!,
-            })
-          );
-        }
-        const count = s.selectedHunt.count + this.interval;
-        this._store$.dispatch(
-          AppActionTypes.updateCurrentHuntsAction({
-            ...s.selectedHunt!,
-            count: count,
-            index: s.selectedHuntIndex,
-          }),
-        );
-      })
-    ).subscribe();
+    // this.counterAnimationFn();
+    // this._store$.pipe(
+    //   take(1),
+    //   map((s) => {
+        // if (s.selectedHunt?.count === null) {
+        //   this._store$.dispatch(
+        //     AppActionTypes.updateCurrentHuntsAction({
+        //       ...s.selectedHunt,
+        //       count: 0,
+        //       index: s.selectedHuntIndex!,
+        //     })
+        //   );
+        // }
+        // const count = s.selectedHunt.count + this.interval;
+        // this._store$.dispatch(
+        //   AppActionTypes.updateCurrentHuntsAction({
+        //     ...s.selectedHunt!,
+        //     count: count,
+        //     index: s.selectedHuntIndex,
+        //   }),
+        // );
+    //   })
+    // ).subscribe();
   }
 
   onCounterDecrease(): void {
     this._store$.pipe(
       take(1),
       map((s) => {
-        if (s.selectedHunt.count !== null) {
-          if(!(s.selectedHunt.count - this.interval < 0)) {
-            this.counterAnimationFn();
-            const count = s.selectedHunt.count - this.interval;
-            this._store$.dispatch(
-              AppActionTypes.updateCurrentHuntsAction({
-                ...s.selectedHunt,
-                count: count,
-                index: s.selectedHuntIndex,
-              }),
-            );
-          }
-        }
+        // if (s.selectedHunt.count !== null) {
+        //   if(!(s.selectedHunt.count - this.interval < 0)) {
+        //     this.counterAnimationFn();
+        //     const count = s.selectedHunt.count - this.interval;
+        //     this._store$.dispatch(
+        //       AppActionTypes.updateCurrentHuntsAction({
+        //         ...s.selectedHunt,
+        //         count: count,
+        //         index: s.selectedHuntIndex,
+        //       }),
+        //     );
+        //   }
+        // }
       })
     ).subscribe();
   }
@@ -129,12 +129,12 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
     this._store$.pipe(
       take(1),
       map((s) => {
-        this._store$.dispatch(
-          AppActionTypes.addPreviousHuntsAction(s.selectedHunt as PreviousHunt)
-        );
-        this._store$.dispatch(
-          AppActionTypes.deleteCurrentHuntsAction({ index: s.selectedHuntIndex! })
-        );
+        // this._store$.dispatch(
+        //   AppActionTypes.addPreviousHuntsAction(s.selectedHunt as PreviousHunt)
+        // );
+        // this._store$.dispatch(
+        //   AppActionTypes.deleteCurrentHuntsAction({ index: s.selectedHuntIndex! })
+        // );
       })
     )
   }
@@ -144,13 +144,13 @@ export class CurrentHuntComponent implements OnInit, OnDestroy {
       this._store$.pipe(
         take(1),
         map((s) => {
-          this._store$.dispatch(
-            AppActionTypes.updateCurrentHuntsAction({
-              ...s.selectedHunt!,
-              count: 0,
-              index: s.selectedHuntIndex!,
-            })
-          );
+          // this._store$.dispatch(
+          //   AppActionTypes.updateCurrentHuntsAction({
+              // ...s.selectedHunt!,
+              // count: 0,
+              // index: s.selectedHuntIndex!,
+          //   })
+          // );
         })
       ).subscribe();
     }

@@ -1,11 +1,14 @@
 <div *ngIf="(activeMenu | async) === 'New'">
   <app-pokemon-select
     *ngIf="(currentPage | async) === 'pokemon'"
+    [newHuntToCreate]="newHuntToCreate"
   ></app-pokemon-select>
   <app-game-select
     *ngIf="(currentPage | async) === 'game'"
+    [newHuntToCreate]="newHuntToCreate"
   ></app-game-select>
   <app-method-select
     *ngIf="(currentPage | async) === 'method'"
+    [newHuntToCreate]="newHuntToCreate"
   ></app-method-select>
 </div>

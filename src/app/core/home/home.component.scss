@@ -1,0 +1,41 @@
+.homeContainer {
+  margin-top: 3rem;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homeCard {
+  background-color: #2D2D2D;
+  margin: 0.5rem;
+  width: clamp(10rem, 80vw, 20rem);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  &__title {
+    color: white;
+  }
+}
+
+.cardContent {
+  &__count {
+    color: white;
+  }
+}
+
+.cardActions {
+  display: flex;
+  justify-content: space-between;
+
+  &__button {
+    margin: 0 !important;
+  }
+}
