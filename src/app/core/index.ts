@@ -1,4 +1,3 @@
-import { CurrentHuntComponent } from "./current-hunt/current-hunt.component";
 import { GameSelectComponent } from "./new-hunt/game-select/game-select.component";
 import { MethodSelectComponent } from "./new-hunt/method-select/method-select.component";
 import { NavComponent } from "./nav/nav.component";
@@ -9,7 +8,6 @@ import { EditHuntComponent } from "./home/edit-hunt/edit-hunt.component";
 import { SelectedHuntComponent } from "./home/selected-hunt/selected-hunt.component";
 
 export const APP_COMPONENTS = [
-  CurrentHuntComponent,
   NavComponent,
   PokemonComponent,
   NewHuntComponent,
