@@ -1,0 +1,25 @@
+.popOver {
+  display: flex;
+  height: 5rem;
+  background-color: #373737;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transform: translateY(2.3rem);
+
+  p {
+    font-weight: 500;
+    font-size: large;
+  }
+
+  &__cancel {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  &__confirm {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
