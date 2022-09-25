@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { CurrentHunt, emptyCurrentHunt } from 'src/app/types/currentHunts.types';
 
 @Component({
   selector: 'app-new-hunt',
@@ -11,6 +12,7 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
   styleUrls: ['./new-hunt.component.scss', '../../app.component.scss']
 })
 export class NewHuntComponent implements OnInit {
+  newHuntToCreate: CurrentHunt = emptyCurrentHunt;
   activeMenu: Observable<ActiveMenuType>;
   currentPage: Observable<'pokemon' | 'game' | 'method'>;
 
@@ -24,7 +26,7 @@ export class NewHuntComponent implements OnInit {
   }
 
   private _mapState(): void {
-    this.activeMenu = this._appBusiness.getActiveMenu();
-    this.currentPage = this._appBusiness.getCurrentNewPage();
+    this.activeMenu = this._appBusiness.getActiveMenu$();
+    this.currentPage = this._appBusiness.getCurrentNewPage$();
   }
 }
