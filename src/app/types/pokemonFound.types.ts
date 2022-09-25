@@ -1,26 +1,26 @@
-export type methodsType = 'fullodds' | 'shinycharm' | 'masudamethod';
+export type methodsType = 'Full Odds' | 'Shiny Charm' | 'Masuda Method';
 
-export const allMethods: methodsType[] = ['fullodds', 'shinycharm', 'masudamethod']
+export const allMethods: methodsType[] = ['Full Odds', 'Shiny Charm', 'Masuda Method'];
 
 export type pokemonGames =
-'gold' | 'silver' | 'crystal' |
-'ruby' | 'sapphire' | 'emerald' | 'firered' | 'leafgreen' |
-'diamond' | 'pearl' | 'platinum' | 'heartgold' | 'soulsilver' |
-'black' | 'white' | 'black2' | 'white2' |
-'x' | 'y' | 'omegaruby' | 'alphasapphire' |
-'sun' | 'moon' | 'ultrasun' | 'ultramoon' |
-'letsgopikachu' | 'letsgoeevee' | 'sword' | 'shield' |
-'brilliantdiamond' | 'shiningpearl' | 'legendsarceus'
+'Gold' | 'Silver' | 'Crystal' |
+'Ruby' | 'Sapphire' | 'Emerald' | 'Fire Red' | 'Leaf Green' |
+'Diamond' | 'Pearl' | 'Platinum' | 'Heartgold' | 'Soulsilver' |
+'Black' | 'White' | 'Black 2' | 'White 2' |
+'X' | 'X' | 'Omega Ruby' | 'Alpha Sapphire' |
+'Sun' | 'Moon' | 'Ultra Sun' | 'Ultra Moon' |
+"Let's Go Pikachu" | "Let's Go Eevee" | 'Sword' | 'Shield' |
+'Brilliant Diamond' | 'Shining Pearl' | 'Legends Arceus'
 
 export const allGames: pokemonGames[] = [
-  'gold', 'silver', 'crystal',
-  'ruby', 'sapphire', 'emerald', 'firered', 'leafgreen',
-  'diamond', 'pearl', 'platinum', 'heartgold', 'soulsilver',
-  'black', 'white', 'black2', 'white2',
-  'x', 'y', 'omegaruby', 'alphasapphire',
-  'sun', 'moon', 'ultrasun', 'ultramoon',
-  'letsgopikachu', 'letsgoeevee', 'sword', 'shield',
-  'brilliantdiamond', 'shiningpearl', 'legendsarceus',
+  'Gold', 'Silver', 'Crystal',
+  'Ruby', 'Sapphire', 'Emerald', 'Fire Red', 'Leaf Green',
+  'Diamond', 'Pearl', 'Platinum', 'Heartgold', 'Soulsilver',
+  'Black', 'White', 'Black 2', 'White 2',
+  'X', 'X', 'Omega Ruby', 'Alpha Sapphire',
+  'Sun', 'Moon', 'Ultra Sun', 'Ultra Moon',
+  "Let's Go Pikachu", "Let's Go Eevee", 'Sword', 'Shield',
+  'Brilliant Diamond', 'Shining Pearl', 'Legends Arceus',
 ]
 
 export interface methodImgUrlLookupType {
