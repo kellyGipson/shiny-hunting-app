@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -9,6 +9,8 @@ import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
+import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 
 @Component({
   selector: 'app-pokemon-select',
@@ -16,16 +18,17 @@ import { PokemonJSONType } from 'src/app/types/pokemonData.types';
   styleUrls: ['./pokemon-select.component.scss', '../../../app.component.scss']
 })
 export class PokemonSelectComponent implements OnInit {
-  readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
+  @Input() newHuntToCreate: CurrentHunt;
+  readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
 
   pokemonList: PokemonJSONType[] = [];
+  searchString: string = '';
   searchList: PokemonJSONType[] = [];
   namesReady: boolean = false;
+  selectedPokemon: PokemonJSONType = null;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
-    private readonly _pokemonBusiness: PokemonBusiness,
-    private readonly _store$: Store<AppState>,
   ) {}
 
   async ngOnInit() {
@@ -56,27 +59,27 @@ export class PokemonSelectComponent implements OnInit {
     return capital;
   }
 
-  search(e: any) {
-    this.searchList = [];
-    for(let i = 0; i < this.pokemonList.length; i++) {
-      if(this.pokemonList[i].name.toLowerCase().includes(e.target.value.toLowerCase())) {
-        this.searchList.push(this.pokemonList[i]);
-      }
+  search() {
+    if (this.searchString === '') {
+      this.searchList = this.pokemonList;
+    }
+    this.searchList = this.pokemonList.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(this.searchString.toLowerCase()));
+  }
+
+  pokemonChanged(event: MatSelectionList) {
+    this.selectedPokemon = event.selectedOptions.selected[0]?.value;
+    if (this.selectedPokemon.name !== null && this.selectedPokemon.url !== null) {
+      this.newHuntToCreate.species = this.selectedPokemon?.name;
+      this.newHuntToCreate.pokemonImgUrl = this.selectedPokemon?.url;
     }
   }
 
-  pokemonClick(pokemon: PokemonJSONType) {
-    this._store$.dispatch(
-      AppActionTypes.addCurrentHuntsAction({
-        species: pokemon.name.toLowerCase(),
-        huntStarted: new Date(),
-        count: 0,
-        capturedOn: null,
-        foundOnGame: null,
-        method: null,
-        pokemonImgUrl: null,
-      })
-    );
+  isNextButtonDisabled(): boolean {
+    return this.selectedPokemon === null;
+  }
+
+  next(): void {
     this._appBusiness.progressToNextPage();
   }
 }

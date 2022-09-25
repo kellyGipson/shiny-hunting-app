@@ -1,19 +1,37 @@
-<div
-class="pokemonList"
-*ngIf="namesReady">
-<input
-placeholder="Search"
-(change)="search($event)"
-class="btn pokemonSearch"
-type="text">
-  <div
-  class="pokemonContainer"
-  (click)="pokemonClick(pokemon)"
-  *ngFor="let pokemon of searchList">
-    <img
-    class="pokemonImg"
-    src="{{pokemon.url}}"
-    alt="Image of {{pokemon.name}}">
-    <p class="pokemonName">{{pokemon.name}}</p>
-  </div>
+<div class="pokemonSelect">
+  <mat-form-field appearance="fill" class="pokemonSearchContainer">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      [(ngModel)]="searchString"
+      class="pokemonSearch"
+      (keydown)="search()"
+      type="text"
+    >
+    </mat-form-field>
+  <mat-selection-list
+    *ngIf="namesReady"
+    #pokemon
+    [multiple]="false"
+    class="pokemonList"
+    (selectionChange)="pokemonChanged(pokemon)"
+  >
+    <mat-list-option
+      class="listItem"
+      *ngFor="let pokemon of searchList"
+      [value]="pokemon"
+    >
+      <div class="listItem__container">
+        <img class="listItem__img" src="{{pokemon.url}}" alt="Image of {{pokemon.name}}">
+        <p class="listItem__name">{{pokemon.name}}</p>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+  <button
+    mat-raised-button
+    color="primary"
+    class="nextButton"
+    [disabled]="isNextButtonDisabled()"
+    (click)="next()"
+  >Next</button>
 </div>
