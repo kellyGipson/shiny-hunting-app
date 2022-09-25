@@ -3,13 +3,14 @@ import { UntypedFormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
+import { Guid } from 'guid-typescript';
 
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
-import { PreviousHunts } from 'src/app/types/previousHunts.types';
+import { PreviousHunt, PreviousHunts } from 'src/app/types/previousHunts.types';
 
 @Component({
   selector: 'app-prev-hunt',
@@ -19,7 +20,7 @@ import { PreviousHunts } from 'src/app/types/previousHunts.types';
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: CurrentHunt;
 
-  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu();
+  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
   addShinyOpen: Observable<boolean> = this._appBusiness.getAddShinyOpen();
   pokemonFound: Observable<PreviousHunts> = this._pokemonBusiness.getPokemonPrev();
 
@@ -50,6 +51,7 @@ export class PokemonComponent implements OnInit {
 
     const newPokemonList: PreviousHunts = [
       {
+        id: Guid.create(),
         species: this.species.value,
         count: this.count.value,
         foundOnGame: this.foundOnGame.value,
@@ -67,9 +69,9 @@ export class PokemonComponent implements OnInit {
     this.method.setValue("");
   }
 
-  onPokemonDelete(index: number): void {
+  onPokemonDelete(pokemon: PreviousHunt): void {
     this._store$.dispatch(
-      AppActionTypes.deletePreviousHuntsAction({ index: index })
+      AppActionTypes.deletePreviousHuntsAction(pokemon)
     );
     this._pokemonBusiness.persistPokemonLists();
   }
