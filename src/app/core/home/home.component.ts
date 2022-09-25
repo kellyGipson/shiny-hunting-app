@@ -17,6 +17,10 @@ export class HomeComponent implements OnInit {
   currentPage: Observable<CurrentNewPageType>;
   currentHunts: Observable<CurrentHunt[]>;
 
+  huntSelected: boolean = false;
+  huntBeingEdited: boolean = false;
+  selectedHunt: CurrentHunt = null;
+
   constructor(
     private readonly _appBusiness: AppBusiness,
     private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
@@ -32,8 +36,16 @@ export class HomeComponent implements OnInit {
     this.currentHunts = this._currentHuntsBusiness.getCurrentHunts$();
   }
 
-  onDeleteHunt(hunt): void {
+  onDeleteHunt(hunt: CurrentHunt): void {
     this._currentHuntsBusiness.deleteCurrentHunt(hunt);
+  }
+
+  onEditHunt(hunt: CurrentHunt) {
+
+  }
+
+  onSelectHunt(hunt: CurrentHunt) {
+
   }
 
   addANewHunt(): void {
