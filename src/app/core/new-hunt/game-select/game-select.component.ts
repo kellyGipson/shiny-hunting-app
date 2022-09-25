@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
@@ -13,6 +13,8 @@ import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
   styleUrls: ['./game-select.component.scss', '../../../app.component.scss']
 })
 export class GameSelectComponent implements OnInit {
+  @Input()
+  newHuntToCreate: CurrentHunt;
 
   currentHunt!: Observable<CurrentHunt>;
   currentHuntIndex!: number;
@@ -26,28 +28,25 @@ export class GameSelectComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentHunt = this._store$.select((s) => {
-      this.currentHuntIndex = s.selectedHuntIndex;
+      // this.currentHuntIndex = s.selectedHuntIndex;
       return s.currentHunts[s.currentHunts.length - 1]
     });
   }
 
   gameClick(game: string) {
-    this.currentHunt.pipe(
-      take(1),
-      map((s) => {
-        this._store$.dispatch(
-          AppActionTypes.updateCurrentHuntsAction({
-            ...s,
-            foundOnGame: game,
-            index: this.currentHuntIndex
-          })
-        );
-      })
-    ).subscribe();
+    this.newHuntToCreate.foundOnGame = game;
+  }
+
+  back() {
+    this._appBusiness.goBackToLastPage();
+  }
+
+  next() {
     this._appBusiness.progressToNextPage();
   }
 
-  backButton() {
-    this._appBusiness.goBackToLastPage();
+  isNextDisabled(): boolean {
+    return this.newHuntToCreate.foundOnGame === null ||
+      this.newHuntToCreate.species === null;
   }
 }

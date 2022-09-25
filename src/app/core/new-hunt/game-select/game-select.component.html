@@ -1,13 +1,24 @@
-<button
-class="btn btn--select"
-(click)="backButton()">Go back</button>
-<div class="gameWrapper">
-  <div class="gameContainer">
-    <div
-    class="game"
-    (click)="gameClick(game)"
-    *ngFor="let game of allGames">
-      <p>{{game}}</p>
-    </div>
-  </div>
+<div class="gameSelectContainer">
+  <mat-selection-list #game [multiple]="false" class="gameSelect">
+    <mat-list-option
+      class="gameSelect__listItem"
+      (click)="gameClick(game)"
+      *ngFor="let game of allGames"
+    >{{game}}</mat-list-option>
+  </mat-selection-list>
+</div>
+<div>
+  <button
+    mat-raised-button
+    (click)="back()"
+    color="primary"
+    class="backButton"
+  >Back</button>
+  <button
+    mat-raised-button
+    (click)="next()"
+    color="primary"
+    class="nextButton"
+    [disabled]="isNextDisabled()"
+  >Next</button>
 </div>

@@ -1,27 +1,35 @@
-.gameWrapper {
+.gameSelectContainer {
   display: flex;
   justify-content: center;
-  width: 100%;
 }
 
-.gameContainer {
+.gameSelect {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 40rem;
-  margin-top: 1rem;
+  flex-wrap: wrap;
+  margin-block: 4rem;
+  max-width: 480px;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+
+  &__listItem {
+    color: white;
+    background-color: #2E2E2E;
+    width: 10rem !important;
+    text-align: start;
+  }
 }
 
-.game {
-  border: 2px solid grey;
-  width: 8rem;
-  padding-block: 0.75rem;
+.backButton {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
 }
 
-.game:active {
-  border-color: white;
-  user-select: none;
+.nextButton {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
 }
