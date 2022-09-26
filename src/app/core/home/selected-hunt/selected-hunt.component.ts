@@ -55,55 +55,67 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   onIntervalIncrease(): void {
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
-      this._store$.pipe(
-        take(1),
-        tap((s) => {
-          const currentHunt = s.currentHunts.find((hunt) =>
-            hunt.id.toString() === selectedHunt.id.toString());
-          if (!!currentHunt) {
-            this._currentHuntsBusiness.updateSelectedHunt({
-              ...currentHunt,
-              interval: currentHunt.interval + 1,
-            });
-            this._selectedHuntBusiness.setSelectedHunt({
-              ...currentHunt,
-              interval: currentHunt.interval + 1,
-            });
-          }
-        })
-      ).subscribe();
+      this._currentHuntsBusiness.updateSelectedHunt({
+        ...selectedHunt,
+        interval: selectedHunt.interval + 1,
+      });
+      this._selectedHuntBusiness.setSelectedHunt({
+        ...selectedHunt,
+        interval: selectedHunt.interval + 1,
+      });
     }
   }
 
   onIntervalDecrease(): void {
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
-      this._store$.pipe(
-        take(1),
-        tap((s) => {
-          const currentHunt = s.currentHunts.find((hunt) =>
-            hunt.id.toString() === selectedHunt.id.toString());
-          if (!!currentHunt) {
-            if (currentHunt.interval > 1 && currentHunt.interval <= Number.MAX_SAFE_INTEGER) {
-              this._currentHuntsBusiness.updateSelectedHunt({
-                ...currentHunt,
-                interval: currentHunt.interval - 1,
-              });
-              this._selectedHuntBusiness.setSelectedHunt({
-                ...currentHunt,
-                interval: currentHunt.interval - 1,
-              });
-            }
-          }
-        })
-      ).subscribe();
+      if (selectedHunt.interval > 1 && selectedHunt.interval <= Number.MAX_SAFE_INTEGER) {
+        this._currentHuntsBusiness.updateSelectedHunt({
+          ...selectedHunt,
+          interval: selectedHunt.interval - 1,
+        });
+        this._selectedHuntBusiness.setSelectedHunt({
+          ...selectedHunt,
+          interval: selectedHunt.interval - 1,
+        });
+      }
     }
   }
 
   onCounterIncrease(): void {
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunt) {
+      let newCount = selectedHunt.count + selectedHunt.interval;
+      if (newCount > Number.MAX_SAFE_INTEGER) {
+        newCount = Number.MAX_SAFE_INTEGER;
+      }
+      this._currentHuntsBusiness.updateSelectedHunt({
+        ...selectedHunt,
+        count: newCount,
+      });
+      this._selectedHuntBusiness.setSelectedHunt({
+        ...selectedHunt,
+        count: newCount,
+      });
+    }
   }
 
   onCounterDecrease(): void {
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunt) {
+      let newCount = selectedHunt.count - selectedHunt.interval;
+      if (newCount < 0) {
+        newCount = 0;
+      }
+      this._currentHuntsBusiness.updateSelectedHunt({
+        ...selectedHunt,
+        count: newCount,
+      });
+      this._selectedHuntBusiness.setSelectedHunt({
+        ...selectedHunt,
+        count: newCount,
+      });
+    }
   }
 
   counterAnimationFn(): void {
@@ -111,26 +123,9 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     setTimeout(() => this.countAnimation = false, 100);
   }
 
-  //{"currentHunt":{"species":"Totodile","huntStarted":"2022-07-06T01:50:32.175Z","capturedOn":null,"count":5451,"foundOnGame":"heartgold","method":"fullodds"},"previousHunts":[{"species":"chikorita","count":330,"foundOnGame":"heartgold","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:50:26.041Z"},{"species":"psyduck","count":4302,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:56.834Z"},{"species":"wooper","count":194,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:41.399Z"},{"species":"bibarel","count":2222,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":null,"capturedOn":"2022-07-06T01:49:30.148Z"},{"species":"quagsire","count":964,"foundOnGame":"brilliantdiamond","method":"fullodds","huntStarted":"2022-07-06T01:47:51.845Z","capturedOn":"2022-07-06T01:49:12.681Z"}]}
+  foundAShiny() {}
 
-  foundAShiny() {
-    this._appBusiness.setActiveMenu('Previous');
-    this._appBusiness.toggleAddShinyOpen();
-    this._store$.pipe(
-      take(1),
-      map((s) => {
-        // this._store$.dispatch(
-        //   AppActionTypes.addPreviousHuntsAction(s.selectedHunt as PreviousHunt)
-        // );
-        // this._store$.dispatch(
-        //   AppActionTypes.deleteCurrentHuntsAction({ index: s.selectedHuntIndex! })
-        // );
-      })
-    )
-  }
-
-  onResetCounter(): void {
-  }
+  onResetCounter(): void {}
 
   onKeypress(e: any): void {
     switch(e.key) {
