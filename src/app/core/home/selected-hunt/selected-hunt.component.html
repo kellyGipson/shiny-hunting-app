@@ -1,17 +1,29 @@
 <div *ngIf="(activeMenu | async) === 'Current'" class="selectedHunt">
-  <h1>Now Hunting: {{(selectedHunt$ | async)?.species}}</h1>
-  <img src="{{gameImgUrl}}">
+  <img src="{{gameImgUrl}}" class="selectedHunt__gameImg">
   <img
     *ngIf="(selectedHunt$ | async)?.pokemonImgUrl"
     src="{{ (selectedHunt$ | async)?.pokemonImgUrl }}"
+    class="selectedHunt__pokemonImg"
   >
+  <mat-form-field *ngIf="editingCount">
+    <mat-label>Editing Count</mat-label>
+    <input
+      type="number"
+      matInput
+      [value]="(selectedHunt$ | async).count"
+      (keypress)="listenToEditingCount($event)"
+    >
+  </mat-form-field>
   <p
-    class="selectedHunt__count {{(countAnimation) ? 'countAnimation' : ''}}"
+    *ngIf="!editingCount"
+    class="selectedHunt__count"
+    [class.countAnimation]="countAnimation"
+    (click)="editingCount = !editingCount"
   >{{(selectedHunt$ | async)?.count}}</p>
   <p>Intervals of: {{(selectedHunt$ | async)?.interval}}</p>
   <div class="intervalButtons">
-    <button (click)="onIntervalIncrease()">+</button>
-    <button (click)="onIntervalDecrease()">-</button>
+    <button mat-raised-button color="primary" (click)="onIntervalIncrease()">+</button>
+    <button mat-raised-button color="primary" (click)="onIntervalDecrease()">-</button>
   </div>
   <div class="counterButtons">
     <img
@@ -23,6 +35,24 @@
     <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
     <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
   </div>
-  <button (click)="onResetCounter()" class="btn resetButton">reset</button>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="onResetCounter()"
+    class="cardActions__button"
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+  >RESET</button>
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isResetConfirmationOpen"
+  >
+    <app-pop-over
+      (onCancel)="onResetCancel()"
+      (onConfirm)="onResetConfirm()"
+      [message]="'Are you sure? Your count will be lost forever...'"
+    ></app-pop-over>
+  </ng-template>
   <p>Click the spacebar to increment the counter.</p>
 </div>

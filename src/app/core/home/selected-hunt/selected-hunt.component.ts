@@ -20,10 +20,12 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   selectedHunt$: Observable<CurrentHunt>;
 
   pokemonApi = new PokemonClient();
-  currentCount!: number | null;
+  currentCount: number | null;
   countAnimation: boolean = false;
-  gameTyped!: keyof typeof gameImgUrlLookup;
-  gameImgUrl!: string;
+  gameTyped: keyof typeof gameImgUrlLookup;
+  gameImgUrl: string;
+  isResetConfirmationOpen: boolean = false;
+  editingCount: boolean = false;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -83,6 +85,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onCounterIncrease(): void {
+    this.counterAnimationFn();
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
       let newCount = selectedHunt.count + selectedHunt.interval;
@@ -101,6 +104,9 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onCounterDecrease(): void {
+    if (this.editingCount) {
+      return;
+    }
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
       let newCount = selectedHunt.count - selectedHunt.interval;
@@ -125,7 +131,26 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   foundAShiny() {}
 
-  onResetCounter(): void {}
+  onResetCounter(): void {
+    this.isResetConfirmationOpen = true;
+  }
+
+  onResetConfirm(): void {
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    this._currentHuntsBusiness.updateSelectedHunt({
+      ...selectedHunt,
+      count: 0,
+    });
+    this._selectedHuntBusiness.setSelectedHunt({
+      ...selectedHunt,
+      count: 0,
+    });
+    this.isResetConfirmationOpen = false;
+  }
+
+  onResetCancel(): void {
+    this.isResetConfirmationOpen = false;
+  }
 
   onKeypress(e: any): void {
     switch(e.key) {
@@ -146,5 +171,27 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   private _mapState(): void {
     this.selectedHunt$ = this._store$.select((s) => s.selectedHunt)
+  }
+
+  listenToEditingCount(e: any): void {
+    if (e.key === 'Enter') {
+      this.confirmEditCount(e.target.value as string);
+    }
+  }
+
+  private confirmEditCount(value: string): void {
+    const parsedValue = parseInt(value);
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunt) {
+      this._currentHuntsBusiness.updateSelectedHunt({
+        ...selectedHunt,
+        count: parsedValue,
+      });
+      this._selectedHuntBusiness.setSelectedHunt({
+        ...selectedHunt,
+        count: parsedValue,
+      });
+    }
+    this.editingCount = false;
   }
 }

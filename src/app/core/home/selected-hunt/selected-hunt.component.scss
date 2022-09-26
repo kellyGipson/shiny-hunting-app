@@ -1,4 +1,20 @@
 .selectedHunt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  row-gap: 1rem;
+
+  &__gameImg {
+    height: auto;
+    width: 8rem;
+  }
+
+  &__pokemonImg {
+    height: 10rem;
+    width: 10rem;
+  }
 
   &__count {
     font-size: 2rem;
@@ -7,14 +23,14 @@
 }
 
 .intervalButtons {
-  width: 4rem;
+  width: 10rem;
   display: flex;
   justify-content: space-between;
 }
 
 
 .countAnimation {
-  transform: scale(1.1);
+  transform: scale(1.25);
 }
 
 .counterButtons {
@@ -29,6 +45,7 @@
   width: 15rem;
   border-top-left-radius: 9999px;
   border-top-right-radius: 9999px;
+  color: white;
   background-color: #cb433f;
   border: 2px solid #333333;
 }
