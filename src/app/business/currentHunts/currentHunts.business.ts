@@ -22,4 +22,10 @@ export class CurrentHuntsBusiness {
       AppActionTypes.deleteCurrentHuntsAction(hunt)
     );
   }
+
+  updateSelectedHunt(hunt: CurrentHunt): void {
+    this._store$.dispatch(
+      AppActionTypes.updateCurrentHuntsAction(hunt)
+    );
+  }
 }
