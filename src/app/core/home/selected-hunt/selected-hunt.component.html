@@ -1,13 +1,18 @@
-<div *ngIf="(activeMenu | async) === 'Current'" class="container">
-  <h1>Now Hunting: {{(selectedHunt | async)!.species}}</h1>
+<div *ngIf="(activeMenu | async) === 'Current'" class="selectedHunt">
+  <h1>Now Hunting: {{(selectedHunt$ | async)?.species}}</h1>
   <img src="{{gameImgUrl}}">
-  <img *ngIf="(selectedHunt | async)?.pokemonImgUrl" src="{{ (selectedHunt | async)?.pokemonImgUrl }}">
-  <p>Intervals of: {{interval}}</p>
-  <div class="intervalBtnContainer">
-    <button class="btn" (click)="onIntervalIncrease()">+</button>
-    <button class="btn" (click)="onIntervalDecrease()">-</button>
+  <img
+    *ngIf="(selectedHunt$ | async)?.pokemonImgUrl"
+    src="{{ (selectedHunt$ | async)?.pokemonImgUrl }}"
+  >
+  <p
+    class="selectedHunt__count {{(countAnimation) ? 'countAnimation' : ''}}"
+  >{{(selectedHunt$ | async)?.count}}</p>
+  <p>Intervals of: {{(selectedHunt$ | async)?.interval}}</p>
+  <div class="intervalButtons">
+    <button (click)="onIntervalIncrease()">+</button>
+    <button (click)="onIntervalDecrease()">-</button>
   </div>
-  <p class="count {{(countAnimation) ? 'countAnimation' : ''}}">Count: {{(selectedHunt | async)!.count}}</p>
   <div class="counterButtons">
     <img
       (click)="foundAShiny()"

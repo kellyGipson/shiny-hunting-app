@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { PokemonClient } from "pokenode-ts";
-import { map, Observable, take } from "rxjs";
+import { map, Observable, take, tap } from "rxjs";
 import { AppBusiness } from "src/app/business/app/app.business";
+import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
+import { SelectedHuntBusiness } from "src/app/business/selectedHunt/selectedHunt.business";
 import { ActiveMenuType } from "src/app/types/activeMenu.types";
 import { AppState } from "src/app/types/app-state.types";
 import { CurrentHunt } from "src/app/types/currentHunts.types";
@@ -15,10 +17,9 @@ import { gameImgUrlLookup } from "src/app/types/pokemonFound.types";
 })
 export class SelectedHuntComponent implements OnInit, OnDestroy {
   activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
-  selectedHunt: Observable<CurrentHunt>;
+  selectedHunt$: Observable<CurrentHunt>;
 
   pokemonApi = new PokemonClient();
-  interval: number = 1;
   currentCount!: number | null;
   countAnimation: boolean = false;
   gameTyped!: keyof typeof gameImgUrlLookup;
@@ -27,13 +28,15 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _appBusiness: AppBusiness,
     private readonly _store$: Store<AppState>,
+    private readonly _selectedHuntBusiness: SelectedHuntBusiness,
+    private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
   ) {}
 
   async ngOnInit(): Promise<void> {
     this._mapState();
     document.addEventListener('keypress', e => this.onKeypress(e));
-    if (this.selectedHunt !== null && this.selectedHunt !== undefined) {
-      this.selectedHunt.pipe(
+    if (this.selectedHunt$ !== null && this.selectedHunt$ !== undefined) {
+      this.selectedHunt$.pipe(
         take(1),
         map((state) => {
           if (!!state?.foundOnGame) {
@@ -50,12 +53,50 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onIntervalIncrease(): void {
-    this.interval++;
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunt) {
+      this._store$.pipe(
+        take(1),
+        tap((s) => {
+          const currentHunt = s.currentHunts.find((hunt) =>
+            hunt.id.toString() === selectedHunt.id.toString());
+          if (!!currentHunt) {
+            this._currentHuntsBusiness.updateSelectedHunt({
+              ...currentHunt,
+              interval: currentHunt.interval + 1,
+            });
+            this._selectedHuntBusiness.setSelectedHunt({
+              ...currentHunt,
+              interval: currentHunt.interval + 1,
+            });
+          }
+        })
+      ).subscribe();
+    }
   }
 
   onIntervalDecrease(): void {
-    if (this.interval > 1 && this.interval <= Number.MAX_SAFE_INTEGER) {
-        this.interval--;
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunt) {
+      this._store$.pipe(
+        take(1),
+        tap((s) => {
+          const currentHunt = s.currentHunts.find((hunt) =>
+            hunt.id.toString() === selectedHunt.id.toString());
+          if (!!currentHunt) {
+            if (currentHunt.interval > 1 && currentHunt.interval <= Number.MAX_SAFE_INTEGER) {
+              this._currentHuntsBusiness.updateSelectedHunt({
+                ...currentHunt,
+                interval: currentHunt.interval - 1,
+              });
+              this._selectedHuntBusiness.setSelectedHunt({
+                ...currentHunt,
+                interval: currentHunt.interval - 1,
+              });
+            }
+          }
+        })
+      ).subscribe();
     }
   }
 
@@ -109,6 +150,6 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   private _mapState(): void {
-    this.selectedHunt = this._store$.select((s) => s.selectedHunt)
+    this.selectedHunt$ = this._store$.select((s) => s.selectedHunt)
   }
 }

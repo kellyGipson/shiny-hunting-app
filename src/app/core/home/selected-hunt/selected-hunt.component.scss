@@ -1,13 +1,17 @@
-.intervalBtnContainer {
+.selectedHunt {
+
+  &__count {
+    font-size: 2rem;
+    transition: all;
+  }
+}
+
+.intervalButtons {
   width: 4rem;
   display: flex;
   justify-content: space-between;
 }
 
-.count {
-  font-size: 2rem;
-  transition: all;
-}
 
 .countAnimation {
   transform: scale(1.1);
