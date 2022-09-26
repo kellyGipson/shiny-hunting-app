@@ -48,7 +48,8 @@ export class MethodSelectComponent implements OnInit {
         id: Guid.create(),
         count: 0,
         huntStarted: new Date(),
-        capturedOn: null
+        capturedOn: null,
+        interval: 1,
       })
     );
     this._appBusiness.progressToNextPage();
