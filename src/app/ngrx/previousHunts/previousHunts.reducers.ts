@@ -7,8 +7,8 @@ import { AppActionTypes } from "../app.actions";
 export const addPreviousHuntsReducer = on(
   AppActionTypes.addPreviousHuntsAction,
   (state: PreviousHunts, action) => {
-    let newPreviousHunts = copy(state);
-    newPreviousHunts.push({
+    let newState = copy(state);
+    newState.push({
       id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
@@ -19,7 +19,7 @@ export const addPreviousHuntsReducer = on(
       species: action.species,
       interval: action.interval,
     })
-    return newPreviousHunts;
+    return newState;
   }
 );
 
@@ -30,7 +30,7 @@ export const deletePreviousHuntsReducer = on(
     const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
     newState.splice(index, 1);
 
-    return { ...state };
+    return newState;
   }
 );
 
@@ -51,7 +51,7 @@ export const updatePreviousHuntsReducer = on(
       interval: action.interval,
     })
 
-    return { ...state }
+    return newState;
   }
 );
 
