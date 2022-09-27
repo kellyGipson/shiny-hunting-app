@@ -21,6 +21,7 @@
     cursor: pointer;
     color: white;
     background-color: #333333;
+    transition: all 100ms linear;
 
     &:disabled {
       cursor: default;
