@@ -3,10 +3,10 @@
   class="homeContainer"
 >
   <button
-    *ngIf="(currentHunts | async).length === 0"
     mat-raised-button
     color="primary"
     (click)="addANewHunt()"
+    [style.margin-bottom]="'1rem'"
   >Add a New Hunt</button>
   <mat-card
     *ngFor="let hunt of (currentHunts | async)"
