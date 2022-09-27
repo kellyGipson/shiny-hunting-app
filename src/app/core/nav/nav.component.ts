@@ -17,6 +17,7 @@ export class NavComponent implements OnInit {
 
   menus: ActiveMenuType[] = allActiveMenu;
   selectedHunt: CurrentHunt = null;
+  menuOpen: boolean = false;
 
   constructor(
     private readonly _appBusiness: AppBusiness,

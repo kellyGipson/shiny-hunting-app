@@ -36,7 +36,7 @@
     <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
   </div>
   <button
-    mat-raised-button
+    mat-stroked-button
     color="warn"
     (click)="onResetCounter()"
     class="cardActions__button"
@@ -54,5 +54,4 @@
       [message]="'Are you sure? Your count will be lost forever...'"
     ></app-pop-over>
   </ng-template>
-  <p>Click the spacebar to increment the counter.</p>
 </div>

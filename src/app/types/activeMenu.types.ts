@@ -16,9 +16,7 @@ export enum ActiveMenuEnum {
 
 export const allActiveMenu: ActiveMenuType[] = [
   'Home',
-  'Current',
   'New',
   'Previous',
-  'Editing'
 ]
 export type ActiveMenuStateType = { activeMenu: ActiveMenuType };

@@ -1,15 +1,17 @@
 .sidenav {
-  &__container {
-    background-color: #333333;
-    color: #ccc;
-    min-height: 100vh;
-  }
+  background-color: #333333;
+  color: #ccc;
+  min-height: 100vh;
 
   &__drawer {
+    background-color: #444;
+  }
+
+  &__list {
     display: flex;
     flex-direction: column;
-    background-color: #444;
-    width: min-content;
+    width: 14rem;
+    row-gap: 2px;
   }
 
   &__button {
@@ -17,6 +19,8 @@
     height: 2rem;
     margin: 0.5rem;
     cursor: pointer;
+    color: white;
+    background-color: #333333;
 
     &:disabled {
       cursor: default;
@@ -31,9 +35,9 @@
 }
 
 .btnActive {
-  border-bottom: 8px solid grey !important;
+  border-left: 8px solid white !important;
+}
 
-  :active {
-    border-bottom: 8px solid white !important;
-  }
+.mat-list-item {
+  margin: 0 !important;
 }
