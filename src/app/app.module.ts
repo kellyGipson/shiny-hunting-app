@@ -12,6 +12,7 @@ import { StoreModule } from '@ngrx/store';
 import { AppReducers } from "./ngrx/app.reducers";
 import { EffectsModule } from '@ngrx/effects';
 import { SHARED_COMPONENTS } from "./shared/components";
+import { LazyImgDirective } from "./shared/directives/lazy-load.directive";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { SHARED_COMPONENTS } from "./shared/components";
     APP_COMPONENTS,
     SHARED_COMPONENTS,
     HomeComponent,
+    LazyImgDirective,
   ],
   imports: [
     FormsModule,
@@ -30,6 +32,7 @@ import { SHARED_COMPONENTS } from "./shared/components";
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([]),
   ],
+  exports: [LazyImgDirective],
   providers: [],
   bootstrap: [AppComponent]
 })
