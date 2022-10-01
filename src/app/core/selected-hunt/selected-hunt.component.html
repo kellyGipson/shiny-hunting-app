@@ -3,10 +3,10 @@
   class="selectedHunt"
 >
   <div *ngFor="let hunt of selectedHunts$ | async">
-    <img src="{{hunt.gameImgUrl}}" class="selectedHunt__gameImg">
+    <img [src]="hunt.gameImgUrl" class="selectedHunt__gameImg">
     <img
       *ngIf="hunt.pokemonImgUrl"
-      src="{{ hunt.pokemonImgUrl }}"
+      [src]="hunt.pokemonImgUrl"
       class="selectedHunt__pokemonImg"
     >
     <mat-form-field *ngIf="editingCount">

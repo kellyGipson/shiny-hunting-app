@@ -3,7 +3,7 @@ import { addShinyFormOpenReducers } from "./addShinyFormOpen/addShinyFormOpen.re
 import { currentHuntsReducers } from "./currentHunts/currentHunts.reducers";
 import { currentNewPageReducers } from "./currentNewPage/currentNewPage.reducers";
 import { previousHuntsReducers } from "./previousHunts/previousHunts.reducers";
-import { selectedHuntReducers } from "./selectedHunt/selectedHunt.reducers";
+import { selectedHuntsReducers } from "./selectedHunts/selectedHunts.reducers";
 
 export const AppReducers = {
   activeMenu: activeMenuReducers,
@@ -11,5 +11,5 @@ export const AppReducers = {
   currentHunts: currentHuntsReducers,
   currentNewPage: currentNewPageReducers,
   previousHunts: previousHuntsReducers,
-  selectedHunt: selectedHuntReducers,
+  selectedHunts: selectedHuntsReducers,
 };
