@@ -5,7 +5,7 @@ import { Observable, take, tap } from "rxjs";
 import { AppBusiness } from "src/app/business/app/app.business";
 import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
 import { PreviousHuntsBusiness } from "src/app/business/previousHunts/previousHunts.business";
-import { SelectedHuntBusiness } from "src/app/business/selectedHunt/selectedHunt.business";
+import { SelectedHuntsBusiness } from "src/app/business/selectedHunts/selectedHunts.business";
 import { ActiveMenuEnum, ActiveMenuType } from "src/app/types/activeMenu.types";
 import { AppState } from "src/app/types/app-state.types";
 import { Hunt } from "src/app/types/Hunts.types";
@@ -28,7 +28,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _appBusiness: AppBusiness,
     private readonly _store$: Store<AppState>,
-    private readonly _selectedHuntBusiness: SelectedHuntBusiness,
+    private readonly _selectedHuntBusiness: SelectedHuntsBusiness,
     private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
     private readonly _previousHuntsBusiness: PreviousHuntsBusiness,
   ) {}
@@ -43,7 +43,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onIntervalIncrease(): void {
-    const selectedHunts = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
     if (!!selectedHunts) {
       this._currentHuntsBusiness.updateSelectedHunt({
         ...selectedHunts[0],
@@ -57,7 +57,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onIntervalDecrease(): void {
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
     if (!!selectedHunt) {
       if (selectedHunt[0].interval > 1 && selectedHunt[0].interval <= Number.MAX_SAFE_INTEGER) {
         this._currentHuntsBusiness.updateSelectedHunt({
@@ -74,7 +74,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   onCounterIncrease(): void {
     this.counterAnimationFn();
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
     if (!!selectedHunt) {
       let newCount = selectedHunt[0].count + selectedHunt[0].interval;
       if (newCount > Number.MAX_SAFE_INTEGER) {
@@ -95,7 +95,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     if (this.editingCount) {
       return;
     }
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
     if (!!selectedHunt) {
       let newCount = selectedHunt[0].count - selectedHunt[0].interval;
       if (newCount < 0) {
@@ -137,7 +137,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onResetConfirm(): void {
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
     this._currentHuntsBusiness.updateSelectedHunt({
       ...selectedHunt[0],
       count: 0,
@@ -185,7 +185,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   private confirmEditCount(value: string): void {
     const parsedValue = parseInt(value);
     // ! come back and fix this
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
+    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
     if (!!selectedHunt) {
       this._currentHuntsBusiness.updateSelectedHunt({
         ...selectedHunt[0],

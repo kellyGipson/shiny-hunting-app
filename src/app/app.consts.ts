@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export const MATERIAL_COMPONENTS = [
   MatSidenavModule,
@@ -18,4 +20,6 @@ export const MATERIAL_COMPONENTS = [
   OverlayModule,
   MatFormFieldModule,
   MatSelectModule,
+  MatButtonToggleModule,
+  MatCheckboxModule,
 ];

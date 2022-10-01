@@ -8,7 +8,7 @@ import { Hunt } from "src/app/types/Hunts.types";
 @Injectable({
   providedIn: 'root'
 })
-export class SelectedHuntBusiness {
+export class SelectedHuntsBusiness {
   constructor(
     private readonly _store$: Store<AppState>
   ) {}
@@ -17,7 +17,7 @@ export class SelectedHuntBusiness {
     return this._store$.select((s) => s.selectedHunts);
   }
 
-  getSelectedHunt(): Hunt[] {
+  getSelectedHunts(): Hunt[] {
     let hunt: Hunt[] = null;
 
     this._store$.pipe(
@@ -34,5 +34,9 @@ export class SelectedHuntBusiness {
     this._store$.dispatch(
       AppActionTypes.setSelectedHuntAction({ list: [hunt] })
     );
+  }
+
+  huntExistsInSelectedList(searchHunt: Hunt): boolean {
+    return !!this.getSelectedHunts().find((hunt) => hunt === searchHunt);
   }
 }

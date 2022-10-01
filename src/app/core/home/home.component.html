@@ -2,14 +2,20 @@
   *ngIf="(activeMenu | async) === 'Home'"
   class="homeContainer"
 >
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="addANewHunt()"
-    [style.margin-bottom]="'1rem'"
-  >Add a New Hunt</button>
+  <div class="homeContainer__actions">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addANewHunt()"
+    >Add a New Hunt</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="userSelectingMultiple = !userSelectingMultiple"
+    >Select Multiple</button>
+  </div>
   <mat-card
-    *ngFor="let hunt of (currentHunts | async)"
+    *ngFor="let hunt of (currentHunts | async); let i = index;"
     class="homeCard"
   >
     <mat-card-header class="cardHeader">
@@ -31,10 +37,19 @@
       >Edit</button>
       <button
         mat-raised-button
-        color="primary"
+        [color]="(userSelectingMultiple) ? 'accent' : 'primary'"
         class="cardActions__button"
         (click)="onSelectHunt(hunt)"
-      >Select</button>
+      >
+        <mat-checkbox
+          *ngIf="userSelectingMultiple"
+          [disabled]="true"
+          [checked]="
+            huntExists(hunt).exists
+          "
+        ></mat-checkbox>
+        Select
+      </button>
       <button
         mat-raised-button
         color="warn"
@@ -57,11 +72,13 @@
     </ng-template>
   </mat-card>
 </div>
-
-<!-- species: string | null;
-huntStarted: Date | null;
-capturedOn: Date | null;
-count: number | null;
-foundOnGame: string | null; // todo add games
-method: methodsType | null;
-pokemonImgUrl: string | null; -->
+<button
+  *ngIf="
+    userSelectedHunts.length > 0 &&
+    userSelectingMultiple
+  "
+  (click)="confirmSelectedHunts()"
+  class="multiSelectDoneButton"
+  mat-raised-button
+  color="primary"
+>Hunt!</button>
