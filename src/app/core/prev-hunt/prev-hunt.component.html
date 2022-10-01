@@ -1,43 +1,70 @@
 <div *ngIf="(activeMenu | async) === 'Previous'" class="container">
-  <button (click)="onToggleShinyForm()" class="btn">Add Shiny</button>
-  <form *ngIf="addShinyOpen | async" (submit)="onShinySubmit($event)">
-    <div class="inputContainer">
-      <label>Pokemon Name</label>
+  <button
+    (click)="onToggleShinyForm()"
+    mat-raised-button
+    color="primary"
+  >Add Shiny</button>
+  <form
+    *ngIf="addShinyOpen | async"
+    (submit)="onShinySubmit($event)"
+  >
+    <mat-form-field appearance="fill">
+      <mat-label>Pokemon Name</mat-label>
       <input
-      [formControl]="species"
-      class="btn btn--input"
-      id="pokemonName"
-      type="text">
-    </div>
-    <div class="inputContainer">
-      <label>Hunt Count</label>
+        matInput
+        [formControl]="species"
+        id="pokemonName"
+        type="text"
+      >
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Hunt Count</mat-label>
       <input
-      [formControl]="count"
-      class="btn btn--input"
-      id="count"
-      type="number">
-    </div>
-    <div class="inputContainer">
-      <label>Game</label>
-      <input
-      [formControl]="foundOnGame"
-      class="btn btn--input"
-      id="foundOnGame"
-      type="text">
-    </div>
-    <div class="inputContainer">
-      <label>Method</label>
-      <input
-      [formControl]="method"
-      class="btn btn--input"
-      id="method"
-      type="text">
-    </div>
-    <button class="btn" type="submit">Add</button>
+        matInput
+        [formControl]="count"
+        id="count"
+        type="number"
+      >
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Game</mat-label>
+      <mat-select
+        [(ngModel)]="foundOnGame"
+        [ngModelOptions]="{ standalone: true }"
+        name="game"
+      >
+        <mat-option
+          *ngFor="let game of allGames"
+          matInput
+          id="foundOnGame"
+          [value]="game"
+        >{{game}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Method</mat-label>
+      <mat-select
+        [(ngModel)]="method"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <mat-option
+          *ngFor="let method of allMethods"
+          matInput
+          id="method"
+          [value]="method"
+        >{{method}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      class="btn"
+      type="submit"
+      mat-raised-button
+      color="primary"
+    >Add</button>
   </form>
   <h2>Pokemon Found:</h2>
   <div *ngIf="(pokemonFound | async) !== null">
-    <div *ngFor="let pokemon of (pokemonFound | async); let index = index" class="pokemonFoundContainer">
+    <div *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFoundContainer">
       <p class="pokemonSpecies">{{pokemon.species}}</p>
       <p class="pokemonCount">{{pokemon.count}}</p>
       <p class="pokemonGame">{{pokemon.foundOnGame}}</p>

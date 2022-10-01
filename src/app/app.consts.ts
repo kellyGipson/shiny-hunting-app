@@ -5,6 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 export const MATERIAL_COMPONENTS = [
   MatSidenavModule,
@@ -14,4 +16,6 @@ export const MATERIAL_COMPONENTS = [
   MatListModule,
   MatInputModule,
   OverlayModule,
+  MatFormFieldModule,
+  MatSelectModule,
 ];

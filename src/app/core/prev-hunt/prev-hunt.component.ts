@@ -11,6 +11,7 @@ import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { PreviousHunt, PreviousHunts } from 'src/app/types/previousHunts.types';
+import { allGames, allMethods, methodsType, pokemonGames } from 'src/app/types/pokemonFound.types';
 
 @Component({
   selector: 'app-prev-hunt',
@@ -26,8 +27,11 @@ export class PokemonComponent implements OnInit {
 
   species!: UntypedFormControl;
   count!: UntypedFormControl;
-  foundOnGame!: UntypedFormControl;
-  method!: UntypedFormControl;
+  foundOnGame!: pokemonGames;
+  method!: methodsType;
+
+  allGames = allGames;
+  allMethods = allMethods;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -38,8 +42,8 @@ export class PokemonComponent implements OnInit {
   ngOnInit(): void {
     this.species = new UntypedFormControl(this.currentHunt?.species || null);
     this.count = new UntypedFormControl(this.currentHunt?.count || null);
-    this.foundOnGame = new UntypedFormControl(this.currentHunt?.foundOnGame || null);
-    this.method = new UntypedFormControl(this.currentHunt?.method || null);
+    this.foundOnGame = 'Gold';
+    this.method = 'Full Odds';
   }
 
   onToggleShinyForm(): void {
@@ -47,27 +51,27 @@ export class PokemonComponent implements OnInit {
   }
 
   onShinySubmit(e: Event): void {
-    if(e)e.preventDefault();
-
+    e?.preventDefault();
     const newPokemonList: PreviousHunts = [
       {
         id: Guid.create(),
         species: this.species.value,
         count: this.count.value,
-        foundOnGame: this.foundOnGame.value,
-        method: this.method.value,
-        huntStarted: this.currentHunt.huntStarted,
+        foundOnGame: this.foundOnGame,
+        method: this.method,
+        huntStarted: this.currentHunt?.huntStarted || new Date(),
         capturedOn: new Date(),
         pokemonImgUrl: null,
         interval: 1,
       },
     ];
+    console.log(newPokemonList);
 
     this._pokemonBusiness.setPokemonPrev(newPokemonList);
-    this.species.setValue("");
+    this.species.setValue('');
     this.count.setValue(0);
-    this.foundOnGame.setValue("");
-    this.method.setValue("");
+    this.foundOnGame = 'Gold';
+    this.method = 'Full Odds';
   }
 
   onPokemonDelete(pokemon: PreviousHunt): void {
