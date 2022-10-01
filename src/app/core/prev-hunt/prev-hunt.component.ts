@@ -12,6 +12,7 @@ import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { CurrentHunt } from 'src/app/types/currentHunts.types';
 import { PreviousHunt, PreviousHunts } from 'src/app/types/previousHunts.types';
 import { allGames, allMethods, methodsType, pokemonGames } from 'src/app/types/pokemonFound.types';
+import { PreviousHuntsBusiness } from 'src/app/business/previousHunts/previousHunts.business';
 
 @Component({
   selector: 'app-prev-hunt',
@@ -21,14 +22,14 @@ import { allGames, allMethods, methodsType, pokemonGames } from 'src/app/types/p
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: CurrentHunt;
 
-  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
-  addShinyOpen: Observable<boolean> = this._appBusiness.getAddShinyOpen();
-  pokemonFound: Observable<PreviousHunts> = this._pokemonBusiness.getPokemonPrev();
+  activeMenu: Observable<ActiveMenuType>;
+  addShinyOpen: Observable<boolean>;
+  pokemonFound: Observable<PreviousHunts>;
 
-  species!: UntypedFormControl;
-  count!: UntypedFormControl;
-  foundOnGame!: pokemonGames;
-  method!: methodsType;
+  species: UntypedFormControl;
+  count: UntypedFormControl;
+  foundOnGame: pokemonGames;
+  method: methodsType;
 
   allGames = allGames;
   allMethods = allMethods;
@@ -38,10 +39,12 @@ export class PokemonComponent implements OnInit {
   constructor(
     private readonly _appBusiness: AppBusiness,
     private readonly _pokemonBusiness: PokemonBusiness,
+    private readonly _previousHuntsBusiness: PreviousHuntsBusiness,
     private readonly _store$: Store<AppState>,
   ) { }
 
   ngOnInit(): void {
+    this._mapStore();
     this.species = new UntypedFormControl(this.currentHunt?.species || null);
     this.count = new UntypedFormControl(this.currentHunt?.count || null);
     this.foundOnGame = 'Gold';
@@ -52,10 +55,10 @@ export class PokemonComponent implements OnInit {
     this._appBusiness.toggleAddShinyOpen();
   }
 
-  onShinySubmit(e: Event): void {
+  async onShinySubmit(e: Event): Promise<void> {
     e?.preventDefault();
-    const newPokemonList: PreviousHunts = [
-      {
+    await this._pokemonBusiness.getPokemonImgUrl(this.species?.value?.toLowerCase()).then((url) => {
+      const newPokemonList: PreviousHunt = {
         id: Guid.create(),
         species: this.species.value,
         count: this.count.value,
@@ -63,20 +66,16 @@ export class PokemonComponent implements OnInit {
         method: this.method,
         huntStarted: this.currentHunt?.huntStarted || new Date(),
         capturedOn: new Date(),
-        pokemonImgUrl: null,
+        pokemonImgUrl: url || '',
         interval: 1,
-      },
-    ];
-    console.log(newPokemonList);
+      };
 
-    this._pokemonBusiness.setPokemonPrev(newPokemonList);
-    this.species.setValue('');
-    this.count.setValue(0);
-    this.foundOnGame = 'Gold';
-    this.method = 'Full Odds';
+      this._previousHuntsBusiness.addPreviousHunt(newPokemonList as CurrentHunt);
+      this.resetFormData();
+    })
   }
 
-  onPokemonDelete(hunt: PreviousHunt) {
+  onPokemonDelete(hunt: PreviousHunt): void {
     this.isDeleteConfirmationOpen = true;
     this.selectedHunt = hunt;
   }
@@ -90,8 +89,21 @@ export class PokemonComponent implements OnInit {
     this._pokemonBusiness.persistPokemonLists();
   }
 
-  onDeleteCancel() {
+  onDeleteCancel(): void {
     this.isDeleteConfirmationOpen = false;
     this.selectedHunt = null;
+  }
+
+  private _mapStore(): void {
+    this.activeMenu = this._appBusiness.getActiveMenu$();
+    this.addShinyOpen = this._appBusiness.getAddShinyOpen();
+    this.pokemonFound = this._pokemonBusiness.getPokemonPrev();
+  }
+
+  private resetFormData(): void {
+    this.species.setValue('');
+    this.count.setValue(0);
+    this.foundOnGame = 'Gold';
+    this.method = 'Full Odds';
   }
 }
