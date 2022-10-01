@@ -166,19 +166,21 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onKeypress(e: any): void {
-    switch(e.key) {
-      case  ' ':
-        this.onCounterIncrease();
-        return;
-      case '0':
-        this.onCounterDecrease();
-        return;
-      case '+':
-        this.onIntervalIncrease();
-        return;
-      case '-':
-        this.onIntervalDecrease();
-        return;
+    if (this._appBusiness.getActiveMenu() === ActiveMenuEnum.Current) {
+      switch(e.key) {
+        case  ' ':
+          this.onCounterIncrease();
+          return;
+        case '0':
+          this.onCounterDecrease();
+          return;
+        case '+':
+          this.onIntervalIncrease();
+          return;
+        case '-':
+          this.onIntervalDecrease();
+          return;
+      }
     }
   }
 

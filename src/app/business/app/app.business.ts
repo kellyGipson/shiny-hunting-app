@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable, take, tap } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
 
@@ -47,6 +47,17 @@ export class AppBusiness {
     this._store$.dispatch(
       AppActionTypes.setSelectedHuntAction(state.selectedHunt)
     );
+  }
+
+  getActiveMenu(): ActiveMenuType {
+    let activeMenu: ActiveMenuType;
+    this._store$.pipe(
+      take(1),
+      tap((s) => {
+        activeMenu = s.activeMenu;
+      })
+    ).subscribe();
+    return activeMenu;
   }
 
   getActiveMenu$(): Observable<ActiveMenuType> {
