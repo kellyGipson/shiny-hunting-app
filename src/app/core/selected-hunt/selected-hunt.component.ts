@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { PokemonClient } from "pokenode-ts";
 import { map, Observable, take, tap } from "rxjs";
 import { AppBusiness } from "src/app/business/app/app.business";
 import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
+import { PreviousHuntsBusiness } from "src/app/business/previousHunts/previousHunts.business";
 import { SelectedHuntBusiness } from "src/app/business/selectedHunt/selectedHunt.business";
-import { ActiveMenuType } from "src/app/types/activeMenu.types";
+import { ActiveMenuEnum, ActiveMenuType } from "src/app/types/activeMenu.types";
 import { AppState } from "src/app/types/app-state.types";
 import { CurrentHunt } from "src/app/types/currentHunts.types";
 import { gameImgUrlLookup } from "src/app/types/pokemonFound.types";
@@ -32,6 +33,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     private readonly _store$: Store<AppState>,
     private readonly _selectedHuntBusiness: SelectedHuntBusiness,
     private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
+    private readonly _previousHuntsBusiness: PreviousHuntsBusiness,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -129,7 +131,18 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     setTimeout(() => this.countAnimation = false, 100);
   }
 
-  foundAShiny() {}
+  foundAShiny() {
+    let shiny: CurrentHunt;
+    this.selectedHunt$.pipe(
+      take(1),
+      tap((hunt) => {
+        shiny = hunt;
+      })
+    ).subscribe();
+    this._previousHuntsBusiness.addPreviousHunt(shiny);
+    this._selectedHuntBusiness.setSelectedHunt(null);
+    this._appBusiness.setActiveMenu(ActiveMenuEnum.Previous);
+  }
 
   onResetCounter(): void {
     this.isResetConfirmationOpen = true;
