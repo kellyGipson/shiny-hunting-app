@@ -6,9 +6,17 @@ form {
   flex-direction: column;
 }
 
+.pokemonFoundContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .pokemonFound {
   max-width: 40rem;
-  width: clamp(10rem, 80vw, 15rem);
+  width: clamp(10rem, 80vw, 12rem);
   background-color: #444;
   color: white;
 

@@ -32,6 +32,8 @@ export class PokemonComponent implements OnInit {
 
   allGames = allGames;
   allMethods = allMethods;
+  isDeleteConfirmationOpen: boolean = false;
+  selectedHunt: PreviousHunt
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -74,10 +76,22 @@ export class PokemonComponent implements OnInit {
     this.method = 'Full Odds';
   }
 
-  onPokemonDelete(pokemon: PreviousHunt): void {
+  onPokemonDelete(hunt: PreviousHunt) {
+    this.isDeleteConfirmationOpen = true;
+    this.selectedHunt = hunt;
+  }
+
+  onDeleteConfirm(pokemon: PreviousHunt): void {
+    this.isDeleteConfirmationOpen = false;
+    this.selectedHunt = null;
     this._store$.dispatch(
       AppActionTypes.deletePreviousHuntsAction(pokemon)
     );
     this._pokemonBusiness.persistPokemonLists();
+  }
+
+  onDeleteCancel() {
+    this.isDeleteConfirmationOpen = false;
+    this.selectedHunt = null;
   }
 }
