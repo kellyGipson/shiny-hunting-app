@@ -72,6 +72,8 @@ export class PokemonBusiness {
   }
 
   async getPokemonImgUrl(pokemonName: string): Promise<string | null> {
-    return this.pokemonApi.getPokemonByName(pokemonName).then(pokemon => pokemon?.sprites?.front_shiny);
+    return this.pokemonApi.getPokemonByName(pokemonName)
+    .then(pokemon => pokemon?.sprites?.front_shiny)
+    .catch(() => null);
   }
 }
