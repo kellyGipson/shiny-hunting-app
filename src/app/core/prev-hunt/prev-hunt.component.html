@@ -63,16 +63,29 @@
     >Add</button>
   </form>
   <h2>Pokemon Found:</h2>
-  <div *ngIf="(pokemonFound | async) !== null">
-    <div *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFoundContainer">
-      <p class="pokemonSpecies">{{pokemon.species}}</p>
-      <p class="pokemonCount">{{pokemon.count}}</p>
-      <p class="pokemonGame">{{pokemon.foundOnGame}}</p>
-      <p class="pokemonMethod">{{pokemon.method}}</p>
-      <button
-      (click)="onPokemonDelete(pokemon)"
-      class="pokemonFound--btn"
-      >Delete</button>
-    </div>
+  <div *ngIf="(pokemonFound | async).length !== 0">
+    <mat-card *ngFor="let pokemon of (pokemonFound | async)" class="pokemonFound">
+      <img *ngIf="pokemon.pokemonImgUrl" [src]="pokemon.pokemonImgUrl" [alt]="pokemon.species">
+      <div class="cardInfoContainer">
+        <p class="pokemonSpecies cardInfo">{{pokemon.species}}</p>
+        <p class="pokemonCount cardInfo">{{pokemon.count}}</p>
+      </div>
+      <div class="cardInfoContainer">
+        <p class="pokemonGame cardInfo">{{pokemon.foundOnGame}}</p>
+        <p class="pokemonMethod cardInfo">{{pokemon.method}}</p>
+      </div>
+      <div class="pokemonFound__actions">
+        <button
+          mat-raised-button
+          color="primary"
+        >Edit</button>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="onPokemonDelete(pokemon)"
+          class="pokemonFound--btn"
+        >Delete</button>
+      </div>
+    </mat-card>
   </div>
 </div>

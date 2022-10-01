@@ -1,33 +1,3 @@
-.pokemonFoundContainer {
-  display: flex;
-  align-items: center;
-}
-
-.pokemonFoundContainer p, .pokemonFound--btn {
-  color: white;
-  font-size: 1rem;
-  background: none;
-  border: 2px solid grey;
-  padding-inline: 1rem;
-  padding-block: 0.5rem;
-}
-
-.pokemonSpecies {
-  width: 12ch;
-}
-
-.pokemonCount {
-  width: 10ch;
-}
-
-.pokemonGame {
-  width: 17ch;
-}
-
-.pokemonMethod {
-  width: 13ch;
-}
-
 form {
   width: 100%;
   display: flex;
@@ -36,7 +6,24 @@ form {
   flex-direction: column;
 }
 
-label {
-  width: 18ch;
-  text-align: left;
+.pokemonFound {
+  max-width: 40rem;
+  width: clamp(10rem, 80vw, 15rem);
+  background-color: #444;
+  color: white;
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.cardInfoContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardInfo {
+  width: fit-content;
 }
