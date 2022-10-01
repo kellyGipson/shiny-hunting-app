@@ -1,16 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-
 import { Observable } from 'rxjs';
-import { AppActionTypes } from 'src/app/ngrx/app.actions';
-
 import { AppBusiness } from 'src/app/business/app/app.business';
-import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
-import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import { Hunt } from 'src/app/types/Hunts.types';
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-pokemon-select',
@@ -18,7 +12,7 @@ import { MatSelectionList, MatSelectionListChange } from '@angular/material/list
   styleUrls: ['./pokemon-select.component.scss', '../../../app.component.scss']
 })
 export class PokemonSelectComponent implements OnInit {
-  @Input() newHuntToCreate: CurrentHunt;
+  @Input() newHuntToCreate: Hunt;
   readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
 
   pokemonList: PokemonJSONType[] = [];

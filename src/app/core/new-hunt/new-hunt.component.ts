@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
-import { CurrentHunt, emptyCurrentHunt } from 'src/app/types/currentHunts.types';
+import { Hunt, emptyHunt } from 'src/app/types/Hunts.types';
 
 @Component({
   selector: 'app-new-hunt',
@@ -12,7 +12,7 @@ import { CurrentHunt, emptyCurrentHunt } from 'src/app/types/currentHunts.types'
   styleUrls: ['./new-hunt.component.scss', '../../app.component.scss']
 })
 export class NewHuntComponent implements OnInit {
-  newHuntToCreate: CurrentHunt = emptyCurrentHunt;
+  newHuntToCreate: Hunt = emptyHunt;
   activeMenu: Observable<ActiveMenuType>;
   currentPage: Observable<'pokemon' | 'game' | 'method'>;
 

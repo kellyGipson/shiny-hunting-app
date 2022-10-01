@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store"
-import { PreviousHunt, PreviousHuntsStateType } from "src/app/types/previousHunts.types";
+import { Hunt } from "src/app/types/Hunts.types";
 
 export const previousHuntsActionsType = {
   ADD_PREVIOUS_HUNTS_OPEN_ACTION: 'ADD_PREVIOUS_HUNTS_OPEN_ACTION',
@@ -10,22 +10,22 @@ export const previousHuntsActionsType = {
 
 export const addPreviousHuntsAction = createAction(
   previousHuntsActionsType.ADD_PREVIOUS_HUNTS_OPEN_ACTION,
-  props<PreviousHunt>(),
+  props<Hunt>(),
 );
 
 export const deletePreviousHuntsAction = createAction(
   previousHuntsActionsType.DELETE_PREVIOUS_HUNTS_OPEN_ACTION,
-  props<PreviousHunt>(),
+  props<Hunt>(),
 );
 
 export const updatePreviousHuntsAction = createAction(
   previousHuntsActionsType.UPDATE_PREVIOUS_HUNTS_OPEN_ACTION,
-  props<PreviousHunt>(),
+  props<Hunt>(),
 );
 
 export const setPreviousHuntsAction = createAction(
   previousHuntsActionsType.SET_PREVIOUS_HUNTS_OPEN_ACTION,
-  props<PreviousHuntsStateType>(),
+  props<{ list: Hunt[] }>(),
 );
 
 export const previousHuntsActionsContainer = {

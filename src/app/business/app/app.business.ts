@@ -39,13 +39,13 @@ export class AppBusiness {
       AppActionTypes.setCurrentNewPageAction({ currentNewPage: state.currentNewPage})
     );
     this._store$.dispatch(
-      AppActionTypes.setPreviousHuntsAction({ previousHunts: state.previousHunts })
+      AppActionTypes.setPreviousHuntsAction({ list: state.previousHunts })
     );
     this._store$.dispatch(
       AppActionTypes.setAddShinyFormOpenAction({ addShinyFormOpen: state.addShinyFormOpen })
     );
     this._store$.dispatch(
-      AppActionTypes.setSelectedHuntAction(state.selectedHunt)
+      AppActionTypes.setSelectedHuntAction({ list : state.selectedHunts })
     );
   }
 

@@ -6,7 +6,7 @@ import { CurrentHuntsBusiness } from 'src/app/business/currentHunts/currentHunts
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { ActiveMenuEnum, ActiveMenuType } from 'src/app/types/activeMenu.types';
 import { AppState } from 'src/app/types/app-state.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { Hunt } from 'src/app/types/Hunts.types';
 import { CurrentNewPageType } from 'src/app/types/currentNewPage.types';
 
 @Component({
@@ -17,11 +17,11 @@ import { CurrentNewPageType } from 'src/app/types/currentNewPage.types';
 export class HomeComponent implements OnInit {
   activeMenu: Observable<ActiveMenuType>;
   currentPage: Observable<CurrentNewPageType>;
-  currentHunts: Observable<CurrentHunt[]>;
+  currentHunts: Observable<Hunt[]>;
 
   huntSelected: boolean = false;
   huntBeingEdited: boolean = false;
-  selectedHunt: CurrentHunt = null;
+  selectedHunt: Hunt = null;
   isDeleteConfirmationOpen: boolean = false;
 
   constructor(
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
     this.currentHunts = this._currentHuntsBusiness.getCurrentHunts$();
   }
 
-  confirmDelete(hunt: CurrentHunt): void {
+  confirmDelete(hunt: Hunt): void {
     console.log(hunt.species);
     this.selectedHunt = hunt;
     this.isDeleteConfirmationOpen = true;
@@ -57,13 +57,13 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onEditHunt(hunt: CurrentHunt) {
+  onEditHunt(hunt: Hunt) {
 
   }
 
-  onSelectHunt(hunt: CurrentHunt) {
+  onSelectHunt(hunt: Hunt) {
     this._store$.dispatch(
-      AppActionTypes.setSelectedHuntAction(hunt)
+      AppActionTypes.setSelectedHuntAction({ list: [hunt]} )
     );
     this._appBusiness.setActiveMenu(ActiveMenuEnum.Current);
   }

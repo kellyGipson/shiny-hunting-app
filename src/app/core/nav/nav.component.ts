@@ -5,7 +5,7 @@ import { Observable, take, tap } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuEnum, ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { Hunt } from 'src/app/types/Hunts.types';
 
 @Component({
   selector: 'app-nav',
@@ -16,7 +16,7 @@ export class NavComponent implements OnInit {
   activeMenu$!: Observable<ActiveMenuType>;
 
   menus: ActiveMenuType[] = allActiveMenu;
-  selectedHunt: CurrentHunt = null;
+  selectedHunt: Hunt = null;
   menuOpen: boolean = false;
 
   constructor(

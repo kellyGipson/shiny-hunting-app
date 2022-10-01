@@ -5,8 +5,8 @@ import { PokemonClient } from 'pokenode-ts';
 import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
-import { CurrentHunt, CurrentHuntsStateType } from 'src/app/types/currentHunts.types';
-import { PreviousHunts } from 'src/app/types/previousHunts.types';
+import { Hunt, HuntsStateType } from 'src/app/types/Hunts.types';
+import { gameImgUrlLookup } from 'src/app/types/pokemonFound.types';
 import { StorageBusiness } from '../storage/storage.business';
 
 @Injectable({
@@ -20,22 +20,22 @@ export class PokemonBusiness {
     private readonly _store$: Store<AppState>,
   ) {}
 
-  getPokemonPrev(): Observable<PreviousHunts> {
+  getPokemonPrev(): Observable<Hunt[]> {
     return this._store$.select((s) => s.previousHunts);
   }
 
-  setPokemonPrev(previousHunts: PreviousHunts): void {
+  setPokemonPrev(list: Hunt[]): void {
     this._store$.dispatch(
-      AppActionTypes.setPreviousHuntsAction({ previousHunts })
+      AppActionTypes.setPreviousHuntsAction({ list })
     );
     this.persistPokemonLists();
   }
 
-  getPokemonCurr(): Observable<CurrentHuntsStateType> {
+  getPokemonCurr(): Observable<HuntsStateType> {
     return this._store$.select((s) => s.currentHunts);
   }
 
-  setPokemonCurr(list: CurrentHuntsStateType): void {
+  setPokemonCurr(list: HuntsStateType): void {
     this._store$.dispatch(
       AppActionTypes.setCurrentHuntsAction({ list: list })
     );
@@ -51,15 +51,7 @@ export class PokemonBusiness {
     ).subscribe();
   }
 
-  async addCurrectPokemonImgUrl(currentHunt: CurrentHunt) {
-    let currentHuntIndex: number;
-    this._store$.pipe(
-      take(1),
-      map((s) => {
-        currentHuntIndex = s.currentHunts.length;
-      })
-    ).subscribe();
-
+  async addCurrectPokemonImgUrl(currentHunt: Hunt) {
     if (currentHunt.species !== null) {
       await this.getPokemonImgUrl(currentHunt.species)
         .then((url) => { currentHunt.pokemonImgUrl = url; return currentHunt })
@@ -75,5 +67,10 @@ export class PokemonBusiness {
     return this.pokemonApi.getPokemonByName(pokemonName)
     .then(pokemon => pokemon?.sprites?.front_shiny)
     .catch(() => null);
+  }
+
+  getGameImgUrl(hunt: Hunt): string {
+    const gameTyped = hunt.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
+    return gameImgUrlLookup[gameTyped];
   }
 }

@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { Hunt } from 'src/app/types/Hunts.types';
 import { allMethods, methodsType } from 'src/app/types/pokemonFound.types';
 import { Guid } from 'guid-typescript'
 import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
+import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 
 @Component({
   selector: 'app-method-select',
@@ -16,10 +17,10 @@ import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 })
 export class MethodSelectComponent implements OnInit {
   @Input()
-  newHuntToCreate: CurrentHunt;
+  newHuntToCreate: Hunt;
 
   @Input()
-  currentHunt!: Observable<CurrentHunt>;
+  currentHunt!: Observable<Hunt>;
   @Input()
   currentHuntIndex!: number;
 
@@ -27,6 +28,7 @@ export class MethodSelectComponent implements OnInit {
 
   constructor(
     private readonly _appBusiness: AppBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
     private readonly _store$: Store<AppState>,
   ) { }
 
@@ -45,6 +47,7 @@ export class MethodSelectComponent implements OnInit {
     this._store$.dispatch(
       AppActionTypes.addCurrentHuntsAction({
         ...this.newHuntToCreate,
+        gameImgUrl: this._pokemonBusiness.getGameImgUrl(this.newHuntToCreate),
         id: Guid.create(),
         count: 0,
         huntStarted: new Date(),

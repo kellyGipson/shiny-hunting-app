@@ -1,37 +1,42 @@
-<div *ngIf="(activeMenu | async) === 'Current'" class="selectedHunt">
-  <img src="{{gameImgUrl}}" class="selectedHunt__gameImg">
-  <img
-    *ngIf="(selectedHunt$ | async)?.pokemonImgUrl"
-    src="{{ (selectedHunt$ | async)?.pokemonImgUrl }}"
-    class="selectedHunt__pokemonImg"
-  >
-  <mat-form-field *ngIf="editingCount">
-    <mat-label>Editing Count</mat-label>
-    <input
-      type="number"
-      matInput
-      [value]="(selectedHunt$ | async).count"
-      (keypress)="listenToEditingCount($event)"
+<div
+  *ngIf="(activeMenu | async) === 'Current'"
+  class="selectedHunt"
+>
+  <div *ngFor="let hunt of selectedHunts$ | async">
+    <img src="{{hunt.gameImgUrl}}" class="selectedHunt__gameImg">
+    <img
+      *ngIf="hunt.pokemonImgUrl"
+      src="{{ hunt.pokemonImgUrl }}"
+      class="selectedHunt__pokemonImg"
     >
-  </mat-form-field>
-  <p
-    *ngIf="!editingCount"
-    class="selectedHunt__count"
-    [class.countAnimation]="countAnimation"
-    (click)="editingCount = !editingCount"
-  >{{(selectedHunt$ | async)?.count}}</p>
-  <p>Intervals of: {{(selectedHunt$ | async)?.interval}}</p>
-  <div class="intervalButtons">
-    <button mat-raised-button color="primary" (click)="onIntervalIncrease()">+</button>
-    <button mat-raised-button color="primary" (click)="onIntervalDecrease()">-</button>
-  </div>
-  <div class="counterButtons">
+    <mat-form-field *ngIf="editingCount">
+      <mat-label>Editing Count</mat-label>
+      <input
+        type="number"
+        matInput
+        [value]="hunt.count"
+        (keypress)="listenToEditingCount($event)"
+      >
+    </mat-form-field>
+    <p
+      *ngIf="!editingCount"
+      class="selectedHunt__count"
+      [class.countAnimation]="countAnimation"
+      (click)="editingCount = !editingCount"
+    >{{hunt.count}}</p>
+    <p>Intervals of: {{hunt.interval}}</p>
+    <div class="intervalButtons">
+      <button mat-raised-button color="primary" (click)="onIntervalIncrease()">+</button>
+      <button mat-raised-button color="primary" (click)="onIntervalDecrease()">-</button>
+    </div>
     <img
       (click)="foundAShiny()"
       class="shinyButton"
       src="../assets/shiny_sparkles.png"
       alt="Found a shiny button"
     >
+  </div>
+  <div class="counterButtons">
     <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
     <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
   </div>

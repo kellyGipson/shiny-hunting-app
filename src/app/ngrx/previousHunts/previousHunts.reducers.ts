@@ -1,18 +1,19 @@
 import { createReducer, on } from "@ngrx/store";
 import copy from "fast-copy";
 import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
-import { PreviousHunts } from "src/app/types/previousHunts.types";
+import { Hunt } from "src/app/types/Hunts.types";
 import { AppActionTypes } from "../app.actions";
 
 export const addPreviousHuntsReducer = on(
   AppActionTypes.addPreviousHuntsAction,
-  (state: PreviousHunts, action) => {
+  (state: Hunt[], action) => {
     let newState = copy(state);
     newState.push({
       id: action.id,
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
+      gameImgUrl: action.gameImgUrl,
       huntStarted: action.huntStarted,
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
@@ -25,7 +26,7 @@ export const addPreviousHuntsReducer = on(
 
 export const deletePreviousHuntsReducer = on(
   AppActionTypes.deletePreviousHuntsAction,
-  (state: PreviousHunts, action) => {
+  (state: Hunt[], action) => {
     let newState = copy(state);
     const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
     newState.splice(index, 1);
@@ -36,7 +37,7 @@ export const deletePreviousHuntsReducer = on(
 
 export const updatePreviousHuntsReducer = on(
   AppActionTypes.updatePreviousHuntsAction,
-  (state: PreviousHunts, action) => {
+  (state: Hunt[], action) => {
     let newState = copy(state);
     const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
     newState.splice(index, 1, {
@@ -44,6 +45,7 @@ export const updatePreviousHuntsReducer = on(
       capturedOn: action.capturedOn,
       count: action.count,
       foundOnGame: action.foundOnGame,
+      gameImgUrl: action.gameImgUrl,
       huntStarted: action.huntStarted,
       method: action.method,
       pokemonImgUrl: action.pokemonImgUrl,
@@ -58,7 +60,7 @@ export const updatePreviousHuntsReducer = on(
 export const setPreviousHuntsReducer = on(
   AppActionTypes.setPreviousHuntsAction,
   (_, action) => {
-    return action.previousHunts
+    return action;
   }
 );
 

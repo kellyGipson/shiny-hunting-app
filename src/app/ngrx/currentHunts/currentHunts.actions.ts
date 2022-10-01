@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store"
-import { CurrentHunt } from "src/app/types/currentHunts.types";
+import { Hunt } from "src/app/types/Hunts.types";
 
 export const currentHuntsActionsType = {
   ADD_CURRENT_HUNTS_OPEN_ACTION: 'ADD_CURRENT_HUNTS_OPEN_ACTION',
@@ -10,22 +10,22 @@ export const currentHuntsActionsType = {
 
 export const addCurrentHuntsAction = createAction(
   currentHuntsActionsType.ADD_CURRENT_HUNTS_OPEN_ACTION,
-  props<CurrentHunt>()
+  props<Hunt>()
 );
 
 export const deleteCurrentHuntsAction = createAction(
   currentHuntsActionsType.DELETE_CURRENT_HUNTS_OPEN_ACTION,
-  props<CurrentHunt>(),
+  props<Hunt>(),
 );
 
 export const updateCurrentHuntsAction = createAction(
   currentHuntsActionsType.UPDATE_CURRENT_HUNTS_OPEN_ACTION,
-  props<CurrentHunt>(),
+  props<Hunt>(),
 );
 
 export const setCurrentHuntsAction = createAction(
   currentHuntsActionsType.SET_CURRENT_HUNTS_OPEN_ACTION,
-  props<{ list: CurrentHunt[] }>(),
+  props<{ list: Hunt[] }>(),
 );
 
 export const currentHuntsActionsContainer = {

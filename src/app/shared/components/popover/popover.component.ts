@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { CurrentHunt } from "src/app/types/currentHunts.types";
 
 @Component({
   selector: 'app-pop-over',

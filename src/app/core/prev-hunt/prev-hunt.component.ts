@@ -9,8 +9,7 @@ import { AppBusiness } from 'src/app/business/app/app.business';
 import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
 import { ActiveMenuType } from 'src/app/types/activeMenu.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
-import { PreviousHunt, PreviousHunts } from 'src/app/types/previousHunts.types';
+import { Hunt } from 'src/app/types/Hunts.types';
 import { allGames, allMethods, methodsType, pokemonGames } from 'src/app/types/pokemonFound.types';
 import { PreviousHuntsBusiness } from 'src/app/business/previousHunts/previousHunts.business';
 
@@ -20,11 +19,11 @@ import { PreviousHuntsBusiness } from 'src/app/business/previousHunts/previousHu
   styleUrls: ['./prev-hunt.component.scss', '../../app.component.scss']
 })
 export class PokemonComponent implements OnInit {
-  @Input() currentHunt!: CurrentHunt;
+  @Input() currentHunt!: Hunt;
 
   activeMenu: Observable<ActiveMenuType>;
   addShinyOpen: Observable<boolean>;
-  pokemonFound: Observable<PreviousHunts>;
+  pokemonFound: Observable<Hunt[]>;
 
   species: UntypedFormControl;
   count: UntypedFormControl;
@@ -34,7 +33,7 @@ export class PokemonComponent implements OnInit {
   allGames = allGames;
   allMethods = allMethods;
   isDeleteConfirmationOpen: boolean = false;
-  selectedHunt: PreviousHunt
+  selectedHunt: Hunt;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -58,29 +57,31 @@ export class PokemonComponent implements OnInit {
   async onShinySubmit(e: Event): Promise<void> {
     e?.preventDefault();
     await this._pokemonBusiness.getPokemonImgUrl(this.species?.value?.toLowerCase()).then((url) => {
-      const newPokemonList: PreviousHunt = {
+      let newPokemonList: Hunt = {
         id: Guid.create(),
         species: this.species.value,
         count: this.count.value,
         foundOnGame: this.foundOnGame,
+        gameImgUrl: '',
         method: this.method,
         huntStarted: this.currentHunt?.huntStarted || new Date(),
         capturedOn: new Date(),
         pokemonImgUrl: url || '',
         interval: 1,
       };
+      newPokemonList.gameImgUrl = this._pokemonBusiness.getGameImgUrl(newPokemonList);
 
-      this._previousHuntsBusiness.addPreviousHunt(newPokemonList as CurrentHunt);
+      this._previousHuntsBusiness.addPreviousHunt(newPokemonList as Hunt);
       this.resetFormData();
     })
   }
 
-  onPokemonDelete(hunt: PreviousHunt): void {
+  onPokemonDelete(hunt: Hunt): void {
     this.isDeleteConfirmationOpen = true;
     this.selectedHunt = hunt;
   }
 
-  onDeleteConfirm(pokemon: PreviousHunt): void {
+  onDeleteConfirm(pokemon: Hunt): void {
     this.isDeleteConfirmationOpen = false;
     this.selectedHunt = null;
     this._store$.dispatch(

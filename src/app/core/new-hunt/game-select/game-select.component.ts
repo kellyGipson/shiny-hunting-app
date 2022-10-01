@@ -4,7 +4,7 @@ import { map, Observable, take } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
-import { CurrentHunt } from 'src/app/types/currentHunts.types';
+import { Hunt } from 'src/app/types/Hunts.types';
 import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
 
 @Component({
@@ -14,9 +14,9 @@ import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
 })
 export class GameSelectComponent implements OnInit {
   @Input()
-  newHuntToCreate: CurrentHunt;
+  newHuntToCreate: Hunt;
 
-  currentHunt!: Observable<CurrentHunt>;
+  currentHunt!: Observable<Hunt>;
   currentHuntIndex!: number;
 
   allGames: pokemonGames[] = allGames;

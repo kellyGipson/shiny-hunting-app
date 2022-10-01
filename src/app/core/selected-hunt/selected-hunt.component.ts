@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { PokemonClient } from "pokenode-ts";
-import { map, Observable, take, tap } from "rxjs";
+import { Observable, take, tap } from "rxjs";
 import { AppBusiness } from "src/app/business/app/app.business";
 import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
 import { PreviousHuntsBusiness } from "src/app/business/previousHunts/previousHunts.business";
 import { SelectedHuntBusiness } from "src/app/business/selectedHunt/selectedHunt.business";
 import { ActiveMenuEnum, ActiveMenuType } from "src/app/types/activeMenu.types";
 import { AppState } from "src/app/types/app-state.types";
-import { CurrentHunt } from "src/app/types/currentHunts.types";
-import { gameImgUrlLookup } from "src/app/types/pokemonFound.types";
+import { Hunt } from "src/app/types/Hunts.types";
 
 @Component({
   selector: 'app-selected-hunt',
@@ -18,13 +17,11 @@ import { gameImgUrlLookup } from "src/app/types/pokemonFound.types";
 })
 export class SelectedHuntComponent implements OnInit, OnDestroy {
   activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
-  selectedHunt$: Observable<CurrentHunt>;
+  selectedHunts$: Observable<Hunt[]>;
 
   pokemonApi = new PokemonClient();
   currentCount: number | null;
   countAnimation: boolean = false;
-  gameTyped: keyof typeof gameImgUrlLookup;
-  gameImgUrl: string;
   isResetConfirmationOpen: boolean = false;
   editingCount: boolean = false;
 
@@ -39,17 +36,6 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this._mapState();
     document.addEventListener('keypress', e => this.onKeypress(e));
-    if (this.selectedHunt$ !== null && this.selectedHunt$ !== undefined) {
-      this.selectedHunt$.pipe(
-        take(1),
-        map((state) => {
-          if (!!state?.foundOnGame) {
-            this.gameTyped = state.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
-            this.gameImgUrl = gameImgUrlLookup[this.gameTyped];
-          }
-        })
-      ).subscribe();
-    }
   }
 
   ngOnDestroy(): void {
@@ -57,15 +43,15 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   onIntervalIncrease(): void {
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
-    if (!!selectedHunt) {
+    const selectedHunts = this._selectedHuntBusiness.getSelectedHunt();
+    if (!!selectedHunts) {
       this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt,
-        interval: selectedHunt.interval + 1,
+        ...selectedHunts[0],
+        interval: selectedHunts[0].interval + 1,
       });
       this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt,
-        interval: selectedHunt.interval + 1,
+        ...selectedHunts[0],
+        interval: selectedHunts[0].interval + 1,
       });
     }
   }
@@ -73,14 +59,14 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   onIntervalDecrease(): void {
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
-      if (selectedHunt.interval > 1 && selectedHunt.interval <= Number.MAX_SAFE_INTEGER) {
+      if (selectedHunt[0].interval > 1 && selectedHunt[0].interval <= Number.MAX_SAFE_INTEGER) {
         this._currentHuntsBusiness.updateSelectedHunt({
-          ...selectedHunt,
-          interval: selectedHunt.interval - 1,
+          ...selectedHunt[0],
+          interval: selectedHunt[0].interval - 1,
         });
         this._selectedHuntBusiness.setSelectedHunt({
-          ...selectedHunt,
-          interval: selectedHunt.interval - 1,
+          ...selectedHunt[0],
+          interval: selectedHunt[0].interval - 1,
         });
       }
     }
@@ -90,16 +76,16 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     this.counterAnimationFn();
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
-      let newCount = selectedHunt.count + selectedHunt.interval;
+      let newCount = selectedHunt[0].count + selectedHunt[0].interval;
       if (newCount > Number.MAX_SAFE_INTEGER) {
         newCount = Number.MAX_SAFE_INTEGER;
       }
       this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: newCount,
       });
       this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: newCount,
       });
     }
@@ -111,16 +97,16 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     }
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
-      let newCount = selectedHunt.count - selectedHunt.interval;
+      let newCount = selectedHunt[0].count - selectedHunt[0].interval;
       if (newCount < 0) {
         newCount = 0;
       }
       this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: newCount,
       });
       this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: newCount,
       });
     }
@@ -132,14 +118,16 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   foundAShiny() {
-    let shiny: CurrentHunt;
-    this.selectedHunt$.pipe(
+    let shiny: Hunt[];
+    this.selectedHunts$.pipe(
       take(1),
-      tap((hunt) => {
-        shiny = hunt;
+      tap((hunts) => {
+        shiny = hunts;
       })
     ).subscribe();
-    this._previousHuntsBusiness.addPreviousHunt(shiny);
+    shiny.forEach((hunt) => {
+      this._previousHuntsBusiness.addPreviousHunt(hunt);
+    })
     this._selectedHuntBusiness.setSelectedHunt(null);
     this._appBusiness.setActiveMenu(ActiveMenuEnum.Previous);
   }
@@ -151,11 +139,11 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   onResetConfirm(): void {
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     this._currentHuntsBusiness.updateSelectedHunt({
-      ...selectedHunt,
+      ...selectedHunt[0],
       count: 0,
     });
     this._selectedHuntBusiness.setSelectedHunt({
-      ...selectedHunt,
+      ...selectedHunt[0],
       count: 0,
     });
     this.isResetConfirmationOpen = false;
@@ -185,7 +173,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   }
 
   private _mapState(): void {
-    this.selectedHunt$ = this._store$.select((s) => s.selectedHunt)
+    this.selectedHunts$ = this._store$.select((s) => s.selectedHunts)
   }
 
   listenToEditingCount(e: any): void {
@@ -196,14 +184,15 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   private confirmEditCount(value: string): void {
     const parsedValue = parseInt(value);
+    // ! come back and fix this
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunt();
     if (!!selectedHunt) {
       this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: parsedValue,
       });
       this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt,
+        ...selectedHunt[0],
         count: parsedValue,
       });
     }
