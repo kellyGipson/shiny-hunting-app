@@ -39,6 +39,10 @@ export const updateCurrentHuntsReducer = on(
 export const setCurrentHuntsAction = on(
   AppActionTypes.setCurrentHuntsAction,
   (_, action) => {
+    if (action.list.length === 0 || !action.list) {
+      throw new Error(`No currentHunts in payload. In Action: ${action.type}`);
+    }
+
     return action.list;
   }
 );

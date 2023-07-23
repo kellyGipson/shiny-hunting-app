@@ -9,6 +9,9 @@ import { get } from "lodash";
 export const setSelectedHuntsAction = on(
   AppActionTypes.setSelectedHuntAction,
   (_, action) => {
+    if (action.list.length === 0 || !action.list) {
+      throw new Error(`No selectedHunts in payload. In Action: ${action.type}`);
+    }
     return action.list;
   }
 );

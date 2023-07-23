@@ -61,7 +61,11 @@ export const updatePreviousHuntsReducer = on(
 export const setPreviousHuntsReducer = on(
   AppActionTypes.setPreviousHuntsAction,
   (_, action) => {
-    return action;
+    if (action.list.length === 0 || !action.list) {
+      throw new Error(`No previousHunts in payload. In Action: ${action.type}`);
+    }
+
+    return action.list;
   }
 );
 

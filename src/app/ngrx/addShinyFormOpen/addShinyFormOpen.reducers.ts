@@ -14,6 +14,10 @@ export const toggleAddShinyFormOpenReducer = on(
 export const setAddShinyFormOpenReducer = on(
   AppActionTypes.setAddShinyFormOpenAction,
   (state: AddShinyFormOpenStateType, action) => {
+    if (!action.addShinyFormOpen) {
+      throw new Error('No addShinyFormOpen in payload. In Action: AppActionTypes.setAddShinyFormOpenAction');
+    }
+
     state = action.addShinyFormOpen;
     return state;
   }

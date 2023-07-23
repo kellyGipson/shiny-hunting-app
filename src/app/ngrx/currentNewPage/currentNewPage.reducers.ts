@@ -6,6 +6,10 @@ import { AppActionTypes } from "../app.actions";
 export const setCurrentNewPageReducer = on(
   AppActionTypes.setCurrentNewPageAction,
   (state: CurrentNewPageType, action) => {
+    if (!action.currentNewPage) {
+      throw new Error(`No currentNewPage in payload. In Action: ${action.type}`);
+    }
+
     state = action.currentNewPage;
     return state;
   }

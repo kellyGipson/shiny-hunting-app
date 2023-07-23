@@ -5,6 +5,10 @@ import { AppActionTypes } from '../app.actions';
 export const setActiveMenuReducer = on(
   AppActionTypes.setActiveMenuAction,
   (_, action) => {
+    if (!action.activeMenu) {
+      throw new Error('No activeMenu in payload. Action: AppActionTypes.setActiveMenuAction');
+    }
+
     return action.activeMenu;
   }
 );
