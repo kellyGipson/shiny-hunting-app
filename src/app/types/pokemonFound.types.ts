@@ -7,7 +7,7 @@ export type pokemonGames =
 'Ruby' | 'Sapphire' | 'Emerald' | 'Fire Red' | 'Leaf Green' |
 'Diamond' | 'Pearl' | 'Platinum' | 'Heartgold' | 'Soulsilver' |
 'Black' | 'White' | 'Black 2' | 'White 2' |
-'X' | 'X' | 'Omega Ruby' | 'Alpha Sapphire' |
+'X' | 'Y' | 'Omega Ruby' | 'Alpha Sapphire' |
 'Sun' | 'Moon' | 'Ultra Sun' | 'Ultra Moon' |
 "Let's Go Pikachu" | "Let's Go Eevee" | 'Sword' | 'Shield' |
 'Brilliant Diamond' | 'Shining Pearl' | 'Legends Arceus'
@@ -17,11 +17,33 @@ export const allGames: pokemonGames[] = [
   'Ruby', 'Sapphire', 'Emerald', 'Fire Red', 'Leaf Green',
   'Diamond', 'Pearl', 'Platinum', 'Heartgold', 'Soulsilver',
   'Black', 'White', 'Black 2', 'White 2',
-  'X', 'X', 'Omega Ruby', 'Alpha Sapphire',
+  'X', 'Y', 'Omega Ruby', 'Alpha Sapphire',
   'Sun', 'Moon', 'Ultra Sun', 'Ultra Moon',
   "Let's Go Pikachu", "Let's Go Eevee", 'Sword', 'Shield',
   'Brilliant Diamond', 'Shining Pearl', 'Legends Arceus',
 ]
+
+const _8192games = [
+  'Gold', 'Silver', 'Crystal',
+  'Ruby', 'Sapphire', 'Emerald', 'Fire Red', 'Leaf Green',
+  'Diamond', 'Pearl', 'Platinum', 'Heartgold', 'Soulsilver',
+  'Black', 'White', 'Black 2', 'White 2',
+];
+
+const _4096games = [
+  'X', 'Y', 'Omega Ruby', 'Alpha Sapphire',
+  'Sun', 'Moon', 'Ultra Sun', 'Ultra Moon',
+  "Let's Go Pikachu", "Let's Go Eevee", 'Sword', 'Shield',
+  'Brilliant Diamond', 'Shining Pearl', 'Legends Arceus',
+];
+
+export let oddsMap = new Map<string, number>();
+_8192games.forEach((game) => {
+  oddsMap.set(game, 8192);
+});
+_4096games.forEach((game) => {
+  oddsMap.set(game, 4096);
+});
 
 export interface methodImgUrlLookupType {
   gold: number,
