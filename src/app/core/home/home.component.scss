@@ -13,6 +13,13 @@
   }
 }
 
+.homeCardsContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 70rem;
+}
+
 .homeCard {
   background-color: #2D2D2D;
   margin: 0.5rem;

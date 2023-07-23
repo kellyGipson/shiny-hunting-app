@@ -14,63 +14,65 @@
       (click)="userSelectingMultiple = !userSelectingMultiple"
     >Select Multiple</button>
   </div>
-  <mat-card
-    *ngFor="let hunt of (currentHunts | async); let i = index;"
-    class="homeCard"
-  >
-    <mat-card-header class="cardHeader">
-      <img [src]="hunt.pokemonImgUrl" [alt]="hunt.species">
-      <div class="cardHeader__titleContainer">
-        <mat-card-title class="cardHeader__title">{{hunt.species}}</mat-card-title>
-        <mat-card-subtitle class="cardHeader__title">{{hunt.foundOnGame}}</mat-card-subtitle>
-      </div>
-    </mat-card-header>
-    <mat-card-content class="cardContent">
-      <div class="cardContent__count">Count: {{hunt.count}}</div>
-    </mat-card-content>
-    <mat-card-actions class="cardActions">
-      <button
-        mat-raised-button
-        color="primary"
-        class="cardActions__button"
-        (click)="onEditHunt(hunt)"
-      >Edit</button>
-      <button
-        mat-raised-button
-        [color]="(userSelectingMultiple) ? 'accent' : 'primary'"
-        class="cardActions__button"
-        (click)="onSelectHunt(hunt)"
-      >
-        <mat-checkbox
-          *ngIf="userSelectingMultiple"
-          [disabled]="true"
-          [checked]="
-            huntExists(hunt).exists
-          "
-        ></mat-checkbox>
-        Select
-      </button>
-      <button
-        mat-raised-button
-        color="warn"
-        (click)="confirmDelete(hunt)"
-        class="cardActions__button"
-        cdkOverlayOrigin
-        #trigger="cdkOverlayOrigin"
-      >Delete</button>
-    </mat-card-actions>
-    <ng-template
-      *ngIf="hunt === selectedHunt"
-      cdkConnectedOverlay
-      [cdkConnectedOverlayOrigin]="trigger"
-      [cdkConnectedOverlayOpen]="isDeleteConfirmationOpen"
+  <div class="homeCardsContainer">
+    <mat-card
+      *ngFor="let hunt of (currentHunts | async); let i = index;"
+      class="homeCard"
     >
-      <app-pop-over
-        (onCancel)="cancelDeleteConfirmation()"
-        (onConfirm)="onDeleteHunt()"
-      ></app-pop-over>
-    </ng-template>
-  </mat-card>
+      <mat-card-header class="cardHeader">
+        <img [src]="hunt.pokemonImgUrl" [alt]="hunt.species">
+        <div class="cardHeader__titleContainer">
+          <mat-card-title class="cardHeader__title">{{hunt.species}}</mat-card-title>
+          <mat-card-subtitle class="cardHeader__title">{{hunt.foundOnGame}}</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="cardContent">
+        <div class="cardContent__count">Count: {{hunt.count}}</div>
+      </mat-card-content>
+      <mat-card-actions class="cardActions">
+        <button
+          mat-raised-button
+          color="primary"
+          class="cardActions__button"
+          (click)="onEditHunt(hunt)"
+        >Edit</button>
+        <button
+          mat-raised-button
+          [color]="(userSelectingMultiple) ? 'accent' : 'primary'"
+          class="cardActions__button"
+          (click)="onSelectHunt(hunt)"
+        >
+          <mat-checkbox
+            *ngIf="userSelectingMultiple"
+            [disabled]="true"
+            [checked]="
+              huntExists(hunt).exists
+            "
+          ></mat-checkbox>
+          Select
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="confirmDelete(hunt)"
+          class="cardActions__button"
+          cdkOverlayOrigin
+          #trigger="cdkOverlayOrigin"
+        >Delete</button>
+      </mat-card-actions>
+      <ng-template
+        *ngIf="hunt === selectedHunt"
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="isDeleteConfirmationOpen"
+      >
+        <app-pop-over
+          (onCancel)="cancelDeleteConfirmation()"
+          (onConfirm)="onDeleteHunt()"
+        ></app-pop-over>
+      </ng-template>
+    </mat-card>
+  </div>
 </div>
 <button
   *ngIf="
