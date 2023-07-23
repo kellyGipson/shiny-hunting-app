@@ -1,0 +1,23 @@
+.counterButtons {
+  width: min-content;
+  margin-inline: auto;
+
+  &__btn {
+    font-size: 3rem;
+    height: 7.5rem;
+    width: 15rem;
+    border: 2px solid #333333;
+  }
+
+  &__decrease {
+    border-top-left-radius: 9999px;
+    border-top-right-radius: 9999px;
+    color: white;
+    background-color: #cb433f;
+  }
+
+  &__increase {
+    border-bottom-left-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+  }
+}

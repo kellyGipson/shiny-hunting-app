@@ -41,7 +41,7 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     private readonly _pokemonBusiness: PokemonBusiness,
   ) {}
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this._mapState();
     this.phaseNameForm = new UntypedFormControl(null);
     document.addEventListener('keypress', e => this.onKeypress(e));
@@ -103,51 +103,6 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
         });
       }
     }
-  }
-
-  onCounterIncrease(): void {
-    this.counterAnimationFn();
-    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
-    selectedHunts.forEach((selectedHunt) => {
-      let newCount = selectedHunt.count + selectedHunt.interval;
-      if (newCount > Number.MAX_SAFE_INTEGER) {
-        newCount = Number.MAX_SAFE_INTEGER;
-      }
-      this._currentHuntsBusiness.updateCurrentHunt({
-        ...selectedHunt,
-        count: newCount,
-      });
-      this._selectedHuntBusiness.updateSelectedHunt({
-        ...selectedHunt,
-        count: newCount,
-      });
-    });
-  }
-
-  onCounterDecrease(): void {
-    if (this.editingCount) {
-      return;
-    }
-    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
-    selectedHunts.forEach((selectedHunt) => {
-      let newCount = selectedHunt.count - selectedHunt.interval;
-      if (newCount < 0) {
-        newCount = 0;
-      }
-      this._currentHuntsBusiness.updateCurrentHunt({
-        ...selectedHunt,
-        count: newCount,
-      });
-      this._selectedHuntBusiness.updateSelectedHunt({
-        ...selectedHunt,
-        count: newCount,
-      });
-    })
-  }
-
-  counterAnimationFn(): void {
-    this.countAnimation = true;
-    setTimeout(() => this.countAnimation = false, 100);
   }
 
   foundAShiny(hunt: Hunt) {
@@ -222,15 +177,14 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     this.isResetConfirmationOpen = false;
   }
 
+  counterAnimationFn(): void {
+    this.countAnimation = true;
+    setTimeout(() => this.countAnimation = false, 100);
+  }
+
   onKeypress(e: any): void {
     if (this._appBusiness.getActiveMenu() === ActiveMenuEnum.Current) {
       switch(e.key) {
-        case  ' ':
-          this.onCounterIncrease();
-          return;
-        case '0':
-          this.onCounterDecrease();
-          return;
         case '+':
           this.onIntervalIncrease();
           return;

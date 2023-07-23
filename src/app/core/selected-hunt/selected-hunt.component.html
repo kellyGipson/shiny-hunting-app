@@ -112,10 +112,12 @@
       </ng-template>
     </div>
   </div>
-  <div class="counterButtons">
-    <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
-    <button class="counterIncreaseBtn" (click)="onCounterIncrease()">+</button>
-  </div>
+
+  <selected-hunt-counter-modify
+    [editingCount]="editingCount"
+    (countChanged)="counterAnimationFn()"
+  ></selected-hunt-counter-modify>
+
   <button
     mat-stroked-button
     color="warn"
