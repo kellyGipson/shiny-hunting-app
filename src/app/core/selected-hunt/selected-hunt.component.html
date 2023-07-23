@@ -8,6 +8,11 @@
       [class.hunt--tla]="hunt.isLeftAlign"
       class="hunt"
     >
+      <selected-hunt-menu
+        class="selectedHunt__menu"
+        [isLeftAlign]="hunt.isLeftAlign"
+        [hunt]="hunt"
+      ></selected-hunt-menu>
 
       <mat-form-field *ngIf="editingCount && huntBeingEdited === hunt">
         <mat-label>Editing Count</mat-label>

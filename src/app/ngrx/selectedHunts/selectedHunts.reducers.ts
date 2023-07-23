@@ -56,6 +56,26 @@ export const clearSelectedHuntsReducer = on(
   }
 );
 
+export const toggleIsLeftAlignReducer = on(
+  AppActionTypes.toggleSelectedHuntIsLeftAlignAction,
+  (state: Hunt[], action) => {
+    const newState = [ ...state ];
+    const huntPredicate = (h: Hunt) => deepEqual(h.id, action.hunt.id);
+    const huntIndex = newState.findIndex(huntPredicate);
+    const hunt = get(newState, huntIndex);
+
+    if (huntIndex === -1 || !hunt) {
+      throw new Error(`Could not find a Hunt. In Action: ${action.type}`);
+    }
+
+    const newHunt: Hunt = { ...hunt };
+    newHunt.isLeftAlign = !hunt.isLeftAlign;
+    newState.splice(huntIndex, 1, newHunt);
+
+    return newState;
+  }
+);
+
 export const selectedHuntsReducers = createReducer(
   INITIAL_APP_STATE,
   clearSelectedHuntsReducer,
@@ -63,4 +83,5 @@ export const selectedHuntsReducers = createReducer(
   updateSelectedHuntsAction,
   deleteSelectedHuntsAction,
   setSelectedHuntsAction,
+  toggleIsLeftAlignReducer,
 )

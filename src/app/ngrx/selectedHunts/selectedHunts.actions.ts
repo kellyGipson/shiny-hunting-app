@@ -24,6 +24,10 @@ export const deleteSelectedHuntAction = createAction(
 export const clearSelectedHuntAction = createAction(
   'CLEAR_SELECTED_HUNT_ACTION',
 );
+
+export const toggleSelectedHuntIsLeftAlignAction = createAction(
+  'TOGGLE_CURRENT_HUNT_IS_LEFT_ALIGN',
+  props<{ hunt: Hunt }>(),
 );
 
 export const selectedHuntActionsContainer = {
@@ -32,4 +36,5 @@ export const selectedHuntActionsContainer = {
   updateSelectedHuntAction,
   deleteSelectedHuntAction,
   setSelectedHuntAction,
+  toggleSelectedHuntIsLeftAlignAction,
 }
