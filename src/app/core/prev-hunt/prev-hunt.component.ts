@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { Guid } from 'guid-typescript';
 
@@ -98,7 +98,9 @@ export class PokemonComponent implements OnInit {
   private _mapStore(): void {
     this.activeMenu = this._appBusiness.getActiveMenu$();
     this.addShinyOpen = this._appBusiness.getAddShinyOpen();
-    this.pokemonFound = this._pokemonBusiness.getPokemonPrev();
+    this.pokemonFound = this._pokemonBusiness.getPokemonPrev().pipe(
+      map((hunts) => hunts.slice().reverse())
+    );
   }
 
   private resetFormData(): void {
