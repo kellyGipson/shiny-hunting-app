@@ -9,6 +9,15 @@ export class PopOverComponent implements OnInit {
   @Input()
   message: string = 'Are you sure you want to delete?'
 
+  @Input()
+  cancelText: string = 'Cancel';
+
+  @Input()
+  confirmText: string = 'Confirm';
+
+  @Input()
+  confirmDisabled: boolean = false;
+
   @Output()
   onConfirm = new EventEmitter<void>();
 

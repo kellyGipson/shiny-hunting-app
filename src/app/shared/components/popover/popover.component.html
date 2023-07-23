@@ -5,11 +5,12 @@
     mat-raised-button
     color="primary"
     (click)="cancel()"
-  >Cancel</button>
+  >{{ cancelText }}</button>
   <button
     class="popOver__confirm"
     mat-raised-button
     color="warn"
     (click)="confirm()"
-  >Confirm</button>
+    [disabled]="confirmDisabled"
+  >{{ confirmText }}</button>
 </div>
