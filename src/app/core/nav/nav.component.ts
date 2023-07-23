@@ -13,9 +13,10 @@ import { Hunt } from 'src/app/types/Hunts.types';
   styleUrls: ['./nav.component.scss', '../../app.component.scss'],
 })
 export class NavComponent implements OnInit {
-  activeMenu$!: Observable<ActiveMenuEnum>;
+  activeMenu$: Observable<ActiveMenuEnum>;
 
   menus: ActiveMenuEnum[] = allActiveMenu;
+  activeMenuEnum = ActiveMenuEnum;
   selectedHunt: Hunt = null;
   menuOpen: boolean = false;
 

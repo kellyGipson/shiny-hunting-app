@@ -1,7 +1,4 @@
-<div
-  *ngIf="(activeMenu | async) === 'Current'"
-  class="selectedHunt"
->
+<div class="selectedHunt">
   <div class="selectedHunt__huntContainer">
     <div
       *ngFor="let hunt of (selectedHunts$ | async)"

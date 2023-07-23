@@ -33,12 +33,12 @@
       </button>
     </div>
     <div class="pages__container">
-      <app-home></app-home>
-      <app-new-hunt></app-new-hunt>
-      <app-prev-hunt></app-prev-hunt>
-      <app-selected-hunt></app-selected-hunt>
-      <app-edit-hunt></app-edit-hunt>
-      <app-settings></app-settings>
+      <app-home *ngIf="(activeMenu$ | async) === activeMenuEnum.Home"></app-home>
+      <app-new-hunt *ngIf="(activeMenu$ | async) === activeMenuEnum.New"></app-new-hunt>
+      <app-prev-hunt *ngIf="(activeMenu$ | async) === activeMenuEnum.Previous"></app-prev-hunt>
+      <app-selected-hunt *ngIf="(activeMenu$ | async) === activeMenuEnum.Current"></app-selected-hunt>
+      <app-edit-hunt *ngIf="(activeMenu$ | async) === activeMenuEnum.Editing"></app-edit-hunt>
+      <app-settings *ngIf="(activeMenu$ | async) === activeMenuEnum.Settings"></app-settings>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
