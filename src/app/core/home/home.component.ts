@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { CurrentHuntsBusiness } from 'src/app/business/currentHunts/currentHunts.business';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
-import { ActiveMenuEnum, ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 import { AppState } from 'src/app/types/app-state.types';
 import { Hunt } from 'src/app/types/Hunts.types';
 import { CurrentNewPageType } from 'src/app/types/currentNewPage.types';
@@ -16,7 +16,7 @@ import { SelectedHuntsBusiness } from 'src/app/business/selectedHunts/selectedHu
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  activeMenu: Observable<ActiveMenuType>;
+  activeMenu: Observable<ActiveMenuEnum>;
   currentPage: Observable<CurrentNewPageType>;
   currentHunts: Observable<Hunt[]>;
 
@@ -41,11 +41,11 @@ export class HomeComponent implements OnInit {
   private _mapState(): void {
     this.activeMenu = this._appBusiness.getActiveMenu$();
     this.currentPage = this._appBusiness.getCurrentNewPage$();
-    this.currentHunts = this._currentHuntsBusiness.getCurrentHunts$();
+    this.currentHunts = this._currentHuntsBusiness
+      .getCurrentHunts$().pipe(map((hunts) => hunts.slice().reverse()));
   }
 
   confirmDelete(hunt: Hunt): void {
-    console.log(hunt.species);
     this.selectedHunt = hunt;
     this.isDeleteConfirmationOpen = true;
   }
@@ -81,15 +81,11 @@ export class HomeComponent implements OnInit {
   }
 
   onToggleSelected(hunt: Hunt): void {
-    console.log(this.huntExists(hunt).exists);
     if (this.huntExists(hunt).exists) {
-      console.log('deleting');
       this.userSelectedHunts.splice(this.huntExists(hunt).index, 1);
     } else {
-      console.log('pushing');
       this.userSelectedHunts.push(hunt);
     }
-    console.log(this.userSelectedHunts);
   }
 
   huntExists(hunt: Hunt): { exists: boolean, index: number } {

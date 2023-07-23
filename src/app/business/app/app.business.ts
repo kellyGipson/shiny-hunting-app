@@ -3,8 +3,7 @@ import { Store } from '@ngrx/store';
 import { map, Observable, take, tap } from 'rxjs';
 import { AppActionTypes } from 'src/app/ngrx/app.actions';
 import { AppState } from 'src/app/types/app-state.types';
-
-import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 
 @Injectable({
   providedIn: 'root'
@@ -49,8 +48,8 @@ export class AppBusiness {
     );
   }
 
-  getActiveMenu(): ActiveMenuType {
-    let activeMenu: ActiveMenuType;
+  getActiveMenu(): ActiveMenuEnum {
+    let activeMenu: ActiveMenuEnum;
     this._store$.pipe(
       take(1),
       tap((s) => {
@@ -60,11 +59,11 @@ export class AppBusiness {
     return activeMenu;
   }
 
-  getActiveMenu$(): Observable<ActiveMenuType> {
+  getActiveMenu$(): Observable<ActiveMenuEnum> {
     return this._store$.select((s) => s.activeMenu);
   }
 
-  setActiveMenu(activeMenu: ActiveMenuType): void {
+  setActiveMenu(activeMenu: ActiveMenuEnum): void {
     this._store$.dispatch(
       AppActionTypes.setActiveMenuAction({ activeMenu })
     );

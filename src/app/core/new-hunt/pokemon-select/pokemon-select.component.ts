@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppBusiness } from 'src/app/business/app/app.business';
-import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 import { PokemonJSONType } from 'src/app/types/pokemonData.types';
 import { Hunt } from 'src/app/types/Hunts.types';
 import { MatSelectionList } from '@angular/material/list';
@@ -13,7 +13,7 @@ import { MatSelectionList } from '@angular/material/list';
 })
 export class PokemonSelectComponent implements OnInit {
   @Input() newHuntToCreate: Hunt;
-  readonly activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
+  readonly activeMenu: Observable<ActiveMenuEnum> = this._appBusiness.getActiveMenu$();
 
   pokemonList: PokemonJSONType[] = [];
   searchString: string = '';

@@ -6,7 +6,7 @@ import { AppBusiness } from "src/app/business/app/app.business";
 import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
 import { PreviousHuntsBusiness } from "src/app/business/previousHunts/previousHunts.business";
 import { SelectedHuntsBusiness } from "src/app/business/selectedHunts/selectedHunts.business";
-import { ActiveMenuEnum, ActiveMenuType } from "src/app/types/activeMenu.types";
+import { ActiveMenuEnum } from "src/app/types/activeMenu.types";
 import { AppState } from "src/app/types/app-state.types";
 import { Hunt } from "src/app/types/Hunts.types";
 
@@ -16,7 +16,7 @@ import { Hunt } from "src/app/types/Hunts.types";
   styleUrls: ['./selected-hunt.component.scss']
 })
 export class SelectedHuntComponent implements OnInit, OnDestroy {
-  activeMenu: Observable<ActiveMenuType> = this._appBusiness.getActiveMenu$();
+  activeMenu: Observable<ActiveMenuEnum> = this._appBusiness.getActiveMenu$();
   selectedHunts$: Observable<Hunt[]>;
 
   pokemonApi = new PokemonClient();

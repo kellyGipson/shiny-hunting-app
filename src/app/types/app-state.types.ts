@@ -1,9 +1,9 @@
-import { ActiveMenuType } from "./activeMenu.types";
+import { ActiveMenuEnum } from "./activeMenu.types";
 import { CurrentNewPageType } from "./currentNewPage.types";
 import { Hunt } from "./Hunts.types";
 
 export interface AppState {
-  activeMenu: ActiveMenuType;
+  activeMenu: ActiveMenuEnum;
   addShinyFormOpen: boolean;
   currentNewPage: CurrentNewPageType;
   currentHunts: Hunt[];
@@ -12,7 +12,7 @@ export interface AppState {
 }
 
 export const INITIAL_APP_STATE: AppState = {
-  activeMenu: 'Home',
+  activeMenu: ActiveMenuEnum.Home,
   addShinyFormOpen: false,
   currentNewPage: 'pokemon',
   currentHunts: [],

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { AppBusiness } from 'src/app/business/app/app.business';
-import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
-import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 import { Hunt, emptyHunt } from 'src/app/types/Hunts.types';
 
 @Component({
@@ -13,12 +11,11 @@ import { Hunt, emptyHunt } from 'src/app/types/Hunts.types';
 })
 export class NewHuntComponent implements OnInit {
   newHuntToCreate: Hunt = emptyHunt;
-  activeMenu: Observable<ActiveMenuType>;
+  activeMenu: Observable<ActiveMenuEnum>;
   currentPage: Observable<'pokemon' | 'game' | 'method'>;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
-    private readonly _pokemonBusiness: PokemonBusiness,
   ) {}
 
   async ngOnInit() {

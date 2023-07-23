@@ -4,7 +4,7 @@ import { Observable, take, tap } from 'rxjs';
 
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { AppState } from 'src/app/types/app-state.types';
-import { ActiveMenuEnum, ActiveMenuType, allActiveMenu } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum, allActiveMenu } from 'src/app/types/activeMenu.types';
 import { Hunt } from 'src/app/types/Hunts.types';
 
 @Component({
@@ -13,9 +13,9 @@ import { Hunt } from 'src/app/types/Hunts.types';
   styleUrls: ['./nav.component.scss', '../../app.component.scss'],
 })
 export class NavComponent implements OnInit {
-  activeMenu$!: Observable<ActiveMenuType>;
+  activeMenu$!: Observable<ActiveMenuEnum>;
 
-  menus: ActiveMenuType[] = allActiveMenu;
+  menus: ActiveMenuEnum[] = allActiveMenu;
   selectedHunt: Hunt = null;
   menuOpen: boolean = false;
 
@@ -32,7 +32,7 @@ export class NavComponent implements OnInit {
     this.activeMenu$ = this._store$.select((s) => s.activeMenu);
   }
 
-  onMenuClick(navItem: ActiveMenuType) {
+  onMenuClick(navItem: ActiveMenuEnum) {
     this._store$.pipe(
       take(1),
       tap((s) => {
@@ -43,7 +43,7 @@ export class NavComponent implements OnInit {
     ).subscribe();
   }
 
-  decideDisabled(navItem: ActiveMenuType) {
+  decideDisabled(navItem: ActiveMenuEnum) {
     let isDisabled: boolean = false;
     this._store$.pipe(
       take(1),

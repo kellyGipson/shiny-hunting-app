@@ -8,7 +8,7 @@ import { Guid } from 'guid-typescript';
 import { AppBusiness } from 'src/app/business/app/app.business';
 import { PokemonBusiness } from 'src/app/business/pokemon/pokemon.business';
 import { AppState } from 'src/app/types/app-state.types';
-import { ActiveMenuType } from 'src/app/types/activeMenu.types';
+import { ActiveMenuEnum } from 'src/app/types/activeMenu.types';
 import { Hunt } from 'src/app/types/Hunts.types';
 import { allGames, allMethods, methodsType, pokemonGames } from 'src/app/types/pokemonFound.types';
 import { PreviousHuntsBusiness } from 'src/app/business/previousHunts/previousHunts.business';
@@ -21,7 +21,7 @@ import { PreviousHuntsBusiness } from 'src/app/business/previousHunts/previousHu
 export class PokemonComponent implements OnInit {
   @Input() currentHunt!: Hunt;
 
-  activeMenu: Observable<ActiveMenuType>;
+  activeMenu: Observable<ActiveMenuEnum>;
   addShinyOpen: Observable<boolean>;
   pokemonFound: Observable<Hunt[]>;
 
