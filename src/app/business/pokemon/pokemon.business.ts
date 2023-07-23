@@ -57,7 +57,7 @@ export class PokemonBusiness {
         .then((url) => { currentHunt.pokemonImgUrl = url; return currentHunt })
         .then((currentHunt) => {
           this._store$.dispatch(
-            AppActionTypes.updateCurrentHuntsAction(currentHunt)
+            AppActionTypes.updateCurrentHuntsAction({ hunt: currentHunt })
           );
         });
     }
@@ -70,7 +70,7 @@ export class PokemonBusiness {
   }
 
   getGameImgUrl(hunt: Hunt): string {
-    const gameTyped = hunt.foundOnGame.toLowerCase() as keyof typeof gameImgUrlLookup;
+    const gameTyped = hunt.foundOnGame.toLowerCase().replace(' ', '') as keyof typeof gameImgUrlLookup;
     return gameImgUrlLookup[gameTyped];
   }
 }

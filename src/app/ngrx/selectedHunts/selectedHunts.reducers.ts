@@ -1,8 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import copy from "fast-copy";
+import { deepEqual } from "fast-equals";
 import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
 import { Hunt } from "src/app/types/Hunts.types";
 import { AppActionTypes } from "../app.actions";
+import { get } from "lodash";
 
 export const setSelectedHuntsAction = on(
   AppActionTypes.setSelectedHuntAction,
@@ -15,51 +17,27 @@ export const addSelectedHuntsAction = on(
   AppActionTypes.addSelectedHuntAction,
   (state: Hunt[], action) => {
     let newSelectedHunts = copy(state);
-    newSelectedHunts.push({
-      id: action.id,
-      capturedOn: action.capturedOn,
-      count: action.count,
-      foundOnGame: action.foundOnGame,
-      gameImgUrl: action.gameImgUrl,
-      huntStarted: action.huntStarted,
-      method: action.method,
-      pokemonImgUrl: action.pokemonImgUrl,
-      species: action.species,
-      interval: action.interval,
-    });
+    newSelectedHunts.push(action.hunt);
+
     return newSelectedHunts;
   }
 );
 
 export const updateSelectedHuntsAction = on(
-  AppActionTypes.addSelectedHuntAction,
+  AppActionTypes.updateSelectedHuntAction,
   (state: Hunt[], action) => {
-    let newSelectedHunts = copy(state);
-    const index = newSelectedHunts.findIndex((hunt) => hunt.id.toString() === action.id.toString());
-    if (!index) {
-      return state;
-    }
-    newSelectedHunts.splice(index, 1, {
-      id: action.id,
-      capturedOn: action.capturedOn,
-      count: action.count,
-      foundOnGame: action.foundOnGame,
-      gameImgUrl: action.gameImgUrl,
-      huntStarted: action.huntStarted,
-      method: action.method,
-      pokemonImgUrl: action.pokemonImgUrl,
-      species: action.species,
-      interval: action.interval,
-    });
-    return newSelectedHunts;
+    let newState = copy(state);
+    const index = newState.findIndex((hunt) => deepEqual(hunt.id, action.hunt.id));
+    newState.splice(index, 1, action.hunt);
+    return newState;
   }
 );
 
 export const deleteSelectedHuntsAction = on(
-  AppActionTypes.addSelectedHuntAction,
+  AppActionTypes.deleteSelectedHuntAction,
   (state: Hunt[], action) => {
     let newSelectedHunts = copy(state);
-    const index = newSelectedHunts.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    const index = newSelectedHunts.findIndex((hunt) => deepEqual(hunt.id, action.hunt.id));
     if (!index) {
       return state;
     }

@@ -46,13 +46,15 @@ export class MethodSelectComponent implements OnInit {
   next() {
     this._store$.dispatch(
       AppActionTypes.addCurrentHuntsAction({
-        ...this.newHuntToCreate,
-        gameImgUrl: this._pokemonBusiness.getGameImgUrl(this.newHuntToCreate),
-        id: Guid.create(),
-        count: 0,
-        huntStarted: new Date(),
-        capturedOn: null,
-        interval: 1,
+        hunt: {
+          ...this.newHuntToCreate,
+          gameImgUrl: this._pokemonBusiness.getGameImgUrl(this.newHuntToCreate),
+          id: Guid.create(),
+          count: 0,
+          huntStarted: new Date(),
+          capturedOn: null,
+          interval: 1,
+        }
       })
     );
     this._appBusiness.progressToNextPage();

@@ -3,6 +3,7 @@ import copy from "fast-copy";
 import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
 import { Hunt } from "src/app/types/Hunts.types";
 import { AppActionTypes } from "../app.actions";
+import { deepEqual } from "fast-equals";
 
 export const addPreviousHuntsReducer = on(
   AppActionTypes.addPreviousHuntsAction,
@@ -28,7 +29,7 @@ export const deletePreviousHuntsReducer = on(
   AppActionTypes.deletePreviousHuntsAction,
   (state: Hunt[], action) => {
     let newState = copy(state);
-    const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    const index = state.findIndex((hunt) => deepEqual(hunt.id, action.id));
     newState.splice(index, 1);
 
     return newState;
@@ -39,7 +40,7 @@ export const updatePreviousHuntsReducer = on(
   AppActionTypes.updatePreviousHuntsAction,
   (state: Hunt[], action) => {
     let newState = copy(state);
-    const index = state.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    const index = state.findIndex((hunt) => deepEqual(hunt.id, action.id));
     newState.splice(index, 1, {
       id: action.id,
       capturedOn: action.capturedOn,

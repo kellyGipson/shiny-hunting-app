@@ -36,6 +36,18 @@ export class SelectedHuntsBusiness {
     );
   }
 
+  updateSelectedHunt(hunt: Hunt): void {
+    this._store$.dispatch(
+      AppActionTypes.updateSelectedHuntAction({ hunt })
+    );
+  }
+
+  deleteSelectedHunt(hunt: Hunt): void {
+    this._store$.dispatch(
+      AppActionTypes.deleteSelectedHuntAction({ hunt })
+    );
+  }
+
   huntExistsInSelectedList(searchHunt: Hunt): boolean {
     return !!this.getSelectedHunts().find((hunt) => hunt === searchHunt);
   }

@@ -17,15 +17,21 @@ export class CurrentHuntsBusiness {
     return this._store$.select((s) => s.currentHunts);
   }
 
-  deleteCurrentHunt(hunt: Hunt): void {
+  addCurrentHunt(hunt: Hunt): void {
     this._store$.dispatch(
-      AppActionTypes.deleteCurrentHuntsAction(hunt)
+      AppActionTypes.addCurrentHuntsAction({ hunt })
     );
   }
 
-  updateSelectedHunt(hunt: Hunt): void {
+  deleteCurrentHunt(hunt: Hunt): void {
     this._store$.dispatch(
-      AppActionTypes.updateCurrentHuntsAction(hunt)
+      AppActionTypes.deleteCurrentHuntsAction({ hunt })
+    );
+  }
+
+  updateCurrentHunt(hunt: Hunt): void {
+    this._store$.dispatch(
+      AppActionTypes.updateCurrentHuntsAction({ hunt })
     );
   }
 }

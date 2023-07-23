@@ -3,23 +3,13 @@ import copy from "fast-copy";
 import { INITIAL_APP_STATE } from "src/app/types/app-state.types";
 import { HuntsStateType } from "src/app/types/Hunts.types";
 import { AppActionTypes } from "../app.actions";
+import { deepEqual } from "fast-equals";
 
 export const addCurrentHuntsReducer = on(
   AppActionTypes.addCurrentHuntsAction,
   (state: HuntsStateType, action) => {
     let newState = copy(state);
-    newState.push({
-      id: action.id,
-      capturedOn: action.capturedOn,
-      count: action.count,
-      foundOnGame: action.foundOnGame,
-      gameImgUrl: action.gameImgUrl,
-      huntStarted: action.huntStarted,
-      method: action.method,
-      pokemonImgUrl: action.pokemonImgUrl,
-      species: action.species,
-      interval: action.interval,
-    })
+    newState.push(action.hunt);
     return newState;
   }
 );
@@ -28,7 +18,7 @@ export const deleteCurrentHuntsReducer = on(
   AppActionTypes.deleteCurrentHuntsAction,
   (state: HuntsStateType, action) => {
     let newState: HuntsStateType = copy(state);
-    const index = newState.findIndex((hunt) => hunt.id.toString() === action.id.toString());
+    const index = newState.findIndex((hunt) => deepEqual(hunt.id, action.hunt.id));
     newState.splice(index, 1);
 
     return newState;
@@ -39,19 +29,8 @@ export const updateCurrentHuntsReducer = on(
   AppActionTypes.updateCurrentHuntsAction,
   (state: HuntsStateType, action) => {
     let newState: HuntsStateType = copy(state);
-    const index = newState.findIndex((hunt) => hunt.id.toString() === action.id.toString());
-    newState.splice(index, 1, {
-      id: action.id,
-      capturedOn: action.capturedOn,
-      count: action.count,
-      foundOnGame: action.foundOnGame,
-      gameImgUrl: action.gameImgUrl,
-      huntStarted: action.huntStarted,
-      method: action.method,
-      pokemonImgUrl: action.pokemonImgUrl,
-      species: action.species,
-      interval: action.interval,
-    });
+    const index = newState.findIndex((hunt) => deepEqual(hunt.id, action.hunt.id));
+    newState.splice(index, 1, action.hunt);
 
     return newState;
   }
