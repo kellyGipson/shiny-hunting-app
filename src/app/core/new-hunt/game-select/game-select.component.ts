@@ -1,9 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { map, Observable, take } from 'rxjs';
-import { AppActionTypes } from 'src/app/ngrx/app.actions';
+import { Component, Input } from '@angular/core';
 import { AppBusiness } from 'src/app/business/app/app.business';
-import { AppState } from 'src/app/types/app-state.types';
 import { Hunt } from 'src/app/types/Hunts.types';
 import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
 
@@ -12,26 +8,15 @@ import { allGames, pokemonGames } from 'src/app/types/pokemonFound.types';
   templateUrl: './game-select.component.html',
   styleUrls: ['./game-select.component.scss', '../../../app.component.scss']
 })
-export class GameSelectComponent implements OnInit {
+export class GameSelectComponent {
   @Input()
   newHuntToCreate: Hunt;
-
-  currentHunt!: Observable<Hunt>;
-  currentHuntIndex!: number;
 
   allGames: pokemonGames[] = allGames;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
-    private readonly _store$: Store<AppState>,
-  ) { }
-
-  ngOnInit(): void {
-    this.currentHunt = this._store$.select((s) => {
-      // this.currentHuntIndex = s.selectedHuntIndex;
-      return s.currentHunts[s.currentHunts.length - 1]
-    });
-  }
+  ) {}
 
   gameClick(game: string) {
     this.newHuntToCreate.foundOnGame = game;

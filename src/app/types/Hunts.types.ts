@@ -2,16 +2,17 @@ import { Guid } from "guid-typescript";
 import { methodsType } from "./pokemonFound.types";
 
 export interface Hunt {
-  id: Guid | null;
-  species: string | null;
-  huntStarted: Date | null;
-  capturedOn: Date | null;
-  count: number | null;
-  foundOnGame: string | null;
-  gameImgUrl: string | null;
-  method: methodsType | null;
-  pokemonImgUrl: string | null;
-  interval: number | null;
+  id: Guid;
+  species: string;
+  huntStarted: Date;
+  capturedOn: Date;
+  count: number;
+  foundOnGame: string;
+  gameImgUrl: string;
+  method: methodsType;
+  pokemonImgUrl: string;
+  interval: number;
+  isLeftAlign?: boolean;
 }
 export type HuntsStateType = Hunt[];
 
@@ -26,4 +27,5 @@ export const emptyHunt: Hunt = {
   method: null,
   pokemonImgUrl: null,
   interval: null,
+  isLeftAlign: false,
 }
