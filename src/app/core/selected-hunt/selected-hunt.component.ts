@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { UntypedFormControl } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { PokemonClient } from "pokenode-ts";
-import { Observable, take, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { AppBusiness } from "src/app/business/app/app.business";
 import { CurrentHuntsBusiness } from "src/app/business/currentHunts/currentHunts.business";
+import { PokemonBusiness } from "src/app/business/pokemon/pokemon.business";
 import { PreviousHuntsBusiness } from "src/app/business/previousHunts/previousHunts.business";
 import { SelectedHuntsBusiness } from "src/app/business/selectedHunts/selectedHunts.business";
 import { ActiveMenuEnum } from "src/app/types/activeMenu.types";
@@ -24,6 +26,11 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
   countAnimation: boolean = false;
   isResetConfirmationOpen: boolean = false;
   editingCount: boolean = false;
+  huntBeingEdited: Hunt = null;
+  binomialDist: number;
+  isShinyFoundOpen: boolean = false;
+  showPhaseInputBox: boolean = false;
+  phaseNameForm: UntypedFormControl;
 
   constructor(
     private readonly _appBusiness: AppBusiness,
@@ -31,10 +38,12 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     private readonly _selectedHuntBusiness: SelectedHuntsBusiness,
     private readonly _currentHuntsBusiness: CurrentHuntsBusiness,
     private readonly _previousHuntsBusiness: PreviousHuntsBusiness,
+    private readonly _pokemonBusiness: PokemonBusiness,
   ) {}
 
   async ngOnInit(): Promise<void> {
     this._mapState();
+    this.phaseNameForm = new UntypedFormControl(null);
     document.addEventListener('keypress', e => this.onKeypress(e));
   }
 
@@ -42,31 +51,55 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     document.removeEventListener('keypress', e => this.onKeypress(e));
   }
 
-  onIntervalIncrease(): void {
-    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
-    if (!!selectedHunts) {
-      this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunts[0],
-        interval: selectedHunts[0].interval + 1,
+  onIntervalIncrease(hunt?: Hunt): void {
+    if (!hunt) {
+      const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
+      selectedHunts?.forEach((selectedHunt) => {
+        this._selectedHuntBusiness.updateSelectedHunt({
+          ...selectedHunt,
+          interval: selectedHunt.interval + 1,
+        });
+        this._currentHuntsBusiness.updateCurrentHunt({
+          ...selectedHunt,
+          interval: selectedHunt.interval + 1,
+        });
       });
-      this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunts[0],
-        interval: selectedHunts[0].interval + 1,
+    } else {
+      this._currentHuntsBusiness.updateCurrentHunt({
+        ...hunt,
+        interval: hunt.interval + 1,
+      });
+      this._selectedHuntBusiness.updateSelectedHunt({
+        ...hunt,
+        interval: hunt.interval + 1,
       });
     }
   }
 
-  onIntervalDecrease(): void {
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
-    if (!!selectedHunt) {
-      if (selectedHunt[0].interval > 1 && selectedHunt[0].interval <= Number.MAX_SAFE_INTEGER) {
-        this._currentHuntsBusiness.updateSelectedHunt({
-          ...selectedHunt[0],
-          interval: selectedHunt[0].interval - 1,
+  onIntervalDecrease(hunt?: Hunt): void {
+    if (!hunt) {
+      let selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
+      selectedHunts.forEach((selectedHunt) => {
+        if (selectedHunt.interval > 1 && selectedHunt.interval <= Number.MAX_SAFE_INTEGER) {
+          this._currentHuntsBusiness.updateCurrentHunt({
+            ...selectedHunt,
+            interval: selectedHunt.interval - 1,
+          });
+          this._selectedHuntBusiness.updateSelectedHunt({
+            ...selectedHunt,
+            interval: selectedHunt.interval - 1,
+          });
+        }
+      })
+    } else {
+      if (hunt.interval > 1 && hunt.interval <= Number.MAX_SAFE_INTEGER) {
+        this._currentHuntsBusiness.updateCurrentHunt({
+          ...hunt,
+          interval: hunt.interval - 1,
         });
-        this._selectedHuntBusiness.setSelectedHunt({
-          ...selectedHunt[0],
-          interval: selectedHunt[0].interval - 1,
+        this._selectedHuntBusiness.updateSelectedHunt({
+          ...hunt,
+          interval: hunt.interval - 1,
         });
       }
     }
@@ -74,42 +107,42 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   onCounterIncrease(): void {
     this.counterAnimationFn();
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
-    if (!!selectedHunt) {
-      let newCount = selectedHunt[0].count + selectedHunt[0].interval;
+    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
+    selectedHunts.forEach((selectedHunt) => {
+      let newCount = selectedHunt.count + selectedHunt.interval;
       if (newCount > Number.MAX_SAFE_INTEGER) {
         newCount = Number.MAX_SAFE_INTEGER;
       }
-      this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt[0],
+      this._currentHuntsBusiness.updateCurrentHunt({
+        ...selectedHunt,
         count: newCount,
       });
-      this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt[0],
+      this._selectedHuntBusiness.updateSelectedHunt({
+        ...selectedHunt,
         count: newCount,
       });
-    }
+    });
   }
 
   onCounterDecrease(): void {
     if (this.editingCount) {
       return;
     }
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
-    if (!!selectedHunt) {
-      let newCount = selectedHunt[0].count - selectedHunt[0].interval;
+    const selectedHunts = this._selectedHuntBusiness.getSelectedHunts();
+    selectedHunts.forEach((selectedHunt) => {
+      let newCount = selectedHunt.count - selectedHunt.interval;
       if (newCount < 0) {
         newCount = 0;
       }
-      this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt[0],
+      this._currentHuntsBusiness.updateCurrentHunt({
+        ...selectedHunt,
         count: newCount,
       });
-      this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt[0],
+      this._selectedHuntBusiness.updateSelectedHunt({
+        ...selectedHunt,
         count: newCount,
       });
-    }
+    })
   }
 
   counterAnimationFn(): void {
@@ -117,19 +150,55 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     setTimeout(() => this.countAnimation = false, 100);
   }
 
-  foundAShiny() {
-    let shiny: Hunt[];
-    this.selectedHunts$.pipe(
-      take(1),
-      tap((hunts) => {
-        shiny = hunts;
-      })
-    ).subscribe();
-    shiny.forEach((hunt) => {
-      this._previousHuntsBusiness.addPreviousHunt(hunt);
-    })
+  foundAShiny(hunt: Hunt) {
+    if (!this.huntBeingEdited) { this.huntBeingEdited = hunt; }
+
+    if (hunt.id === this.huntBeingEdited.id) {
+      this.isShinyFoundOpen = !this.isShinyFoundOpen;
+    }
+
+    if (hunt.id !== this.huntBeingEdited.id && this.showPhaseInputBox) {
+      this.showPhaseInputBox = false;
+      this.isShinyFoundOpen = true;
+    }
+    this.huntBeingEdited = hunt;
+  }
+
+  onShinyPhase(hunt: Hunt) {
+
+    this.isShinyFoundOpen = false;
+    this.showPhaseInputBox = true;
+  }
+
+  onShinyTarget(hunt: Hunt, originalHunt?: Hunt) {
+    if (!!originalHunt) {
+      this._currentHuntsBusiness.addCurrentHunt({ ...originalHunt, count: 0 });
+    }
+    this._previousHuntsBusiness.addPreviousHunt(hunt);
+    this._selectedHuntBusiness.deleteSelectedHunt(hunt);
+    this._currentHuntsBusiness.deleteCurrentHunt(hunt);
     this._selectedHuntBusiness.setSelectedHunt(null);
     this._appBusiness.setActiveMenu(ActiveMenuEnum.Previous);
+  }
+
+  async onConfirmPhase(hunt: Hunt) {
+    this._pokemonBusiness.getPokemonImgUrl(this.phaseNameForm.value.toLowerCase())
+    .then((url) => {
+      this.onShinyTarget(
+        {
+          ...hunt,
+          species: this.phaseNameForm.value,
+          pokemonImgUrl: url || '',
+        },
+        hunt
+      );
+      this.phaseNameForm.setValue(null);
+    });
+  }
+
+  onCancelPhase() {
+    this.showPhaseInputBox = false;
+    this.phaseNameForm.setValue(null);
   }
 
   onResetCounter(): void {
@@ -138,11 +207,11 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
 
   onResetConfirm(): void {
     const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
-    this._currentHuntsBusiness.updateSelectedHunt({
+    this._currentHuntsBusiness.updateCurrentHunt({
       ...selectedHunt[0],
       count: 0,
     });
-    this._selectedHuntBusiness.setSelectedHunt({
+    this._selectedHuntBusiness.updateSelectedHunt({
       ...selectedHunt[0],
       count: 0,
     });
@@ -172,30 +241,36 @@ export class SelectedHuntComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _mapState(): void {
-    this.selectedHunts$ = this._store$.select((s) => s.selectedHunts)
-  }
-
   listenToEditingCount(e: any): void {
     if (e.key === 'Enter') {
       this.confirmEditCount(e.target.value as string);
     }
   }
 
+  onEditCount(hunt: Hunt): void {
+    this.editingCount = true;
+    this.huntBeingEdited = hunt;
+  }
+
+  private _mapState(): void {
+    this.selectedHunts$ = this._store$.select((s) => s.selectedHunts);
+  }
+
   private confirmEditCount(value: string): void {
+    if (this.huntBeingEdited === null) { return; }
+
     const parsedValue = parseInt(value);
-    // ! come back and fix this
-    const selectedHunt = this._selectedHuntBusiness.getSelectedHunts();
-    if (!!selectedHunt) {
-      this._currentHuntsBusiness.updateSelectedHunt({
-        ...selectedHunt[0],
-        count: parsedValue,
-      });
-      this._selectedHuntBusiness.setSelectedHunt({
-        ...selectedHunt[0],
-        count: parsedValue,
-      });
-    }
+
+    this._currentHuntsBusiness.updateCurrentHunt({
+      ...this.huntBeingEdited,
+      count: parsedValue,
+    });
+    this._selectedHuntBusiness.updateSelectedHunt({
+      ...this.huntBeingEdited,
+      count: parsedValue,
+    });
+
     this.editingCount = false;
+    this.huntBeingEdited = null;
   }
 }

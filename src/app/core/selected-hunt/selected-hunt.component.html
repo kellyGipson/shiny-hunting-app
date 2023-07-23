@@ -2,39 +2,110 @@
   *ngIf="(activeMenu | async) === 'Current'"
   class="selectedHunt"
 >
-  <div *ngFor="let hunt of selectedHunts$ | async">
-    <img [src]="hunt.gameImgUrl" class="selectedHunt__gameImg">
-    <img
-      *ngIf="hunt.pokemonImgUrl"
-      [src]="hunt.pokemonImgUrl"
-      class="selectedHunt__pokemonImg"
+  <div class="selectedHunt__huntContainer">
+    <div
+      *ngFor="let hunt of (selectedHunts$ | async)"
+      [class.hunt--tla]="hunt.isLeftAlign"
+      class="hunt"
     >
-    <mat-form-field *ngIf="editingCount">
-      <mat-label>Editing Count</mat-label>
-      <input
-        type="number"
-        matInput
-        [value]="hunt.count"
-        (keypress)="listenToEditingCount($event)"
+
+      <mat-form-field *ngIf="editingCount && huntBeingEdited === hunt">
+        <mat-label>Editing Count</mat-label>
+        <input
+          type="number"
+          matInput
+          [value]="hunt.count"
+          (keypress)="listenToEditingCount($event)"
+        >
+      </mat-form-field>
+      <p
+        *ngIf="!editingCount || huntBeingEdited !== hunt"
+        class="hunt__count"
+        [class.countAnimation]="countAnimation"
+        (click)="onEditCount(hunt)"
+      >{{hunt.count}}</p>
+      <binomial-dist-progress
+        class="hunt__binomial"
+        [count]="hunt.count"
+        [game]="hunt.foundOnGame"
+      ></binomial-dist-progress>
+      <p>{{ hunt.species }}</p>
+      <p>Intervals of: {{hunt.interval}}</p>
+      <div class="interval-shiny-button">
+        <div class="intervalButtons">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onIntervalIncrease(hunt)"
+          >+</button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onIntervalDecrease(hunt)"
+          >-</button>
+        </div>
+        <img
+          (click)="foundAShiny(hunt)"
+          class="shinyButton"
+          src="../assets/shiny_sparkles.png"
+          alt="Found a shiny button"
+          cdkOverlayOrigin
+          #trigger="cdkOverlayOrigin"
+        >
+      </div>
+
+      <ng-template
+        *ngIf="huntBeingEdited === hunt"
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="isShinyFoundOpen"
       >
-    </mat-form-field>
-    <p
-      *ngIf="!editingCount"
-      class="selectedHunt__count"
-      [class.countAnimation]="countAnimation"
-      (click)="editingCount = !editingCount"
-    >{{hunt.count}}</p>
-    <p>Intervals of: {{hunt.interval}}</p>
-    <div class="intervalButtons">
-      <button mat-raised-button color="primary" (click)="onIntervalIncrease()">+</button>
-      <button mat-raised-button color="primary" (click)="onIntervalDecrease()">-</button>
+        <app-pop-over
+          (onCancel)="onShinyPhase(hunt)"
+          (onConfirm)="onShinyTarget(hunt)"
+          [message]="'Did you find your target?'"
+          [cancelText]="'Phase'"
+          [confirmText]="'Target'"
+          [confirmDisabled]="hunt.count === 0"
+        ></app-pop-over>
+      </ng-template>
+
+      <ng-template
+        *ngIf="huntBeingEdited === hunt && showPhaseInputBox"
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="showPhaseInputBox"
+        >
+        <div class="phase">
+          <mat-form-field appearance="fill">
+            <mat-label>Pokemon Name</mat-label>
+            <input
+              matInput
+              [formControl]="phaseNameForm"
+              id="pokemonName"
+              type="text"
+            >
+          </mat-form-field>
+          <div class="phase__btn-container">
+            <button
+              mat-raised-button
+              color="primary"
+              class="phase__btn"
+              (click)="onCancelPhase()"
+              [disabled]="!phaseNameForm"
+            >Cancel</button>
+            <button
+              mat-raised-button
+              color="primary"
+              class="phase__btn"
+              (click)="onConfirmPhase(hunt)"
+              [disabled]="!phaseNameForm.value"
+            >Phase</button>
+          </div>
+        </div>
+      </ng-template>
     </div>
-    <img
-      (click)="foundAShiny()"
-      class="shinyButton"
-      src="../assets/shiny_sparkles.png"
-      alt="Found a shiny button"
-    >
   </div>
   <div class="counterButtons">
     <button class="counterDecreaseBtn" (click)="onCounterDecrease()">-</button>
