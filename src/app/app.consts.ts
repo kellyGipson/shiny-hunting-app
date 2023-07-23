@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 
 export const MATERIAL_COMPONENTS = [
   MatSidenavModule,
@@ -22,4 +23,5 @@ export const MATERIAL_COMPONENTS = [
   MatSelectModule,
   MatButtonToggleModule,
   MatCheckboxModule,
+  MatMenuModule
 ];

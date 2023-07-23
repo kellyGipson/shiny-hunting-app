@@ -1,9 +1,9 @@
 <mat-drawer-container class="sidenav">
-
   <mat-drawer
     #drawer
     mode="side"
     class="sidenav__drawer"
+    [style.position]="'fixed'"
     [(opened)]="menuOpen"
   >
     <mat-selection-list
@@ -38,7 +38,7 @@
       <app-prev-hunt></app-prev-hunt>
       <app-selected-hunt></app-selected-hunt>
       <app-edit-hunt></app-edit-hunt>
+      <app-settings></app-settings>
     </div>
   </mat-drawer-content>
-
 </mat-drawer-container>

@@ -6,6 +6,9 @@ import { PokemonSelectComponent } from "./new-hunt/pokemon-select/pokemon-select
 import { PokemonComponent } from "./prev-hunt/prev-hunt.component";
 import { EditHuntComponent } from "./edit-hunt/edit-hunt.component";
 import { SelectedHuntComponent } from "./selected-hunt/selected-hunt.component";
+import { DATA_COMPONENTS } from "./data";
+import { SettingsComponent } from "./settings/settings.component";
+import { SelectedHuntMenuComponent } from "./selected-hunt/menu/menu.component";
 
 export const APP_COMPONENTS = [
   NavComponent,
@@ -16,4 +19,7 @@ export const APP_COMPONENTS = [
   MethodSelectComponent,
   EditHuntComponent,
   SelectedHuntComponent,
-]
+  SettingsComponent,
+  SelectedHuntMenuComponent,
+  DATA_COMPONENTS,
+];
